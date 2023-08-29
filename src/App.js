@@ -1,23 +1,37 @@
-import logo from './logo.svg';
+import React, {useState, useEffect} from 'react';
 import './App.css';
+import Navbar from './components/Navbar';
+import BackToTop from './components/BackToTop';
+import Footer from './components/Footer';
 
 function App() {
+  const [loggedIn, setLoggedIn] = useState(false);
+
+  useEffect(() => {
+    // Check if UserData exists in local storage and keep the user logged in
+    const storedUserData = JSON.parse(localStorage.getItem('UserData'));
+    if (storedUserData) {
+        handleLogin();
+    }
+}, []);
+
+  const handleLogin = () => {
+    setLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setLoggedIn(false);
+    // Remove all of the users data from local storage
+    localStorage.removeItem('profileData');
+    localStorage.removeItem('UserData');
+    localStorage.removeItem('userId');
+  };
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Navbar isLoggedIn={loggedIn} onLogin={handleLogin} onLogout={handleLogout} />
+      <BackToTop />
+      <Footer />
     </div>
   );
 }
