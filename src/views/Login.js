@@ -43,8 +43,10 @@ const Login = ({ onLogin }) => {
         <div className="row">
 
           <div className="col-md-6">
-            <form className="glass-box m-3 mb-3" onSubmit={handleLogin}>
-              <div className="d-flex justify-content-center align-items-center mt-4">
+            
+            <form className="glass-box m-3 mb-3 fw-bold text-center" onSubmit={handleLogin}>
+              <p className="fs-5 mt-3 mb-0">Welcome back!</p>
+              <div className="d-flex justify-content-center align-items-center">
                 <div className="row p-3">
                   <div className="col-12">
                     <input
@@ -77,10 +79,18 @@ const Login = ({ onLogin }) => {
           </div>
 
           <div className="col-md-6 hand-writing">
-            <div className="glass-box m-3 fw-bold p-4 text-center">
-              <p>Don't have an account yet?</p>
-              <p>Sign up here!</p>
-              <button className="btn btn-warning border-dark border-2 mt-3 col-6 mb-4" onClick={() => navigate('/signup')}>Sign Up</button>
+            <div className="glass-box m-3 fw-bold p-3 text-center">
+              <p className="fs-5">Don't have an account yet?</p>
+              <p>Are you a Developer looking to showcase your talents or find work? <br /> Sign up here!</p>
+              <button 
+                className="btn btn-warning border-dark border-2 mt-1 col-6 mb-4" 
+                onClick={() => navigate('/signup')}>New Dev Account
+              </button>
+              <p>If you're looking to hire the perfect talent for your latest project <br /> Sign up here!</p>
+              <button 
+                className="btn btn-warning border-dark border-2 mt-1 col-6 mb-4" 
+                onClick={() => navigate('/signup')}>New Client Account
+              </button>
             </div>
             
           </div>

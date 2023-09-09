@@ -109,18 +109,23 @@ const Home = ({loggedIn}) => {
                         <hr />
                         <h1 className='nasa text-uppercase'>Clients!</h1>
                         <p>
-                        Create basic accounts to explore developer profiles, view contact details,
-                        and send private messages to developers.
+                        Create an account to explore developer profiles, unlock contact details,
+                        and send private messages to your perfect developer.
                         </p>
                         <hr />
                         {!loggedIn ? (
                         <div>
                             <p className="pb-3">
-                            Ready to get started? Join TechConnect today and take your tech projects to the next level!
+                            Ready to get started? Join TechConnect today and take your career and projects to the next level!
                             </p>
-                            <div className="col-12 text-center hand-writing mb-3">
+                            <div className="col-12 text-center hand-writing mb-3 m-2">
                                 <button onClick={handleSignUp} className="btn border-dark custom-button">
-                                    Sign Up
+                                    Sign Up as a Developer
+                                </button>
+                            </div>
+                            <div className="col-12 text-center hand-writing mb-3 m-2">
+                                <button onClick={handleSignUp} className="btn border-dark custom-button">
+                                    Sign Up as a Client
                                 </button>
                             </div>
                         </div>
