@@ -26,7 +26,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
 
   return (
     <Router>
-      <nav className="navbar navbar-expand-lg navbar-light bg-dark sticky-top text-uppercase">
+      <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
         <div className="container">
           <Link className="navbar-brand nasa text-uppercase" to="/">
             <FontAwesomeIcon icon={faHeartbeat} /> TechConnect

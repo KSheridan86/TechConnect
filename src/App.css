@@ -5,11 +5,11 @@
 }
 .nasa {
   font-family: 'NasaFont', sans-serif;
-  color: antiquewhite;
+  color: #f1916d;
 }
 .nasa-black {
   font-family: 'NasaFont', sans-serif;
-  color: black;
+  color: #f1916d;
 }
 .hand-writing {
   font-family: 'Edu SA Beginner', cursive;
@@ -24,13 +24,15 @@
 }
 
 /* Navbar styles */
+nav {
+  background-color: rgba(27, 51, 88, .9);
+}
 .nav-link, .navbar-brand, .navbar-toggler-icon {
-  color: antiquewhite !important;
+  color: #f1916d !important;
 }
 .navbar-toggler {
-  color: #292b2c !important;
-  border: 2px solid antiquewhite !important;
-  border-color: antiquewhite !important;
+  border: 2px solid #f1916d !important;
+  border-color: #f1916d !important;
 }
 .navbar-toggler-icon {
   font-size: 1.2rem;
@@ -50,14 +52,17 @@
 .spacing {
   margin-bottom: 5rem;
 }
+button.custom-button {
+  background-color: #bd83b8;
+}
 input, button {
-  box-shadow: 5px 5px 10px 1px #292b2c;
+  box-shadow: 5px 5px 10px 1px #1b335b;
 }
 #no-shadow {
   box-shadow: none;
 }
 h1 {
-  text-shadow: 5px 5px 13px #686868;
+  text-shadow: 5px 5px 13px #1b335b;
 }
 p {
   font-family: 'Noto Sans JP', sans-serif;
@@ -66,14 +71,14 @@ p {
   background-color: white;
 }
 .glass-box {
-  background-color: rgba(255, 255, 255, 0);
-  border: 1px solid rgba(255, 255, 255, 0.3);
-  box-shadow: 5px 5px 10px 1px #292b2c;
+  background-color: #06142e;
+  border: 1px solid #1b335b;
+  box-shadow: 5px 5px 10px 1px #1b335b;
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
   max-width: 600px;
-  color: black;
+  color: #f5d7db
 }
 .calories, .login, .logout, .delete {
   min-height: 80vh;
@@ -109,17 +114,20 @@ p {
 }
 
 /* Footer */
+footer {
+  background-color: rgba(27, 51, 88, .9);
+}
 .footer > div {
-  color: antiquewhite;
+  color: #f1916d;
 }
 .social-icons i {
-  color: antiquewhite;
+  color: #f1916d;
   font-size: 1.5rem;
   margin-bottom: 1rem;
 }
 
 div > a {
-  color: antiquewhite;
+  color: #f1916d;
   text-decoration: none;
 }
 
@@ -130,7 +138,7 @@ div > a {
     width: 100%;
     left: 0;
     top: 100%;
-    background-color: #242627;
+    background-color: rgba(27, 51, 88, .9);
     z-index: 1;
     overflow-y: auto;
     max-height: calc(100vh - 12vh);

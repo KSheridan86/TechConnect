@@ -72,11 +72,11 @@ const Home = ({loggedIn}) => {
     };
 
     return (
-        <div className="container spacing">
+        <div className="container">
             <div className="row justify-content-center">
                 <div className="col-md-6">
-                    <div className="glass-box border-dark m-3 nasa-black">
-                        <h1 className="fw-bold p-4 pb-1 text-center">
+                    <div className="glass-box border-dark m-3 nasa">
+                        <h1 className="p-4 pb-1 text-center">
                         Welcome to <br />
                         <span className="text-uppercase">TechConnect</span>
                         </h1>
@@ -84,30 +84,44 @@ const Home = ({loggedIn}) => {
 
                     <div className="p-3 text-center glass-box m-3 border-dark">
                         <p>
-                        With our user-friendly platform, you have the power to take control of your nutrition and make informed choices about your food.
+                        The premier platform for connecting with talented
+                        developers and finding the right expertise for your projects. 
+                        Whether you're a developer looking to showcase your skills or a
+                        client seeking top-notch tech talent, TechConnect is the place to be.
+                        </p>
+                        <hr />
+                        <h1 className='nasa'>Developers!</h1>
+                        <p>
+                        Create free accounts and build professional portfolio
+                        pages. Showcase your work, highlight your skills, and let potential clients discover
+                        your talent.
                         </p>
                         <hr />
                         <p>
-                        Our app offers a comprehensive food search feature.
+                        Include your contact information on your portfolio page, making it easy for 
+                        clients to reach out to you directly.
                         </p>
                         <hr />
                         <p>
-                        This functionality enables you to explore and discover detailed nutritional information about a wide variety of foods.
+                        Receive private messages from clients interested in your services.
+                        Communicate securely within the TechConnect platform.
                         </p>
                         <hr />
-                        <p className="">
-                        Whether you're planning your meals, curious about the calorie content of your favorite dishes, or seeking healthier alternatives, we have got you covered.
+                        <h1 className='nasa text-uppercase'>Clients!</h1>
+                        <p>
+                        Create basic accounts to explore developer profiles, view contact details,
+                        and send private messages to developers.
                         </p>
                         <hr />
                         {!loggedIn ? (
                         <div>
                             <p className="pb-3">
-                            Sign up today for free and get access to our comprehensive nutritional information!
+                            Ready to get started? Join TechConnect today and take your tech projects to the next level!
                             </p>
                             <div className="col-12 text-center hand-writing mb-3">
-                            <button onClick={handleSignUp} className="btn btn-warning border-dark">
-                                Sign Up
-                            </button>
+                                <button onClick={handleSignUp} className="btn border-dark custom-button">
+                                    Sign Up
+                                </button>
                             </div>
                         </div>
                         ) : (null)}
@@ -173,7 +187,7 @@ const Home = ({loggedIn}) => {
                 </div>
                 )}
             </div>
-            <div style={{ height: "50px" }}></div>
+            <div style={{ height: "80px" }}></div>
         </div>
     );
 };

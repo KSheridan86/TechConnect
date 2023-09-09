@@ -2,9 +2,9 @@ import React from 'react';
 
 const Footer = () => {
     return (
-        <footer className="footer bg-dark text-white text-center py-3 fixed-bottom">
+        <footer className="footer text-white text-center py-3 fixed-bottom">
             <div className="container">
-                <div className="social-icons d-flex justify-content-between">
+                <div className="social-icons d-none justify-content-between">
                     <a
                         href="http://instagram.com"
                         target="_blank"
