@@ -41,21 +41,9 @@ const Login = ({ onLogin }) => {
     <div className="container login">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
         <div className="row">
-          <div className="col-md-6">
-            <h1 className="glass-box m-3 fw-bold p-4 text-center">Welcome to Fit4Life!</h1>
-            <div className="glass-box m-3 p-3 text-center">
-              <p>
-                Login to your account and embark on a journey towards better health and well-being.
-              </p>
-              <hr />
-              <p>
-                With our powerful tools, you can easily track your nutrition, monitor your calories, and make informed choices about your diet.
-              </p>
-            </div>
-          </div>
 
           <div className="col-md-6">
-            <form className="glass-box m-3 mb-5" onSubmit={handleLogin}>
+            <form className="glass-box m-3 mb-3" onSubmit={handleLogin}>
               <div className="d-flex justify-content-center align-items-center mt-4">
                 <div className="row p-3">
                   <div className="col-12">
@@ -87,8 +75,17 @@ const Login = ({ onLogin }) => {
               </div>
             </form>
           </div>
+
+          <div className="col-md-6 hand-writing">
+            <div className="glass-box m-3 fw-bold p-4 text-center">
+              <p>Don't have an account yet?</p>
+              <p>Sign up here!</p>
+              <button className="btn btn-warning border-dark border-2 mt-3 col-6 mb-4" onClick={() => navigate('/signup')}>Sign Up</button>
+            </div>
+            
+          </div>
         </div>
-      <div style={{ height: "70px" }}></div>
+      <div style={{ height: "75px" }}></div>
     </div>
   );
 };
