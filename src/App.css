@@ -47,6 +47,9 @@ nav {
 .navbar-open .content-wrapper {
   transform: translateY(50px);
 }
+.search-bar {
+  width: 75%;
+}
 
 /* General spacing, shadows and effects for divs */
 .spacing {
@@ -111,6 +114,9 @@ p {
   100% {
     transform: translateY(-15px);
   }
+}
+#arrow-image {
+  filter: invert(1); /* Invert the colors (turns black to white) */
 }
 
 /* Footer */

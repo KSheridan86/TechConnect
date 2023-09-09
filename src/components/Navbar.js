@@ -11,7 +11,7 @@ import ConfirmDelete from '../views/ConfirmDelete';
 import EditProfile from '../views/EditProfile';
 import CreateProfile from '../views/CreateProfile';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStream, faHeartbeat } from '@fortawesome/free-solid-svg-icons';
+import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
@@ -29,7 +29,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
       <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
         <div className="container">
           <Link className="navbar-brand nasa text-uppercase" to="/">
-            <FontAwesomeIcon icon={faHeartbeat} /> TechConnect
+            <FontAwesomeIcon icon={faCodeFork} /> TechConnect
           </Link>
           <button
             className="navbar-toggler"
@@ -55,7 +55,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
               </li>
               <li className="nav-item">
                 <Link className="nav-link nasa" to="/nutrition" onClick={closeNav}>
-                  Nutrition
+                  Profile
                 </Link>
               </li>
               { isLoggedIn ? 
@@ -69,6 +69,13 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                     Login
                   </Link>
                 </li>}
+                <li className="nav-item search-bar mt-3 mb-3 m-auto">
+                <input
+                  type="text"
+                  placeholder="Who or what are you looking for?"
+                  className="form-control"
+                />
+                </li>
             </ul>
           </div>
         </div>
