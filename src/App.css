@@ -47,17 +47,14 @@ nav {
 .navbar-open .content-wrapper {
   transform: translateY(50px);
 }
-.search-bar {
-  width: 75%;
-}
 
 /* General spacing, shadows and effects for divs */
 .spacing {
   margin-bottom: 5rem;
 }
-button.custom-button {
-  background-color: #bd83b8;
-}
+/* button.custom-button {
+  background-color: #f5d7db;
+} */
 input, button {
   box-shadow: 5px 5px 10px 1px #1b335b;
 }

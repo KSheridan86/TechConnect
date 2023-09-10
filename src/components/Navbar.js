@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
 import '../App.css';
 import Home from '../views/Home';
-import Nutrition from '../views/Nutrition';
+import Developers from '../views/Developers';
+import Profile from '../views/Profile';
 import SignUp from '../views/SignUp';
 import DeleteUser from '../views/DeleteUser';
 import Login from '../views/Login';
@@ -54,7 +55,12 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                 </Link>
               </li>
               <li className="nav-item">
-                <Link className="nav-link nasa" to="/nutrition" onClick={closeNav}>
+                <Link className="nav-link nasa" to="/developers" onClick={closeNav}>
+                  Developers
+                </Link>
+              </li>
+              <li className="nav-item">
+                <Link className="nav-link nasa" to="/profile" onClick={closeNav}>
                   Profile
                 </Link>
               </li>
@@ -69,20 +75,14 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                     Login
                   </Link>
                 </li>}
-                <li className="nav-item search-bar mt-3 mb-3 m-auto">
-                <input
-                  type="text"
-                  placeholder="Who or what are you looking for?"
-                  className="form-control"
-                />
-                </li>
             </ul>
           </div>
         </div>
       </nav>
       <Routes>
         <Route path="/" element={<Home loggedIn={isLoggedIn} />} />
-        <Route path="/nutrition" element={<Nutrition />} />
+        <Route path="/developers" element={<Developers />} />
+        <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp onLogin={onLogin} />} />
         <Route path="/delete-user" element={<DeleteUser onLogout={onLogout} />} />
         <Route path="/login" element={<Login onLogin={onLogin} />} /> 

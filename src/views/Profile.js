@@ -29,16 +29,17 @@ const Profile = () => {
     }
   };
 
-  if (!user) {
-    return <div>Loading...</div>;
-  }
+  // if (!user) {
+  //   return <div>Loading...</div>;
+  // }
 
   return (
     <div>
       <h2>Profile</h2>
-      <p>Email: {user.email}</p>
+      <p>Email: </p>
       {/* Render other profile information here */}
       <button onClick={() => handleUpdateProfile({ ...user, name: 'New Name' })}>Update Name</button>
+      <div style={{height: "500px"}}></div>
     </div>
   );
 };

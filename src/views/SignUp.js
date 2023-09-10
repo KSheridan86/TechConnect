@@ -56,16 +56,7 @@ const SignUp = ({ onLogin }) => {
 
     return (
       <div className="container login">
-        <div className="row">
-          <div className="col-md-6">
-            <div className="glass-box border-dark m-3 p-2 text-center">
-              <h1 className="fw-bold pt-2">Welcome to <div className="nasa-black text-uppercase">Fit4Life!</div></h1>
-              <hr />
-              <p className="pb-3">
-                Sign up today for free and start tracking your nutrition!
-              </p>
-            </div>
-          </div>
+        <div className="row mt-3">
 
           <div className="col-md-6">
             <div className="glass-box border-dark m-3">

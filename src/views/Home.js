@@ -53,23 +53,6 @@ const Home = ({loggedIn}) => {
     const handleSignUp = () => {
         navigate("/signup");
     }
-    // This function can be slimmed down to just use userdata.id
-    const handleDeleteProfile = () => {
-        if (dataFromLogin !== undefined) {
-            navigate(`/confirm-delete/${UserData.id}`, { state: { data: UserData.id } });
-    }};
-
-    const handleEditProfile = () => {
-        navigate("/edit-profile", { state: { profileData, UserData }});
-    };
-
-    const handleCreateProfile = () => {
-        navigate("/create-profile", { state: { profileData, UserData }});
-    };
-
-    const handleDeleteUser = () => {
-        navigate("/delete-user", { state: { UserData }});
-    };
 
     return (
         <div className="container">
@@ -113,84 +96,24 @@ const Home = ({loggedIn}) => {
                         and send private messages to your perfect developer.
                         </p>
                         <hr />
-                        {!loggedIn ? (
+
                         <div>
                             <p className="pb-3">
                             Ready to get started? Join TechConnect today and take your career and projects to the next level!
                             </p>
                             <div className="col-12 text-center hand-writing mb-3 m-2">
-                                <button onClick={handleSignUp} className="btn border-dark custom-button">
+                                <button onClick={handleSignUp} className="btn btn-warning border-dark custom-button">
                                     Sign Up as a Developer
                                 </button>
                             </div>
                             <div className="col-12 text-center hand-writing mb-3 m-2">
-                                <button onClick={handleSignUp} className="btn border-dark custom-button">
+                                <button onClick={handleSignUp} className="btn btn-warning border-dark custom-button">
                                     Sign Up as a Client
                                 </button>
                             </div>
                         </div>
-                        ) : (null)}
                     </div>
                 </div>
-
-                {loggedIn && (
-                <div className="col-md-6">
-                    <div className="glass-box m-3 mb-5 border-dark text-center">
-                        <h1 className="text-center mt-3 mb-3 text-uppercase nasa-black">
-                            Welcome {UserData ? UserData.username : 'Friend!'}!
-                        </h1>
-                        {profileData ? (
-                        <div>
-                            <p>Age: {profileData.age}</p>
-                            <p>Height: {profileData.height} cms</p>
-                            <p>Weight: {profileData.weight} Kgs</p>
-                            <p>Gender: {profileData.gender}</p>
-                            <p>Goal Weight: {profileData.goal_weight} Kgs</p>
-                            <p>Deadline: {profileData.goal_time_frame} weeks</p>
-                            <div className="col-12 text-center hand-writing mb-3 mt-4">
-                                <button onClick={handleEditProfile} className="btn btn-warning border-dark">Update Profile</button>
-                            </div>
-                            <div className="col-12 text-center hand-writing mb-3">
-                                <button onClick={handleDeleteProfile} className="btn btn-warning border-dark">Delete Profile</button>
-                            </div>
-                            <div className="col-12 text-center hand-writing mb-4">
-                                <button onClick={handleDeleteUser} className="btn btn-danger border-dark">
-                                Delete Account
-                                </button>
-                            </div>
-                        </div>
-                        ) : (
-                        <div className="text-center m-3">
-                            <h2 className="nasa-black text-uppercase">No Profile?</h2>
-                            <h4 className="nasa-black">No Problem!</h4>
-                            <p className="p-3 border-bottom border-2 border-dark m-1">
-                                Head up to the menu and visit our food Nutrient page to find out about all your favourite foods!
-                            </p>
-                            <h5 className="nasa-black mt-3">But...</h5>
-                            <p className="p-3 pt-0 border-bottom border-2 border-dark">
-                                We are working on a revolutionary new AI that can recommend a diet and exercise regime to guarantee your fitness goals will be achieved.
-                            </p>
-                            <h5 className="nasa-black">Interested?</h5>
-                            <p className="p-3 pb-0">
-                                Create a profile below and you will be notified as soon your recommendations are ready!
-                            </p>
-                            <p className="hand-writing p-3 pb-0 fw-bold">
-                                We are currently in the process of training the AI and will be ready to launch soon!
-                            </p>
-                            <div className="col-12 text-center hand-writing">
-                                <button onClick={handleCreateProfile} className="btn btn-warning border-dark border-2 mt-3 col-6 mb-3">
-                                Create Profile
-                                </button>
-                                <br />
-                                <button onClick={handleDeleteUser} className="btn btn-warning border-dark border-2 col-6 mb-5">
-                                Delete Account
-                                </button>
-                            </div>
-                        </div>
-                        )}
-                    </div>
-                </div>
-                )}
             </div>
             <div style={{ height: "80px" }}></div>
         </div>
