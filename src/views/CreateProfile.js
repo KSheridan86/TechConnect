@@ -19,7 +19,7 @@ const CreateProfile = () => {
     });
 
     // Retrieve UserData from local storage
-    const storedUserData = JSON.parse(localStorage.getItem('UserData'));
+    // const storedUserData = JSON.parse(localStorage.getItem('UserData'));
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -45,7 +45,7 @@ const CreateProfile = () => {
         <div className="row justify-content-center login">
           <div className="col-12 col-lg-6">
             <div className="glass-box border-dark m-3">
-              <h2 className="nasa-black text-center text-uppercase mt-3">Create a Profile For <br /> {storedUserData.username}</h2>
+              <h2 className="nasa-black text-center text-uppercase mt-3">Create your Profile<br /></h2>
               <form onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-center align-items-center">
                   <div className="row">

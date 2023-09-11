@@ -51,8 +51,8 @@ const Home = ({loggedIn}) => {
         }
     };
 
-    const handleSignUp = () => {
-        navigate("/signup");
+    const handleSignUp = (accountType) => {
+        navigate("/signup", { state: { accountType } });
     }
 
     return (
@@ -75,10 +75,10 @@ const Home = ({loggedIn}) => {
                             <p>
                             Ready to get started? Join TechConnect today and take your career or your projects to the next level!
                             </p>
-                            <button onClick={handleSignUp} className="hand-writing btn btn-warning border-dark m-1 custom-button">
+                            <button onClick={() => handleSignUp('Developer')} className="hand-writing btn btn-warning border-dark m-1 custom-button">
                                 Sign Up as a Developer
                             </button>
-                            <button onClick={handleSignUp} className="btn btn-warning border-dark custom-button m-1">
+                            <button onClick={() => handleSignUp('Client')} className="btn btn-warning border-dark custom-button m-1">
                                 Sign Up as a Client
                             </button>
                         </div>

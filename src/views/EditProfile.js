@@ -17,52 +17,50 @@ function getCsrfToken() {
 
 const EditProfile = () => {
     const navigate = useNavigate();
-    const location = useLocation();
-    const { profileData } = location.state;
-    const { UserData } = location.state;
+    // const location = useLocation();
+    // const { profileData } = location.state;
+    // const { UserData } = location.state;
     
     const [profile, setProfile] = useState({
-        age: profileData.age,
-        height: profileData.height,
-        weight: profileData.weight,
-        gender: profileData.gender,
-        goal_weight: profileData.goal_weight,
-        goal_time_frame: profileData.goal_time_frame,
+        // age: profileData.age,
+        // height: profileData.height,
+        // weight: profileData.weight,
+        // gender: profileData.gender,
+        // goal_weight: profileData.goal_weight,
+        // goal_time_frame: profileData.goal_time_frame,
     });
 
     const handleInputChange = event => {
-      console.log(UserData)
-      console.log(UserData.id)
         const { name, value } = event.target;
         setProfile(prevProfile => ({ ...prevProfile, [name]: value }));
     };
 
-    const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            const response = await api.put(`/api/profiles/${UserData.id}`, { profile }, {
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem('authToken')}` // Include the authentication token here
-            }
+    // const handleSubmit = async (event) => {
+    //     event.preventDefault();
+    //     try {
+    //         const response = await api.put(`/api/profiles/${UserData.id}`, { profile }, {
+    //           headers: {
+    //             Authorization: `Bearer ${localStorage.getItem('authToken')}` // Include the authentication token here
+    //         }
         
-            });
-            if (response) {
-                localStorage.setItem('profileData', JSON.stringify(profile));
-            }
-            console.log('Profile updated successfully', response.data);
-        } catch (error) {
-            console.error('Failed to update profile:', error);
-        }
-        navigate("/", { state: { userId: UserData.id } })
-    };
+    //         });
+    //         if (response) {
+    //             localStorage.setItem('profileData', JSON.stringify(profile));
+    //         }
+    //         console.log('Profile updated successfully', response.data);
+    //     } catch (error) {
+    //         console.error('Failed to update profile:', error);
+    //     }
+    //     navigate("/", { state: { userId: UserData.id } })
+    // };
 
     return (
       <div className='container'>
         <div className="row justify-content-center login">
           <div className="col-12 col-lg-6">
             <div className="glass-box border-dark m-3">
-              <h2 className="nasa-black text-center text-uppercase mt-3">Edit Profile For <br /> {UserData.username}</h2>
-              <form onSubmit={handleSubmit}>
+              <h2 className="nasa-black text-center text-uppercase mt-3">Edit your Profile<br /></h2>
+              <form>
                 <div className="d-flex justify-content-center align-items-center">
                   <div className="row">
                     <div className="col-12 text-center">

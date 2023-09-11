@@ -34,7 +34,7 @@ const Developers = () => {
     };
 
     return (
-        <div className="container">
+        <div className="container mt-3">
             <div className="row justify-content-center">
 
                 <div className="col-10 col-md-6 glass-box p-3 mt-3 text-center">
@@ -79,7 +79,7 @@ const Developers = () => {
                     <div className="glass-box m-3 p-3 text-center">
 
                         <p>
-                        <p className="fs-3 mt-3 mb-2 nasa">Searching made easy!</p>
+                        <p className="fs-3 mt-3 mb-2 nasa text-uppercase">Searching made easy!</p>
                         <p className="fs-5 mt-3 mb-2 nasa">Name</p>
                         Have a specific developer in mind? 
                         You can search by their name to quickly find their profile and portfolio.

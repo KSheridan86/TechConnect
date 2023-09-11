@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import axios from 'axios';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const api = axios.create({
     baseURL: 'http://16.171.133.35:4000/api',
@@ -8,6 +8,9 @@ const api = axios.create({
 });
 
 const SignUp = ({ onLogin }) => {
+  const location = useLocation();
+  const accountType = location.state?.accountType;
+  console.log(accountType)
     const navigate = useNavigate();
     const [userData, setUserData] = useState({
         username: '',
@@ -60,7 +63,7 @@ const SignUp = ({ onLogin }) => {
 
           <div className="col-md-6">
             <div className="glass-box border-dark m-3">
-              <h2 className="nasa-black text-center text-uppercase mt-3">Sign Up</h2>
+              <h2 className="nasa-black text-center text-uppercase mt-3">{ accountType === "Developer" ?  "Developer Sign Up" : "Client Sign up"}</h2>
               <form onSubmit={handleSubmit}>
                 <div className="d-flex justify-content-center align-items-center">
                   <div className="row">

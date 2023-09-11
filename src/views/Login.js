@@ -30,6 +30,10 @@ const Login = ({ onLogin }) => {
       }
   };
 
+  const handleSignUp = (accountType) => {
+    navigate("/signup", { state: { accountType } });
+}
+
   useEffect(() => {
     if (data !== null) {
       onLogin()
@@ -87,12 +91,14 @@ const Login = ({ onLogin }) => {
               <p>Are you a Developer looking to showcase your talents or find work? <br /> Sign up here!</p>
               <button 
                 className="btn btn-warning border-dark border-2 mt-1 col-6 mb-4" 
-                onClick={() => navigate('/signup')}>New Dev Account
+                onClick={() => handleSignUp('Developer')}>
+                
+                  New Dev Account
               </button>
               <p>If you're looking to hire the perfect talent for your latest project <br /> Sign up here!</p>
               <button 
                 className="btn btn-warning border-dark border-2 mt-1 col-6 mb-4" 
-                onClick={() => navigate('/signup')}>New Client Account
+                onClick={() => handleSignUp('Client')}>New Client Account
               </button>
             </div>
             
