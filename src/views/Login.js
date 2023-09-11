@@ -45,7 +45,10 @@ const Login = ({ onLogin }) => {
           <div className="col-md-6">
             
             <form className="glass-box m-3 mb-3 fw-bold text-center" onSubmit={handleLogin}>
-              <p className="fs-5 mt-3 mb-0">Welcome back!</p>
+              <p className="fs-5 mt-3 mb-2">Welcome back to</p>
+              <h2 className="nasa mt-2 text-center text-uppercase">
+                TechConnect
+              </h2>
               <div className="d-flex justify-content-center align-items-center">
                 <div className="row p-3">
                   <div className="col-12">
@@ -95,7 +98,7 @@ const Login = ({ onLogin }) => {
             
           </div>
         </div>
-      <div style={{ height: "75px" }}></div>
+      <div style={{ height: "30vh" }}></div>
     </div>
   );
 };

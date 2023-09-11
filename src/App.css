@@ -23,6 +23,20 @@
   background-attachment: fixed;
 }
 
+/* logo */
+.circle-image {
+  width: 50%; /* Adjust the width and height as needed */
+  height: 100%;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.circle-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover; /* This ensures the image covers the circular container */
+}
+
 /* Navbar styles */
 nav {
   background-color: rgba(27, 51, 88, .9);

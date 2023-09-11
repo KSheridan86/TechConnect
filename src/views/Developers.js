@@ -35,51 +35,28 @@ const Developers = () => {
 
     return (
         <div className="container">
-            <div className="row">
-                <div className="col-md-6">
-                <div className="">
-                    <h1 className="glass-box m-3 fw-bold p-4 text-center nasa-black text-uppercase">Discover Talented Developers!</h1>
-                    <div className="glass-box m-3 p-3 text-center">
-                        <p>
+            <div className="row justify-content-center">
+
+                <div className="col-10 col-md-6 glass-box p-3 mt-3 text-center">
+                    <h1 className="fw-bold p-2 text-center nasa text-uppercase">Discover Talented Developers!</h1>
+                    <p className="p-2">
                         Looking for the right developer for your project? 
                         <br />
                         You're in the right place! 
                         <br />
                         Explore a diverse pool of talented 
                         individuals with expertise in various technologies and experience levels.
-                        </p>
-                        <hr />
-                        <p>
-                        <p className="fs-5 mt-3 mb-2">Searching made easy!</p>
-                        <p className="fs-5 mt-3 mb-2">Name</p>
-                        Have a specific developer in mind? 
-                        You can search by their name to quickly find their profile and portfolio.
-                        <hr />
-                        <p className="fs-5 mt-3 mb-2">Tech Stack</p>
-                        Need someone skilled in a particular technology or programming language? 
-                        Use our technology stack filter to discover developers who specialize in 
-                        what you need.
-                        <hr />
-                        <p className="fs-5 mt-3 mb-2">Experience</p>
-                        Find developers with the right level of experience for your project, 
-                        whether you're looking for seasoned veterans or fresh talent.
-                        <hr />
-                        <p className="fs-5 mt-3 mb-2">Location</p>
-                        Prefer to work with developers in your area or time zone? 
-                        Our location filter helps you narrow down your search.
-                        </p>
-                        <hr />
-                        <p className="hand-writing fs-4">
+                    </p>
+                    <hr />
+                    <p className="hand-writing fs-4 text-center">
                             Simply input your particular criteria below and we'll do the rest!
                         </p>
-                        <div className="d-flex justify-content-evenly align-items-center mt-3">
+                        <div className="d-flex justify-content-evenly align-items-center mt-3 mb-3">
                             <FontAwesomeIcon icon={faLongArrowAltDown} />
                             <FontAwesomeIcon icon={faLongArrowAltDown} />
                         </div>
-                    </div>
-                    <div className="glass-box m-3 p-3 d-flex justify-content-center align-items-center">
-                        <div className="row">
-                            <div className="col-12">
+                        <div className="row justify-content-center text-center">
+                            <div className="col-8">
                                 <input
                                     className="text-center border border-dark border-2 p-2 form-control mb-2 hand-writing"
                                     type="text"
@@ -88,7 +65,7 @@ const Developers = () => {
                                     onChange={(e) => setFoodType(e.target.value)}
                                 />
                             </div>
-                            <div className="col-12 text-center hand-writing">
+                            <div className="col-8 text-center hand-writing">
                                 <button 
                                     onClick={handleSearch} 
                                     className="btn btn-warning border-dark border-2 mt-3 col-6">
@@ -96,8 +73,31 @@ const Developers = () => {
                                 </button>
                             </div>
                         </div>
-                    </div>
                 </div>
+
+                <div className="col-12 col-md-6">
+                    <div className="glass-box m-3 p-3 text-center">
+
+                        <p>
+                        <p className="fs-3 mt-3 mb-2 nasa">Searching made easy!</p>
+                        <p className="fs-5 mt-3 mb-2 nasa">Name</p>
+                        Have a specific developer in mind? 
+                        You can search by their name to quickly find their profile and portfolio.
+                        <hr />
+                        <p className="fs-5 mt-3 mb-2 nasa">Tech Stack</p>
+                        Need someone skilled in a particular technology or programming language? 
+                        Use our technology stack filter to discover developers who specialize in 
+                        what you need.
+                        <hr />
+                        <p className="fs-5 mt-3 mb-2 nasa">Experience</p>
+                        Find developers with the right level of experience for your project, 
+                        whether you're looking for seasoned veterans or fresh talent.
+                        <hr />
+                        <p className="fs-5 mt-3 mb-2 nasa">Location</p>
+                        Prefer to work with developers in your area or time zone? 
+                        Our location filter helps you narrow down your search.
+                        </p>
+                    </div>
                 </div>
             </div>
             <div style={{height: "100px"}}></div>

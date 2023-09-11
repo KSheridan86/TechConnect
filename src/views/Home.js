@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import axios from 'axios';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
+import logo from "../images/logo.png";
 
 const api = axios.create({
     baseURL: 'http://16.171.133.35:4000',
@@ -55,17 +56,14 @@ const Home = ({loggedIn}) => {
     }
 
     return (
-        <div className="container">
+        <div className="container mt-4">
             <div className="row justify-content-center">
-                <div className="col-md-6">
-                    <div className="glass-box border-dark m-3 nasa">
-                        <h1 className="p-4 pb-1 text-center">
-                        Welcome to <br />
-                        <span className="text-uppercase">TechConnect</span>
-                        </h1>
-                    </div>
 
-                    <div className="p-3 text-center glass-box m-3 border-dark">
+                <div className="col-md-6">
+                    <div className="glass-box border-dark m-3 nasa p-4 text-center">
+                        <div className="circle-image m-auto mb-3">
+                            <img src={logo} alt="Circle" />
+                        </div>
                         <p>
                         The premier platform for connecting with talented
                         developers and finding the right expertise for your projects. 
@@ -73,6 +71,21 @@ const Home = ({loggedIn}) => {
                         client seeking top-notch tech talent, TechConnect is the place to be.
                         </p>
                         <hr />
+                        <div className="hand-writing">
+                            <p>
+                            Ready to get started? Join TechConnect today and take your career or your projects to the next level!
+                            </p>
+                            <button onClick={handleSignUp} className="hand-writing btn btn-warning border-dark m-1 custom-button">
+                                Sign Up as a Developer
+                            </button>
+                            <button onClick={handleSignUp} className="btn btn-warning border-dark custom-button m-1">
+                                Sign Up as a Client
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-md-6">
+                    <div className="p-3 text-center glass-box m-3 border-dark">
                         <h1 className='nasa'>Developers!</h1>
                         <p>
                         Create free accounts and build professional portfolio
@@ -96,26 +109,10 @@ const Home = ({loggedIn}) => {
                         and send private messages to your perfect developer.
                         </p>
                         <hr />
-
-                        <div>
-                            <p className="pb-3">
-                            Ready to get started? Join TechConnect today and take your career and projects to the next level!
-                            </p>
-                            <div className="col-12 text-center hand-writing mb-3 m-2">
-                                <button onClick={handleSignUp} className="btn btn-warning border-dark custom-button">
-                                    Sign Up as a Developer
-                                </button>
-                            </div>
-                            <div className="col-12 text-center hand-writing mb-3 m-2">
-                                <button onClick={handleSignUp} className="btn btn-warning border-dark custom-button">
-                                    Sign Up as a Client
-                                </button>
-                            </div>
-                        </div>
                     </div>
                 </div>
             </div>
-            <div style={{ height: "80px" }}></div>
+            <div style={{ height: "20vh" }}></div>
         </div>
     );
 };
