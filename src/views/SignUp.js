@@ -24,6 +24,16 @@ const SignUp = ({ onLogin }) => {
         setUserData(prevUserData => ({ ...prevUserData, [name]: value }));
     };
 
+    const clientSignUp = () => {
+      // Redirect the user to the home page
+      navigate("/");
+    };
+
+    const devSignUp = () => {
+      // Redirect the user to the "create-profile" page
+      navigate("/create-profile");
+    };
+
     const loginAfterSignup = async (email, password) => {
         try {
             const response = await api.post('/login', {
@@ -106,11 +116,22 @@ const SignUp = ({ onLogin }) => {
                   </div>
                 </div>
                 <div className="col-12 text-center hand-writing">
-                  <button
-                    type="submit"
-                    className="btn btn-warning border-dark border-2 mt-3 mb-4 col-6">
-                    Sign Up
-                  </button>
+                  {accountType === "Developer" ? (
+                    <button
+                      type="submit"
+                      className="btn btn-warning border-dark border-2 mt-3 mb-4 col-6"
+                      onClick={devSignUp}>
+                      Sign Up
+                    </button>
+                  ) : (
+                    <button
+                      type="submit"
+                      className="btn btn-warning border-dark border-2 mt-3 mb-4 col-6"
+                      onClick={clientSignUp}>
+                      Sign Up
+                    </button>
+                  )}
+                  
                 </div>
               </form>
             </div>
