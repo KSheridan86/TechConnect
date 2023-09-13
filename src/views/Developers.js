@@ -48,24 +48,24 @@ const Developers = () => {
                         individuals with expertise in various technologies and experience levels.
                     </p>
                     <hr />
-                    <p className="hand-writing fs-4 text-center">
+                    <p className="hand-writing fs-4 text-center mb-4">
                             Simply input your particular criteria below and we'll do the rest!
                         </p>
-                        <div className="d-flex justify-content-evenly align-items-center mt-3 mb-3">
+                        <div className="d-flex justify-content-evenly align-items-center mt-3 mb-4">
                             <FontAwesomeIcon icon={faLongArrowAltDown} />
                             <FontAwesomeIcon icon={faLongArrowAltDown} />
                         </div>
                         <div className="row justify-content-center text-center">
                             <div className="col-8">
                                 <input
-                                    className="text-center border border-dark border-2 p-2 form-control mb-2 hand-writing"
+                                    className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
                                     type="text"
                                     placeholder="Who or What are you looking for?"
                                     value={foodType}
                                     onChange={(e) => setFoodType(e.target.value)}
                                 />
                             </div>
-                            <div className="col-8 text-center hand-writing">
+                            <div className="col-8 text-center hand-writing mb-3">
                                 <button 
                                     onClick={handleSearch} 
                                     className="btn btn-warning border-dark border-2 mt-3 col-6">
@@ -73,6 +73,7 @@ const Developers = () => {
                                 </button>
                             </div>
                         </div>
+                        <hr />
                 </div>
 
                 <div className="col-12 col-md-6">

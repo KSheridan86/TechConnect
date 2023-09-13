@@ -65,6 +65,11 @@ const CreateProfile = () => {
             console.error('Failed to create profile:', error);
         }
     };
+
+    const createProfile = () => {
+      localStorage.setItem('userProfile', JSON.stringify(profile));
+      navigate("/create-profile-part2");
+    };
     
 
     return (
@@ -190,6 +195,7 @@ const CreateProfile = () => {
                 <button
                   type='submit'
                   className='btn btn-warning btn-lg'
+                  onClick={createProfile}
                 >
                   Create Profile
                 </button>

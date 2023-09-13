@@ -11,6 +11,7 @@ import Logout from '../views/Logout';
 import ConfirmDelete from '../views/ConfirmDelete';
 import EditProfile from '../views/EditProfile';
 import CreateProfile from '../views/CreateProfile';
+import CreateProfilePart2 from '../views/CreateProfilePart2';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
 
@@ -90,6 +91,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
         <Route path="/confirm-delete/:id" element={<ConfirmDelete />} />
         <Route path="/edit-profile" element={<EditProfile />} />
         <Route path="/create-profile" element={<CreateProfile />} />
+        <Route path="/create-profile-part2" element={<CreateProfilePart2 />} />
       </Routes>
     </Router>
   );

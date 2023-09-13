@@ -26,11 +26,15 @@ const SignUp = ({ onLogin }) => {
 
     const clientSignUp = () => {
       // Redirect the user to the home page
-      navigate("/");
+      navigate("/developers");
     };
 
     const devSignUp = () => {
-      // Redirect the user to the "create-profile" page
+      const userDataToStore = {
+        username: userData.username,
+        email: userData.email,
+    };
+      localStorage.setItem('UserData', JSON.stringify(userDataToStore));
       navigate("/create-profile");
     };
 
