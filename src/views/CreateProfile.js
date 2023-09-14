@@ -68,7 +68,7 @@ const CreateProfile = () => {
 
     const createProfile = () => {
       localStorage.setItem('userProfile', JSON.stringify(profile));
-      navigate("/create-profile-part2");
+      navigate("/add-skills");
     };
     
 

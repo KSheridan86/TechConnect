@@ -62,6 +62,31 @@ nav {
   transform: translateY(50px);
 }
 
+/* Notifications */
+
+.notification-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9999;
+}
+
+.notification-overlay .alert {
+  max-width: 400px;
+  background-color: #1b335b;
+  color: #f1916d;
+  border-radius: 4px;
+  text-align: center;
+  padding: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
 /* General spacing, shadows and effects for divs */
 .spacing {
   margin-bottom: 5rem;
@@ -91,7 +116,7 @@ p {
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   border-radius: 10px;
-  max-width: 600px;
+  /* max-width: 80%; */
   color: #f5d7db
 }
 .calories, .login, .logout, .delete {
