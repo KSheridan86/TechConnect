@@ -11,24 +11,49 @@ const Login = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [data, setData] = useState(null);
+  const [error, setError] = useState('');
   const navigate = useNavigate();
     
   const handleLogin = async (e) => {
     e.preventDefault();
-    try {
-      const response = await api.post('/login', {
-        user: {
-          email,
-          password,
-        },
-      });
-      setData(response.data.user.id)
-      localStorage.setItem('userId', JSON.stringify(response.data.user.id));
-      
-    } catch (error) {
-        console.error('Error while making the API call:', error);
+    // Retrieve the list of users from local storage
+    const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
+    // Find the user with the provided email
+    const user = storedUsers.find((user) => user.email === email);
+    if (user && user.password === password) {
+      const currentUser = {
+        username: user.username,
+        accountType: user.accountType,
+      };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      onLogin();
+      if (user.accountType === 'Client') {
+      navigate('/developers');
+      } else {
+        navigate('/profile');
       }
+    } else {
+      // User credentials are incorrect
+      setError('Invalid email or password');
+    }
+    // try {
+    //   const response = await api.post('/login', {
+    //     user: {
+    //       email,
+    //       password,
+    //     },
+    //   });
+    //   setData(response.data.user.id)
+    //   localStorage.setItem('userId', JSON.stringify(response.data.user.id));
+      
+    // } catch (error) {
+    //     console.error('Error while making the API call:', error);
+    //   }
   };
+  setTimeout(() => {
+    setError('');
+  }, 2500);
+
 
   const handleSignUp = (accountType) => {
     navigate("/signup", { state: { accountType } });
@@ -47,7 +72,13 @@ const Login = ({ onLogin }) => {
         <div className="row">
 
           <div className="col-md-6">
-            
+          {error && (
+            <div className='notification-overlay'>
+              <div className='alert alert-success' role='alert'>
+                {error}
+              </div>
+            </div>
+          )}
             <form className="glass-box m-3 mb-3 fw-bold text-center" onSubmit={handleLogin}>
               <p className="fs-5 mt-3 mb-2">Welcome back to</p>
               <h2 className="nasa mt-2 text-center text-uppercase">
@@ -76,7 +107,8 @@ const Login = ({ onLogin }) => {
                   <div className="col-12 text-center hand-writing">
                     <button
                       className="btn btn-warning border-dark border-2 mt-3 col-6 mb-4"
-                      type="submit">
+                      type="submit"
+                      onClick={handleLogin}>
                       Login
                     </button>
                   </div>

@@ -16,17 +16,14 @@ const CreateProfile = () => {
       email: '',
       intro: '',
       bio: '',
-      avatar: '', // You can store the avatar URL here
+      avatar: '',
       location: '',
       githubUrl: '',
       linkedinUrl: '',
       portfolioUrl: '',
       yearsExperience: '',
-      available: false, // Set to false by default
+      available: false,
     });
-
-    // Retrieve UserData from local storage
-    // const storedUserData = JSON.parse(localStorage.getItem('UserData'));
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -52,22 +49,18 @@ const CreateProfile = () => {
       setProfile((prevProfile) => ({ ...prevProfile, [name]: checked }));
     };
 
-    const handleSubmit = async event => {
-        event.preventDefault();
-        try {
-            localStorage.setItem('profileData', JSON.stringify(profile));
-            const response = await api.post('/api/profiles', { profile });
-            if (response) {
-                navigate('/');
-            }
-            console.log('Profile created successfully', response.data);
-        } catch (error) {
-            console.error('Failed to create profile:', error);
-        }
-    };
-
     const createProfile = () => {
-      localStorage.setItem('userProfile', JSON.stringify(profile));
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const users = JSON.parse(localStorage.getItem('Users'));
+      // Find the current user in the Users array
+      const updatedUsers = users.map((user) => {
+      if (user.username === currentUser.username) {
+            user.profile = profile; // Update the user's profile
+          }
+          return user;
+      });
+      localStorage.setItem('Users', JSON.stringify(updatedUsers));
+            
       navigate("/add-skills");
     };
     
@@ -80,7 +73,7 @@ const CreateProfile = () => {
               Create your Profile
             </h2>
 
-            <form onSubmit={handleSubmit}>
+            <form>
               <div className='row justify-content-evenly text-center'>
                 <div className='col-md-5 mb-3'>
                   <div className='glass-box border-dark m-3 p-3'>

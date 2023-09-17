@@ -1,46 +1,42 @@
 // Profile.js
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+// import axios from 'axios';
 
 const Profile = () => {
-  const [user, setUser] = useState(null);
+  // Step 2: Create a state variable to store user data
+  const [userData, setUserData] = useState({});
 
   useEffect(() => {
-    // Fetch the user's profile data from the backend when the component mounts
-    axios.get('http://16.171.133.35:4000/api/profile')
-      .then((response) => {
-        setUser(response.data);
-      })
-      .catch((error) => {
-        console.error('Failed to fetch profile:', error);
-      });
+      // Step 3: Retrieve data from local storage and update the state
+      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+      const users = JSON.parse(localStorage.getItem('Users'));
+
+      // Find the current user in the Users array
+      const foundUser = users.find(user => user.username === currentUser.username);
+
+      if (foundUser) {
+          setUserData(foundUser);
+      }
   }, []);
 
-  const handleUpdateProfile = async (updatedProfile) => {
-    try {
-      const response = await axios.put('http://16.171.133.35:4000/api/profile', {
-        user: updatedProfile,
-      });
-      // If the update is successful, update the local user state
-      setUser(response.data);
-      console.log('Profile updated:', response.data);
-    } catch (error) {
-      console.error('Profile update failed:', error);
-    }
-  };
-
-  // if (!user) {
-  //   return <div>Loading...</div>;
-  // }
 
   return (
-    <div>
-      <h2>Profile</h2>
-      <p>Email: </p>
-      {/* Render other profile information here */}
-      <button onClick={() => handleUpdateProfile({ ...user, name: 'New Name' })}>Update Name</button>
-      <div style={{height: "500px"}}></div>
-    </div>
+    <div className='container mt-4'>
+            <div className='row justify-content-center login'>
+                <div className='col-12 glass-box'>
+                    <h2 className='nasa-black text-center text-uppercase mt-3'>
+                    Hello {userData.username}, Welcome back!
+                    </h2>
+                    <p className='nasa-black text-center text-uppercase mt-3'>{userData.accountType}</p>
+                    <p className='nasa-black text-center text-uppercase mt-3'>{userData.email}</p>
+                    <p className='nasa-black text-center text-uppercase mt-3'>
+                      Your current skills are: {userData.skills[0]}, {userData.skills[1]} & 
+                      {userData.skills[2]}. 
+                    </p>
+            </div>
+            <div style={{ height: '35rem' }}></div>
+        </div>
+        </div>
   );
 };
 

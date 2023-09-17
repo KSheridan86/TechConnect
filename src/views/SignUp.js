@@ -10,31 +10,46 @@ const api = axios.create({
 const SignUp = ({ onLogin }) => {
   const location = useLocation();
   const accountType = location.state?.accountType;
-  console.log(accountType)
-    const navigate = useNavigate();
-    const [userData, setUserData] = useState({
-        username: '',
-        email: '',
-        password: '',
-        passwordConfirmation: '',
-    });
+  const navigate = useNavigate();
+  const initialUserData =
+    accountType === 'Developer'
+      ? {
+          username: '',
+          email: '',
+          password: '',
+          passwordConfirmation: '',
+          accountType: accountType,
+          profile: {},
+          skills: [],
+          projectsList: [],
+        }
+      : {
+          username: '',
+          email: '',
+          password: '',
+          passwordConfirmation: '',
+          accountType: accountType,
+        };
+const [userData, setUserData] = useState(initialUserData);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
         setUserData(prevUserData => ({ ...prevUserData, [name]: value }));
     };
 
+    const addUserToLocalStorage = user => {
+      const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
+      storedUsers.push(user);
+      localStorage.setItem('Users', JSON.stringify(storedUsers));
+  };
+
     const clientSignUp = () => {
-      // Redirect the user to the home page
+      addUserToLocalStorage(userData);
       navigate("/developers");
     };
 
     const devSignUp = () => {
-      const userDataToStore = {
-        username: userData.username,
-        email: userData.email,
-    };
-      localStorage.setItem('UserData', JSON.stringify(userDataToStore));
+      addUserToLocalStorage(userData);
       navigate("/create-profile");
     };
 

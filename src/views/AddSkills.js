@@ -19,7 +19,16 @@ const AddSkills = () => {
     };
 
     const addSkills = () => {
-        localStorage.setItem('skills', JSON.stringify(skills));
+        const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+        const users = JSON.parse(localStorage.getItem('Users'));
+        // Find the current user in the Users array
+        const updatedUsers = users.map((user) => {
+            if (user.username === currentUser.username) {
+                user.skills = skills;
+            }
+            return user;
+        });
+        localStorage.setItem('Users', JSON.stringify(updatedUsers));
         navigate("/add-projects");
     };
     

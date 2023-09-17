@@ -12,16 +12,16 @@ const AddProjects = () => {
         image: '',
     });
 
-    const [projectsList, setProjectsList] = useState([]);
     const [showNotification, setShowNotification] = useState(false);
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
-    useEffect(() => {
-        // Load projects from local storage when the component mounts
-        const storedProjects = JSON.parse(localStorage.getItem('projectsList'));
-        if (storedProjects) {
-            setProjectsList(storedProjects);
-        }
-    }, []);
+    // useEffect(() => {
+    //     // Initialize the project state based on the currentUser's projectsList
+    //     setProject({
+    //     ...project,
+    //       projectsList: currentUser.projectsList || [], // Initialize with the user's projectsList or an empty array
+    //     });
+    // }, [currentUser, project]);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -47,11 +47,20 @@ const AddProjects = () => {
             // Create a copy of the current project
             const newProject = { ...project };
 
-            // Add the new project to the projectsList array
-            setProjectsList((prevProjectsList) => [...prevProjectsList, newProject]);
+            // Load the Users array from local storage
+            const users = JSON.parse(localStorage.getItem('Users'));
 
-            // Store the updated projectsList in local storage
-            localStorage.setItem('projectsList', JSON.stringify([...projectsList, newProject]));
+            // Find the currently logged in user within the Users array
+            const updatedUsers = users.map(user => {
+                if (user.username === currentUser.username) {
+                    // Update the user's projectsList with the new project
+                    user.projectsList.push(newProject);
+                }
+                return user;
+            });
+
+            // Update the Users array in local storage
+            localStorage.setItem('Users', JSON.stringify(updatedUsers));
 
             // Clear the input fields
             setProject({

@@ -16,8 +16,9 @@ import AddProjects from '../views/AddProjects';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
 
-const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
+const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
   const [isNavOpen, setIsNavOpen] = useState(false);
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
@@ -61,11 +62,13 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                   Developers
                 </Link>
               </li>
-              <li className="nav-item">
-                <Link className="nav-link nasa" to="/profile" onClick={closeNav}>
-                  Profile
-                </Link>
-              </li>
+              {isLoggedIn && currentUser.accountType === "Developer" && (
+                <li className="nav-item">
+                  <Link className="nav-link nasa" to="/profile" onClick={closeNav}>
+                    Profile
+                  </Link>
+                </li>
+              )}
               { isLoggedIn ? 
                 <li className="nav-item">
                   <Link className="nav-link nasa" to="/logout" onClick={closeNav}>
