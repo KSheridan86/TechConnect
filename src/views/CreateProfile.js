@@ -66,7 +66,7 @@ const CreateProfile = () => {
     
 
     return (
-      <div className='container'>
+      <div className='container fill-screen'>
         <div className='row justify-content-center login'>
           <div className='col-12'>
             <h2 className='nasa-black text-center text-uppercase mt-3'>
@@ -195,7 +195,7 @@ const CreateProfile = () => {
               </div>
             </form>
           </div>
-        <div style={{ height: '120px' }}></div>
+        <div style={{ height: '9rem' }}></div>
       </div>
     </div>
     );

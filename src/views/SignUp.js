@@ -45,11 +45,25 @@ const [userData, setUserData] = useState(initialUserData);
 
     const clientSignUp = () => {
       addUserToLocalStorage(userData);
+      const currentUser = {
+        username: userData.username,
+        email: userData.email,
+        accountType: userData.accountType,
+      };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      onLogin();
       navigate("/developers");
     };
 
     const devSignUp = () => {
       addUserToLocalStorage(userData);
+      const currentUser = {
+        username: userData.username,
+        email: userData.email,
+        accountType: userData.accountType,
+      };
+      localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      onLogin();
       navigate("/create-profile");
     };
 
@@ -87,7 +101,7 @@ const [userData, setUserData] = useState(initialUserData);
     };
 
     return (
-      <div className="container login">
+      <div className="container login fill-screen mt-4">
         <div className="row mt-3 justify-content-center">
 
           <div className="col-md-6">
@@ -156,7 +170,7 @@ const [userData, setUserData] = useState(initialUserData);
             </div>
           </div>
         </div>
-        <div style={{ height: "120px" }}></div>
+        {/* <div style={{ height: "120px" }}></div> */}
       </div>
     );
 };

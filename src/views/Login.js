@@ -23,6 +23,7 @@ const Login = ({ onLogin }) => {
     if (user && user.password === password) {
       const currentUser = {
         username: user.username,
+        email: user.email,
         accountType: user.accountType,
       };
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -67,7 +68,7 @@ const Login = ({ onLogin }) => {
   }, [data, navigate, onLogin]);
 
   return (
-    <div className="container login">
+    <div className="container login fill-screen">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
         <div className="row">
 
@@ -136,7 +137,7 @@ const Login = ({ onLogin }) => {
             
           </div>
         </div>
-      <div style={{ height: "30vh" }}></div>
+      {/* <div style={{ height: "30vh" }}></div> */}
     </div>
   );
 };

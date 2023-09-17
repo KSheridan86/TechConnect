@@ -126,6 +126,10 @@ p {
   font-size: 2rem;
 }
 
+.fill-screen {
+  min-height: 100vh;
+}
+
 /* Back to top btn styles & animation */
 .back-to-top-button {
   font-size: 2rem;

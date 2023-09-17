@@ -56,7 +56,7 @@ const Home = ({loggedIn}) => {
     }
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4 fill-screen">
             <div className="row justify-content-center">
 
                 <div className="col-md-6">
@@ -112,7 +112,7 @@ const Home = ({loggedIn}) => {
                     </div>
                 </div>
             </div>
-            <div style={{ height: "20vh" }}></div>
+            {/* <div style={{ height: "20vh" }}></div> */}
         </div>
     );
 };

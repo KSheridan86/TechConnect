@@ -22,9 +22,7 @@ function App() {
   const handleLogout = () => {
     setLoggedIn(false);
     // Remove all of the users data from local storage
-    localStorage.removeItem('profileData');
-    localStorage.removeItem('UserData');
-    localStorage.removeItem('userId');
+    localStorage.removeItem('currentUser');
   };
 
   return (

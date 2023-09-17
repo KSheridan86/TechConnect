@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-router-dom';
 import '../App.css';
 import Home from '../views/Home';
 import Developers from '../views/Developers';
@@ -87,7 +87,9 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
       <Routes>
         <Route path="/" element={<Home loggedIn={isLoggedIn} />} />
         <Route path="/developers" element={<Developers />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={
+            isLoggedIn && currentUser.accountType === 'Developer' ? (
+              <Profile /> ) : ( <Navigate to="/" /> )} />
         <Route path="/signup" element={<SignUp onLogin={onLogin} />} />
         <Route path="/delete-user" element={<DeleteUser onLogout={onLogout} />} />
         <Route path="/login" element={<Login onLogin={onLogin} />} /> 

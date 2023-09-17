@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const AddProjects = () => {
@@ -14,14 +14,9 @@ const AddProjects = () => {
 
     const [showNotification, setShowNotification] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    // Initialize projectsList with the current user's projects
+    const [projectsList, setProjectsList] = useState(currentUser.projectsList || []);
 
-    // useEffect(() => {
-    //     // Initialize the project state based on the currentUser's projectsList
-    //     setProject({
-    //     ...project,
-    //       projectsList: currentUser.projectsList || [], // Initialize with the user's projectsList or an empty array
-    //     });
-    // }, [currentUser, project]);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
@@ -85,11 +80,11 @@ const AddProjects = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='container fill-screen'>
             <div className='row justify-content-center login'>
                 <div className='col-12'>
                     <h2 className='nasa-black text-center text-uppercase mt-3'>
-                        Add content to your Profile
+                        Add projects to your Profile
                     </h2>
                     {showNotification && (
                         <div className='notification-overlay'>
@@ -188,7 +183,7 @@ const AddProjects = () => {
                         </button>
                     </div>
                 </div>
-                <div style={{ height: '120px' }}></div>
+                {/* <div style={{ height: '120px' }}></div> */}
             </div>
         </div>
     );
