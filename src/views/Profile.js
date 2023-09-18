@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import defaultAvatar from '../images/default-avatar.png';
 // import axios from 'axios';
 
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const users = JSON.parse(localStorage.getItem('Users'));
-  const [userData, setUserData] = useState({});
+  // const [userData, setUserData] = useState({});
+  const [userData, setUserData] = useState({ profile: {} });
   const [foundUser, setFoundUser] = useState({}); 
   const navigate = useNavigate();
 
@@ -17,7 +19,7 @@ const Profile = () => {
         setUserData(found);
       }
   }
-  , [currentUser.email, users]);
+  , []);
 
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
@@ -57,17 +59,37 @@ const Profile = () => {
     // Update the state to reflect the changes
     setUserData(updatedUserData);
   };
+  console.log(userData.profile.githubUrl)
   
   return (
     <div className='container mt-4 fill-screen mb-2'>
-      <div className='row justify-content-center login'>
-        <div className='col-12 glass-box mb-5'>
-          <h2 className='nasa-black text-center text-uppercase mt-3'>
-            Hello {userData.username}, Welcome back!
-          </h2>
-          <p className='nasa-black text-center text-uppercase mt-3'>{userData.accountType}</p>
-          <p className='nasa-black text-center text-uppercase mt-3'>{userData.email}</p>
-          
+      <div className='row justify-content-evenly'>
+        <h2 className='nasa-black text-center text-uppercase mt-3'>
+          Hello {userData.username}, Welcome back!
+        </h2>
+        <div className='col-10 col-lg-5 glass-box mb-5'>
+          <div className="row">
+            <div className="col-6">
+              <img
+                src={defaultAvatar}
+                alt='User Avatar'
+                className='user-avatar mt-2'
+              />
+            </div>
+            <div className="col-6 mt-3">
+              <p className='nasa-black text-center text-uppercase'>{userData.username}</p>
+              <p className='nasa-black text-center text-uppercase'>{userData.email}</p>
+              <p className='nasa-black text-center text-uppercase'>{userData.profile.githubUrl}</p>
+              <p className='nasa-black text-center text-uppercase'>{userData.profile.linkedinUrl}</p>
+              <p className='nasa-black text-center text-uppercase'>{userData.profile.location}</p>
+              {userData.profile.available === true ? (
+                <p className='nasa-black text-center text-uppercase'>Available for work</p>
+              ) : (
+                <p className='nasa-black text-center text-uppercase'>Not Available</p>
+              )}
+            </div>
+          </div>
+        
           <h3 className='nasa-black text-center text-uppercase mt-3'>Your Skills:</h3>
           
           {userData.skills && userData.skills.length > 0 && (
@@ -85,7 +107,10 @@ const Profile = () => {
               </button>
             </div>
           )}
-          {userData.projectsList && userData.projectsList.length > 0 && (
+          
+        </div>
+        <div className='col-10 col-lg-5 glass-box mb-5'>
+          {/* {userData.projectsList && userData.projectsList.length > 0 && (
           <div>
             <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
                       
@@ -119,8 +144,10 @@ const Profile = () => {
                 </div>
           ))}
           </div>
-          )}
-          <div className='text-center mt-3 mb-5 hand-writing'>
+          )} */}
+        </div>
+
+        <div className='text-center mt-5 mb-5 hand-writing'>
             <button
               className='btn btn-warning btn-lg mx-2'
               onClick={updateSkills}
@@ -134,8 +161,6 @@ const Profile = () => {
               Add Projects
             </button>
           </div>
-          
-        </div>
         <div style={{ height: '10rem' }}></div>
       </div>
     </div>
