@@ -192,3 +192,7 @@ div > a {
     margin-top: 0;
   }
 }
+
+.user-avatar {
+  width: 100%;
+}

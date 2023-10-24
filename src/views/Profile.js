@@ -71,7 +71,7 @@ const Profile = () => {
           <div className="row">
             <div className="col-6">
               <img
-                src={defaultAvatar}
+                src={userData.profile.avatar || defaultAvatar}
                 alt='User Avatar'
                 className='user-avatar mt-2'
               />
@@ -101,7 +101,7 @@ const Profile = () => {
             <div className="text-center hand-writing">
               <button
                 type='button'
-                className='btn btn-danger btn-lg'
+                className='btn btn-danger btn-lg mb-4'
                 onClick={deleteAllSkills}>
                 Delete All Skills
               </button>
@@ -110,12 +110,12 @@ const Profile = () => {
           
         </div>
         <div className='col-10 col-lg-5 glass-box mb-5'>
-          {/* {userData.projectsList && userData.projectsList.length > 0 && (
+          {userData.projectsList && userData.projectsList.length > 0 && (
           <div>
             <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
                       
               {userData.projectsList.map((project, index) => (
-                <div className="glass-box w-50 m-auto mb-3">
+                <div className="glass-box w-75 m-auto mb-3">
                   <p className='nasa-black text-center text-uppercase mt-3' key={index}>
                   {project.name}
                   </p>
@@ -144,7 +144,7 @@ const Profile = () => {
                 </div>
           ))}
           </div>
-          )} */}
+          )}
         </div>
 
         <div className='text-center mt-5 mb-5 hand-writing'>
