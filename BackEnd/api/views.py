@@ -5,9 +5,12 @@ The views to control the API.
 
 # from django.shortcuts import render
 from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.response import Response
 from .users import users
 
 
+@api_view(['GET'])
 def get_routes(request):
     """
     Setting up the routes for the API.
@@ -20,11 +23,25 @@ def get_routes(request):
         'api/admin.py',
         'api/tests.py',
     ]
-    return JsonResponse(routes, safe=False)
+    return Response(routes)
 
 
+@api_view(['GET'])
 def get_users(request):
     """
     Return all users.
     """
-    return JsonResponse(users, safe=False)
+    return Response(users)
+
+
+@api_view(['GET'])
+def get_user(request, pk):
+    """
+    Return all users.
+    """
+    user = "Me"
+    for i in users:
+        if i["id"] == int(pk):
+            user = i
+            break
+    return Response(user)
