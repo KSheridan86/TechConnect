@@ -4,7 +4,7 @@ The views to control the API.
 
 
 # from django.shortcuts import render
-from django.http import JsonResponse
+# pylint: disable=E0401
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .users import users
