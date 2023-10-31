@@ -1,37 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
+import axios from 'axios';
 
 const Developers = () => {
-    const [foodType, setFoodType] = useState('');
-    const [nutritionInfo, setNutritionInfo] = useState(null);
-    const apiKey = 'ea0f0eff98a1a9e86e859c075afe7746';
+    const [users, setUsers] = useState([]);
+    const apiUrl = 'http://127.0.0.1:8000/api/';
 
-    const handleSearch = async () => {
-        try {
-        const response = await fetch(
-            `https://trackapi.nutritionix.com/v2/natural/nutrients`,
-            {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'x-app-id': '88f90da2',
-                'x-app-key': apiKey,
-            },
-            body: JSON.stringify({ query: foodType }),
-            }
-        );
-
-        if (response.ok) {
-            const data = await response.json();
-            setNutritionInfo(data.foods[0]);
-        } else {
-            console.error('Error fetching data');
+    useEffect(() => {
+        async function fetchUsers(){
+            const { data } = await axios.get(apiUrl + 'users/');
+            setUsers(data);
         }
-        } catch (error) {
-        console.error('Error:', error);
-        }
-    };
+        fetchUsers();
+        
+    }, []);
 
     return (
         <div className="container mt-3">
@@ -61,19 +44,25 @@ const Developers = () => {
                                     className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
                                     type="text"
                                     placeholder="Who or What are you looking for?"
-                                    value={foodType}
-                                    onChange={(e) => setFoodType(e.target.value)}
                                 />
                             </div>
                             <div className="col-8 text-center hand-writing mb-3">
-                                <button 
-                                    onClick={handleSearch} 
+                                <button  
                                     className="btn btn-warning border-dark border-2 mt-3 col-6">
                                         Search
                                 </button>
                             </div>
                         </div>
                         <hr />
+                        <div>
+                            {users.length > 0 ? (
+                                users.map((user) => {
+                                    return <p key={user.id}>{user.name}</p>;
+                                })
+                            ) : (
+                                <p>no users</p>
+                            )}
+                        </div>
                 </div>
 
                 <div className="col-12 col-md-6">
