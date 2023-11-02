@@ -57,7 +57,10 @@ const Developers = () => {
                         <div>
                             {users.length > 0 ? (
                                 users.map((user) => {
-                                    return <p key={user.id}>{user.name}</p>;
+                                    return <p key={user.id}>
+                                        {user.username}<br />
+                                        {user.email}
+                                        </p>;
                                 })
                             ) : (
                                 <p>no users</p>

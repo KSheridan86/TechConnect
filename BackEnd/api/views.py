@@ -8,6 +8,12 @@ The views to control the API.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .users import users
+from .models import (User, DeveloperProfile, Skill, Project,
+                     DeveloperReview, ProjectReview, PrivateMessage)
+from .serializers import (UserSerializer, DeveloperProfileSerializer,
+                          SkillSerializer, ProjectSerializer,
+                          DeveloperReviewSerializer, ProjectReviewSerializer,
+                          PrivateMessageSerializer)
 
 
 @api_view(['GET'])
@@ -31,7 +37,9 @@ def get_users(request):
     """
     Return all users.
     """
-    return Response(users)
+    all_users = User.objects.all()
+    serializer = UserSerializer(all_users, many=True)
+    return Response(serializer.data)
 
 
 @api_view(['GET'])

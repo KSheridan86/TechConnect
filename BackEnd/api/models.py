@@ -22,8 +22,8 @@ TYPE_CHOICES = (
 )
 
 # Extend the built-in User model to include the 'user_type' field
-# User.add_to_class('user_type', models.CharField(
-#     max_length=10, choices=TYPE_CHOICES))
+# User.add_to_class('type', models.CharField(
+#     max_length=10, choices=TYPE_CHOICES, null=True, blank=True))
 
 
 # Developer Profile Model
@@ -41,7 +41,7 @@ class DeveloperProfile(models.Model):
     portfolio_url = models.URLField()
     intro_text = models.TextField()
     biography_text = models.TextField()
-    # avatar = models.ImageField(upload_to='avatars/')
+    avatar = models.ImageField(null=True, blank=True)
     years_of_experience = models.PositiveIntegerField()
     location = models.CharField(max_length=100)
     available = models.BooleanField(default=False)
@@ -76,10 +76,13 @@ class Project(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
     url = models.URLField()
-    # image = models.ImageField(upload_to='project-images/')
+    image = models.ImageField(null=True, blank=True)
     tech_stack = models.TextField()
     developer = models.ForeignKey(
         DeveloperProfile, on_delete=models.CASCADE, related_name='projects')
+
+    def __str__(self):
+        return f"{self.name}"
 
 
 # Developer Review Model
