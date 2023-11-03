@@ -26,6 +26,7 @@ class ProfileType(models.Model):
     ])
 
     def __str__(self):
+        # pylint: disable=E1101
         return self.user.username
 
 

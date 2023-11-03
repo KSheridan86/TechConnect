@@ -7,12 +7,14 @@ from .models import ProfileType
 
 
 @receiver(post_save, sender=User)
+# pylint: disable=W0613
 def create_or_update_user_profile(sender, instance, created, **kwargs):
     """
     Create or update the user profile associated with the user.
     """
     try:
         profile = instance.profiletype
+        # pylint: disable=E1101
     except ProfileType.DoesNotExist:
         profile = ProfileType(user=instance)
 

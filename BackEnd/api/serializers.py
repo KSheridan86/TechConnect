@@ -23,9 +23,13 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['username', 'email', 'profile_type']
 
     def get_profile_type(self, obj):
+        """_summary_
+        This method returns the profile type of the user.
+        """
         try:
             profile = obj.profiletype
             return profile.type
+        # pylint: disable=E1101
         except ProfileType.DoesNotExist:
             return None
 
