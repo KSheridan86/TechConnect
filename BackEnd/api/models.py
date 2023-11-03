@@ -15,15 +15,18 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-# Define the user type choices
-TYPE_CHOICES = (
-    ('client', 'Client'),
-    ('developer', 'Developer'),
-)
+class ProfileType(models.Model):
+    """
+    This model defines the user type choices.
+    """
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    type = models.CharField(max_length=10, choices=[
+        ('client', 'Client'),
+        ('developer', 'Developer'),
+    ])
 
-# Extend the built-in User model to include the 'user_type' field
-# User.add_to_class('type', models.CharField(
-#     max_length=10, choices=TYPE_CHOICES, null=True, blank=True))
+    def __str__(self):
+        return self.user.username
 
 
 # Developer Profile Model

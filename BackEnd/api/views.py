@@ -8,7 +8,7 @@ The views to control the API.
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .users import users
-from .models import (User, DeveloperProfile, Skill, Project,
+from .models import (User, ProfileType, DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, DeveloperProfileSerializer,
                           SkillSerializer, ProjectSerializer,

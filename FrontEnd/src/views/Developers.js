@@ -11,6 +11,7 @@ const Developers = () => {
         async function fetchUsers(){
             const { data } = await axios.get(apiUrl + 'users/');
             setUsers(data);
+            console.log(data);
         }
         fetchUsers();
         
@@ -59,7 +60,8 @@ const Developers = () => {
                                 users.map((user) => {
                                     return <p key={user.id}>
                                         {user.username}<br />
-                                        {user.email}
+                                        {user.email}<br />
+                                        {user.profile_type}
                                         </p>;
                                 })
                             ) : (

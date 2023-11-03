@@ -5,7 +5,7 @@ _summary_
 # pylint: disable=E0401
 from rest_framework import serializers
 from django.contrib.auth.models import User
-from .models import (DeveloperProfile, Skill, Project,
+from .models import (ProfileType, DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 
 
@@ -13,12 +13,21 @@ class UserSerializer(serializers.ModelSerializer):
     """
     Serializes the User model.
     """
+    profile_type = serializers.SerializerMethodField()
+
     class Meta:
         """
         _summary_
         """
         model = User
-        fields = '__all__'
+        fields = ['username', 'email', 'profile_type']
+
+    def get_profile_type(self, obj):
+        try:
+            profile = obj.profiletype
+            return profile.type
+        except ProfileType.DoesNotExist:
+            return None
 
 
 class DeveloperProfileSerializer(serializers.ModelSerializer):
