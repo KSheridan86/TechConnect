@@ -5,6 +5,8 @@ The views to control the API.
 # from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from rest_framework_simplejwt.views import TokenObtainPairView
 from .users import users
 # pylint: disable=W0611
 from .models import (User, ProfileType, DeveloperProfile, Skill, Project,
@@ -13,6 +15,29 @@ from .serializers import (UserSerializer, DeveloperProfileSerializer,
                           SkillSerializer, ProjectSerializer,
                           DeveloperReviewSerializer, ProjectReviewSerializer,
                           PrivateMessageSerializer)
+
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """
+    Serializer for the token.
+    """
+    def validate(self, attrs):
+        """
+        Validate the token.
+        """
+        data = super().validate(attrs)
+        data['username'] = self.user.username
+        data['email'] = self.user.email
+        # data['profile_type'] = self.user.profile_type
+
+        return data
+
+
+class MyTokenObtainPairView(TokenObtainPairView):
+    """
+    View for the token.
+    """
+    serializer_class = MyTokenObtainPairSerializer
 
 
 @api_view(['GET'])
@@ -42,13 +67,10 @@ def get_users(request):
 
 
 @api_view(['GET'])
-def get_user(request, pk):
+def user_profile(request):
     """
-    Return all users.
+    Return single user.
     """
-    user = "Me"
-    for i in users:
-        if i["id"] == int(pk):
-            user = i
-            break
-    return Response(user)
+    user = request.user
+    serializer = UserSerializer(user, many=False)
+    return Response(serializer.data)

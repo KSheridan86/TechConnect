@@ -12,14 +12,15 @@ class UserSerializer(serializers.ModelSerializer):
     """
     Serializes the User model.
     """
-    profile_type = serializers.SerializerMethodField()
+    # profile_type = serializers.SerializerMethodField()
 
     class Meta:
         """
         _summary_
         """
         model = User
-        fields = ['username', 'email', 'profile_type']
+        fields = ['id', 'username', 'email',  # 'profile_type'
+                  ]
 
     def get_profile_type(self, obj):
         """_summary_
