@@ -2,7 +2,6 @@
 _summary_
 """
 
-# pylint: disable=E0401
 from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import (ProfileType, DeveloperProfile, Skill, Project,

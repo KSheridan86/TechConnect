@@ -2,12 +2,11 @@
 The views to control the API.
 """
 
-
 # from django.shortcuts import render
-# pylint: disable=E0401
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from .users import users
+# pylint: disable=W0611
 from .models import (User, ProfileType, DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, DeveloperProfileSerializer,
