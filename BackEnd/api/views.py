@@ -7,11 +7,11 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from .users import users
+# from .users import users
 # pylint: disable=W0611
 from .models import (User, ProfileType, DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
-from .serializers import (UserSerializer, DeveloperProfileSerializer,
+from .serializers import (UserSerializer, UserSerializerWithToken, DeveloperProfileSerializer,
                           SkillSerializer, ProjectSerializer,
                           DeveloperReviewSerializer, ProjectReviewSerializer,
                           PrivateMessageSerializer)
@@ -26,9 +26,12 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         Validate the token.
         """
         data = super().validate(attrs)
-        data['username'] = self.user.username
-        data['email'] = self.user.email
-        # data['profile_type'] = self.user.profile_type
+        serializer = UserSerializerWithToken(self.user).data
+        # data['username'] = self.user.username
+        # data['email'] = self.user.email
+        # data['account_type'] = self.user.first_name
+        for k, v in serializer.items():
+            data[k] = v
 
         return data
 

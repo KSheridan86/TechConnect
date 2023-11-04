@@ -3,8 +3,9 @@ _summary_
 """
 
 from rest_framework import serializers
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
-from .models import (ProfileType, DeveloperProfile, Skill, Project,
+from .models import (DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 
 
@@ -12,26 +13,55 @@ class UserSerializer(serializers.ModelSerializer):
     """
     Serializes the User model.
     """
-    # profile_type = serializers.SerializerMethodField()
+    account_type = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         """
         _summary_
         """
         model = User
-        fields = ['id', 'username', 'email',  # 'profile_type'
-                  ]
+        fields = ['id', 'username', 'email', 'account_type']
 
-    def get_profile_type(self, obj):
-        """_summary_
-        This method returns the profile type of the user.
+    def get_account_type(self, obj):
         """
-        try:
-            profile = obj.profiletype
-            return profile.type
-        # pylint: disable=E1101
-        except ProfileType.DoesNotExist:
-            return None
+        Function to get the account type from the user model
+        """
+        account_type = obj.first_name
+        if account_type == '':
+            account_type = 'Client'
+        return account_type
+
+    # def get_profile_type(self, obj):
+    #     """_summary_
+    #     This method returns the profile type of the user.
+    #     """
+    #     try:
+    #         profile = obj.profiletype
+    #         return profile.type
+    #     # pylint: disable=E1101
+    #     except ProfileType.DoesNotExist:
+    #         return None
+
+
+class UserSerializerWithToken(UserSerializer):
+    """
+    Serializes the User model with a token.
+    """
+    token = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        """
+        _summary_
+        """
+        model = User
+        fields = ['id', 'username', 'email', 'account_type', 'token']
+
+    def get_token(self, obj):
+        """
+        Function to get the token from the user model
+        """
+        token = RefreshToken.for_user(obj)
+        return str(token.access_token)
 
 
 class DeveloperProfileSerializer(serializers.ModelSerializer):
