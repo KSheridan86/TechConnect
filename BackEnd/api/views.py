@@ -2,41 +2,72 @@
 The views to control the API.
 """
 
-# from django.shortcuts import render
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from rest_framework.response import Response
-# from rest_framework import status
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 # pylint: disable=W0611
-from .models import (User, ProfileType, DeveloperProfile, Skill, Project,
+from .models import (User, DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
-from .serializers import (UserSerializer, UserSerializerWithToken, DeveloperProfileSerializer,
-                          SkillSerializer, ProjectSerializer,
-                          DeveloperReviewSerializer, ProjectReviewSerializer,
-                          PrivateMessageSerializer)
+from .serializers import (UserSerializer, UserSerializerWithToken,
+                          DeveloperProfileSerializer, SkillSerializer,
+                          ProjectSerializer, DeveloperReviewSerializer,
+                          ProjectReviewSerializer, PrivateMessageSerializer)
+# Create and update methods overwritten in the MyTokenObtainPairSerializer class.
+
+# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+#     """
+#     Serializer for the token.
+#     """
+#     def validate(self, attrs):
+#         """
+#         Validate the token.
+#         """
+#         data = super().validate(attrs)
+#         serializer = UserSerializerWithToken(self.user).data
+#         # data['username'] = self.user.username
+#         # data['email'] = self.user.email
+#         # data['account_type'] = self.user.first_name
+#         for k, v in serializer.items():
+#             data[k] = v
+
+#         return data
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     """
     Serializer for the token.
     """
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+
+        # Add custom claims
+        token['username'] = user.username
+        token['email'] = user.email
+        token['account_type'] = user.first_name
+
+        return token
+
     def validate(self, attrs):
         """
         Validate the token.
         """
         data = super().validate(attrs)
         serializer = UserSerializerWithToken(self.user).data
-        # data['username'] = self.user.username
-        # data['email'] = self.user.email
-        # data['account_type'] = self.user.first_name
         for k, v in serializer.items():
             data[k] = v
 
         return data
+
+    def create(self, validated_data):
+        pass
+
+    def update(self, instance, validated_data):
+        pass
 
 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -73,8 +104,8 @@ def register_user(request):
         serializer = UserSerializerWithToken(user, many=False)
         return Response(serializer.data)
     except IntegrityError:
-        return Response( 
-            "Whoops! Username or email is already registered to an account.")
+        return Response(
+            "Whoops! That Username is unavailable.")
 
 
 @api_view(['GET'])
