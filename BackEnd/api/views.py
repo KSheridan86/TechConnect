@@ -16,25 +16,6 @@ from .serializers import (UserSerializer, UserSerializerWithToken,
                           DeveloperProfileSerializer, SkillSerializer,
                           ProjectSerializer, DeveloperReviewSerializer,
                           ProjectReviewSerializer, PrivateMessageSerializer)
-# Create and update methods overwritten in the MyTokenObtainPairSerializer class.
-
-# class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
-#     """
-#     Serializer for the token.
-#     """
-#     def validate(self, attrs):
-#         """
-#         Validate the token.
-#         """
-#         data = super().validate(attrs)
-#         serializer = UserSerializerWithToken(self.user).data
-#         # data['username'] = self.user.username
-#         # data['email'] = self.user.email
-#         # data['account_type'] = self.user.first_name
-#         for k, v in serializer.items():
-#             data[k] = v
-
-#         return data
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

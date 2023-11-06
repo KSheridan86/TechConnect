@@ -15,21 +15,6 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
-class ProfileType(models.Model):
-    """
-    This model defines the user type choices.
-    """
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    type = models.CharField(max_length=10, choices=[
-        ('client', 'Client'),
-        ('developer', 'Developer'),
-    ])
-
-    def __str__(self):
-        # pylint: disable=E1101
-        return self.user.username
-
-
 # Developer Profile Model
 class DeveloperProfile(models.Model):
     """
