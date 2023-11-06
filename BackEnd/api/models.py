@@ -1,10 +1,7 @@
 """
-Django Models for Developer Platform
+Django Models for the TechConnect Developer Platform
 
 This module defines the Django models used in a developer platform.
-It includes the User model extended with a 'user_type' field
-to distinguish between clients and developers, as well as other models
-like DeveloperProfile, Skill, Project, DeveloperReview, and ProjectReview.
 
 Author: [Ken Sheridan]
 Date: [19/10/2023]

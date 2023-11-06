@@ -58,6 +58,7 @@ class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
 
 
+# pylint: disable=W0613
 @api_view(['GET'])
 @permission_classes([IsAdminUser])
 def get_users(request):
