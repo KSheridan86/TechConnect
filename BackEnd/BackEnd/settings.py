@@ -164,7 +164,11 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 
 MEDIA_ROOT = 'static/images'
 
-CORS_ALLOW_ALL_ORIGINS = True  # CORS
+CORS_ALLOW_ALL_ORIGINS = False
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",  # Replace with the actual origin of your React app
+]
+CORS_ALLOW_CREDENTIALS = True
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field

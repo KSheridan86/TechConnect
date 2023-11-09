@@ -5,43 +5,43 @@ import defaultAvatar from '../images/default-avatar.png';
 
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const users = JSON.parse(localStorage.getItem('Users'));
+  // const users = JSON.parse(localStorage.getItem('Users'));
   // const [userData, setUserData] = useState({});
   const [userData, setUserData] = useState({ profile: {} });
   const [foundUser, setFoundUser] = useState({}); 
   const navigate = useNavigate();
 
-  useEffect(() => {
-      // Find the current user in the Users array
-      const found = users.find(user => user.email === currentUser.email);
-      if (found) {
-        setFoundUser(found);
-        setUserData(found);
-      }
-  }
-  , []);
+  // useEffect(() => {
+  //     // Find the current user in the Users array
+  //     const found = users.find(user => user.email === currentUser.email);
+  //     if (found) {
+  //       setFoundUser(found);
+  //       setUserData(found);
+  //     }
+  // }
+  // , []);
 
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
   };
 
-  const deleteAllSkills = () => {
-    // Find the current user in the Users array
-    const updatedUsers = users.map((user) => {
-      if (user.email === currentUser.email) {
-        user.skills = []; // Set skills array to an empty array
-      }
-      return user;
-    });
+  // const deleteAllSkills = () => {
+  //   // Find the current user in the Users array
+  //   const updatedUsers = users.map((user) => {
+  //     if (user.email === currentUser.email) {
+  //       user.skills = []; // Set skills array to an empty array
+  //     }
+  //     return user;
+  //   });
 
-    localStorage.setItem('Users', JSON.stringify(updatedUsers));
+  //   localStorage.setItem('Users', JSON.stringify(updatedUsers));
 
-    // Update the userData state to reflect the changes
-    setUserData((prevUserData) => ({
-      ...prevUserData,
-      skills: [],
-    }));
-  };
+  //   // Update the userData state to reflect the changes
+  //   setUserData((prevUserData) => ({
+  //     ...prevUserData,
+  //     skills: [],
+  //   }));
+  // };
 
   const handleDeleteProject = (indexToDelete) => {
     const updatedProjectsList = [...userData.projectsList];
@@ -49,17 +49,17 @@ const Profile = () => {
     updatedProjectsList.splice(indexToDelete, 1);
     // Update the user's projectsList in local storage
     const updatedUserData = { ...userData, projectsList: updatedProjectsList };
-    const updatedUsers = users.map(user => {
-        if (user.username === currentUser.username) {
-            return updatedUserData;
-        }
-        return user;
-        });
-    localStorage.setItem('Users', JSON.stringify(updatedUsers));
+    // const updatedUsers = users.map(user => {
+    //     if (user.username === currentUser.username) {
+    //         return updatedUserData;
+    //     }
+    //     return user;
+    //     });
+    // localStorage.setItem('Users', JSON.stringify(updatedUsers));
     // Update the state to reflect the changes
     setUserData(updatedUserData);
   };
-  console.log(userData.profile.githubUrl)
+  // console.log(userData.profile.githubUrl)
   
   return (
     <div className='container mt-4 fill-screen mb-2'>
@@ -102,7 +102,8 @@ const Profile = () => {
               <button
                 type='button'
                 className='btn btn-danger btn-lg mb-4'
-                onClick={deleteAllSkills}>
+                // onClick={deleteAllSkills}
+                >
                 Delete All Skills
               </button>
             </div>

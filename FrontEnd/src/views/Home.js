@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import logo from "../images/logo.png";
 
 const api = axios.create({
-    baseURL: 'http://16.171.133.35:4000',
+    baseURL: 'http://127.0.0.1:8000/api/',
     withCredentials: true,
 });
 

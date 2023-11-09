@@ -60,13 +60,14 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 # pylint: disable=W0613
 @api_view(['GET'])
-@permission_classes([IsAdminUser])
+# @permission_classes([IsAdminUser])
 def get_users(request):
     """
     Return all users.
     """
     all_users = User.objects.all()
-    serializer = UserSerializer(all_users, many=True)
+    developers = all_users.filter(first_name__iexact='Developer')
+    serializer = UserSerializer(developers, many=True)
     return Response(serializer.data)
 
 

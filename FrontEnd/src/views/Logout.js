@@ -12,7 +12,7 @@ const Logout = ({ onLogout }) => {
 
     const handleLogout = async () => {
         try {
-            api.post('/logout');
+            // api.post('/logout');
             onLogout();
             navigate('/');
         } catch (error) {

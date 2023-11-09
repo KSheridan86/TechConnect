@@ -62,7 +62,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
                   Developers
                 </Link>
               </li>
-              {isLoggedIn && currentUser.accountType === "Developer" && (
+              {isLoggedIn && currentUser.data.account_type === "Developer" && (
                 <li className="nav-item">
                   <Link className="nav-link nasa" to="/profile" onClick={closeNav}>
                     Profile
@@ -88,7 +88,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
         <Route path="/" element={<Home loggedIn={isLoggedIn} />} />
         <Route path="/developers" element={<Developers />} />
         <Route path="/profile" element={
-            isLoggedIn && currentUser.accountType === 'Developer' ? (
+            isLoggedIn && currentUser.data.account_type === 'Developer' ? (
               <Profile /> ) : ( <Navigate to="/" /> )} />
         <Route path="/signup" element={<SignUp onLogin={onLogin} />} />
         <Route path="/delete-user" element={<DeleteUser onLogout={onLogout} />} />

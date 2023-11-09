@@ -5,17 +5,42 @@ import axios from 'axios';
 
 const Developers = () => {
     const [users, setUsers] = useState([]);
-    const apiUrl = 'http://127.0.0.1:8000/api/';
+    const [searchTerm, setSearchTerm] = useState('');
+    const [filteredUsers, setFilteredUsers] = useState([]);
+    const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
+    const api = axios.create({
+        baseURL: 'http://127.0.0.1:8000/api/',
+        withCredentials: true,
+    });
 
     useEffect(() => {
         async function fetchUsers(){
-            const { data } = await axios.get(apiUrl + 'users/');
+            const { data } = await api.get('users/');
             setUsers(data);
             console.log(data);
         }
         fetchUsers();
         
     }, []);
+
+    const handleSearch = () => {
+        // Filter users based on the search term
+        const filteredUsers = users.filter((user) =>
+            Object.values(user).some(
+                (value) =>
+                    typeof value === 'string' &&
+                    value.toLowerCase().includes(searchTerm.toLowerCase())
+            )
+        )
+        // Update the state with the filtered users
+        setFilteredUsers(filteredUsers);
+        setSearchButtonClicked(true);
+    };
+
+    const handleInputChange = (e) => {
+        setSearchTerm(e.target.value);
+        setSearchButtonClicked(false); // Reset search button click when user starts typing
+    };
 
     return (
         <div className="container mt-3">
@@ -41,32 +66,34 @@ const Developers = () => {
                         </div>
                         <div className="row justify-content-center text-center">
                             <div className="col-8">
-                                <input
-                                    className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
-                                    type="text"
-                                    placeholder="Who or What are you looking for?"
-                                />
+                            <input
+                                className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
+                                type="text"
+                                placeholder="Who or What are you looking for?"
+                                value={searchTerm}
+                                onChange={handleInputChange}
+                            />
                             </div>
                             <div className="col-8 text-center hand-writing mb-3">
                                 <button  
-                                    className="btn btn-warning border-dark border-2 mt-3 col-6">
+                                    className="btn btn-warning border-dark border-2 mt-3 col-6"
+                                    onClick={handleSearch}>
                                         Search
                                 </button>
                             </div>
                         </div>
                         <hr />
                         <div>
-                            {users.length > 0 ? (
-                                users.map((user) => {
-                                    return <p key={user.id}>
-                                        {user.username}<br />
-                                        {user.email}<br />
-                                        {user.profile_type}
-                                        </p>;
-                                })
-                            ) : (
-                                <p>no users</p>
-                            )}
+                            {searchButtonClicked && searchTerm && filteredUsers.length === 0 ? (
+                                <p>Sorry, that search returned no results!</p>
+                            ) : null}
+                            {filteredUsers.map((user) => (
+                                <p key={user.id}>
+                                    {user.username}<br />
+                                    {user.email}<br />
+                                    {user.account_type}
+                                </p>
+                            ))}
                         </div>
                 </div>
 

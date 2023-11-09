@@ -3,7 +3,7 @@ import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const api = axios.create({
-    baseURL: 'http://16.171.133.35:4000/api',
+    baseURL: 'http://127.0.0.1:8000/api/',
     withCredentials: true,
 });
 
@@ -11,93 +11,68 @@ const SignUp = ({ onLogin }) => {
   const location = useLocation();
   const accountType = location.state?.accountType;
   const navigate = useNavigate();
-  const initialUserData =
-    accountType === 'Developer'
-      ? {
+  const initialUserData = {
           username: '',
           email: '',
           password: '',
-          passwordConfirmation: '',
-          accountType: accountType,
-          profile: {},
-          skills: [],
-          projectsList: [],
+          account_type: accountType,
         }
-      : {
-          username: '',
-          email: '',
-          password: '',
-          passwordConfirmation: '',
-          accountType: accountType,
-        };
-const [userData, setUserData] = useState(initialUserData);
+
+  const [userData, setUserData] = useState(initialUserData);
 
     const handleInputChange = event => {
         const { name, value } = event.target;
         setUserData(prevUserData => ({ ...prevUserData, [name]: value }));
     };
 
-    const addUserToLocalStorage = user => {
-      const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
-      storedUsers.push(user);
-      localStorage.setItem('Users', JSON.stringify(storedUsers));
-  };
-
-    const clientSignUp = () => {
-      addUserToLocalStorage(userData);
-      const currentUser = {
-        username: userData.username,
-        email: userData.email,
-        accountType: userData.accountType,
-      };
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      onLogin();
-      navigate("/developers");
-    };
-
-    const devSignUp = () => {
-      addUserToLocalStorage(userData);
-      const currentUser = {
-        username: userData.username,
-        email: userData.email,
-        accountType: userData.accountType,
-      };
-      localStorage.setItem('currentUser', JSON.stringify(currentUser));
-      onLogin();
-      navigate("/create-profile");
-    };
-
-    const loginAfterSignup = async (email, password) => {
-        try {
-            const response = await api.post('/login', {
-                user: {
-                email,
-                password,
-                },
-            });
-            if (response) {
-                const userResponse = await api.get(`/users/${response.data.user.id}`);
-                localStorage.setItem('UserData', JSON.stringify(userResponse.data));
-                await onLogin();
-                await navigate('/');
-            }
-            } catch (error) {
-            console.error('Error logging in after signup:', error);
-            }
-        };
-
     const handleSubmit = async event => {
         event.preventDefault();
         try {
-            const response = await api.post('/users', { user: userData });
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          };
+            const response = await api.post('users/register/', { 
+              'account_type': userData.account_type,
+              'username': userData.username.toLowerCase(),
+              'email': userData.email,
+              'password': userData.password,
+              
+            }, config);
             if (response) {
                 console.log('User registered successfully:', response.data);
             // Log the user in after signup
-            await loginAfterSignup(userData.email, userData.password);
+            await loginAfterSignup();
             }
         } catch (error) {
             console.error('Failed to register user:', error);
         }
+    };
+
+    const loginAfterSignup = async () => {
+      try {
+          const config = {
+            headers: {
+              'Content-Type': 'application/json',
+            },
+          };
+          const response = await api.post('/users/login/', {
+            'username': userData.username.toLowerCase(),
+            'password': userData.password,
+          }, config);
+          const currentUser = response;
+          console.log('User logged in successfully:', response.data);
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
+          onLogin();
+        } catch (error) {
+          console.error('Error logging in after signup:', error);
+        }
+      if (accountType === "Developer") {
+          navigate('/create-profile');
+      } else {
+          navigate('/developers');
+      }
     };
 
     return (
@@ -135,14 +110,6 @@ const [userData, setUserData] = useState(initialUserData);
                         placeholder="Enter password"
                         onChange={handleInputChange}
                       />
-                      <label className="fw-bold fs-5">Confirm Password:</label>
-                      <input
-                        className="text-center border border-dark border-2 p-2 form-control mb-2 hand-writing"
-                        type="password"
-                        name="passwordConfirmation"
-                        placeholder="Confirm password"
-                        onChange={handleInputChange}
-                      />
                       <br />
                     </div>
                     <br />
@@ -153,14 +120,16 @@ const [userData, setUserData] = useState(initialUserData);
                     <button
                       type="submit"
                       className="btn btn-warning border-dark border-2 mt-3 mb-4 col-6"
-                      onClick={devSignUp}>
+                      // onClick={devSignUp}
+                      >
                       Sign Up
                     </button>
                   ) : (
                     <button
                       type="submit"
                       className="btn btn-warning border-dark border-2 mt-3 mb-4 col-6"
-                      onClick={clientSignUp}>
+                      // onClick={clientSignUp}
+                      >
                       Sign Up
                     </button>
                   )}

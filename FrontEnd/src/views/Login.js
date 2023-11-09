@@ -3,12 +3,12 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://16.171.133.35:4000/api',
+  baseURL: 'http://127.0.0.1:8000/api/',
   withCredentials: true,
 });
 
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
+  const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [data, setData] = useState(null);
   const [error, setError] = useState('');
@@ -16,47 +16,38 @@ const Login = ({ onLogin }) => {
     
   const handleLogin = async (e) => {
     e.preventDefault();
-    // Retrieve the list of users from local storage
-    const storedUsers = JSON.parse(localStorage.getItem('Users')) || [];
-    // Find the user with the provided email
-    const user = storedUsers.find((user) => user.email === email);
-    if (user && user.password === password) {
-      const currentUser = {
-        username: user.username,
-        email: user.email,
-        accountType: user.accountType,
+
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
       };
+      const response = await api.post('users/login/', {
+        'username': username.toLowerCase(),
+        'password': password,
+      }, config);
+      // Handle the response as needed
+      setData(response.data);
+      const currentUser = response;
+
+      // Store user details in local storage
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       onLogin();
-      if (user.accountType === 'Client') {
-      navigate('/developers');
-      } else {
+      if(currentUser.data.account_type === 'Developer') {
         navigate('/profile');
+      } else {
+        navigate('/developers');
       }
-    } else {
-      // User credentials are incorrect
-      setError('Invalid email or password');
+    } catch (error) {
+      setError("Whoops, looks like there's an issue with your login details. Please try again.");
+      console.error('Error while making the API call:', error);
     }
-    // try {
-    //   const response = await api.post('/login', {
-    //     user: {
-    //       email,
-    //       password,
-    //     },
-    //   });
-    //   setData(response.data.user.id)
-    //   localStorage.setItem('userId', JSON.stringify(response.data.user.id));
-      
-    // } catch (error) {
-    //     console.error('Error while making the API call:', error);
-    //   }
-  };
-  setTimeout(() => {
-    setError('');
-  }, 2500);
-
-
-  const handleSignUp = (accountType) => {
+    setTimeout(() => {
+      setError('');
+    }, 3000);
+  }
+    const handleSignUp = (accountType) => {
     navigate("/signup", { state: { accountType } });
 }
 
@@ -91,9 +82,9 @@ const Login = ({ onLogin }) => {
                     <input
                       className="text-center border border-dark border-2 p-2 form-control mb-2 hand-writing"
                       type="email"
-                      placeholder="Enter Email"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter Username"
+                      value={username}
+                      onChange={(e) => setUsername(e.target.value)}
                     />
                     <br></br>
                     <input
@@ -137,7 +128,6 @@ const Login = ({ onLogin }) => {
             
           </div>
         </div>
-      {/* <div style={{ height: "30vh" }}></div> */}
     </div>
   );
 };
