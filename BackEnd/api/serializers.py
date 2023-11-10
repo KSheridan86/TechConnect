@@ -4,6 +4,7 @@ _summary_
 
 from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
+from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
 from .models import (DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
@@ -57,12 +58,21 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
     """
     Serializes the DeveloperProfile model.
     """
+    user = serializers.PrimaryKeyRelatedField(
+        queryset=User.objects.all(),
+        # pylint: disable=E1101
+        validators=[UniqueValidator(queryset=DeveloperProfile.objects.all())]
+    )
+
     class Meta:
         """
         _summary_
         """
         model = DeveloperProfile
         fields = '__all__'
+        extra_kwargs = {
+            'avatar': {'required': False, 'allow_null': True},
+        }
 
 
 class SkillSerializer(serializers.ModelSerializer):

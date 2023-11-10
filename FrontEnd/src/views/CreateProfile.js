@@ -3,65 +3,108 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
 const api = axios.create({
-    baseURL: 'http://16.171.133.35:4000', // Replace with the actual base URL of your Rails API
-    withCredentials: true,
+  baseURL: 'http://127.0.0.1:8000/api/',
+  withCredentials: true,
 });
 
 const CreateProfile = () => {
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const navigate = useNavigate();
     const [profile, setProfile] = useState({
-      username: '',
-      firstName: '',
-      lastName: '',
-      email: '',
-      intro: '',
-      bio: '',
-      avatar: '',
+      firstname: '',
+      lastname: '',
+      github: '',
+      linkedin: '',
+      portfolio_url: '',
+      intro_text: '',
+      biography_text: '',
+      // avatar: null,
+      years_of_experience: '',
       location: '',
-      githubUrl: '',
-      linkedinUrl: '',
-      portfolioUrl: '',
-      yearsExperience: '',
       available: false,
+      date_available: '',
     });
 
-    const handleInputChange = event => {
-        const { name, value } = event.target;
-        setProfile(prevProfile => ({ ...prevProfile, [name]: value }));
+    const handleInputChange = (event) => {
+      const { name, value, type, checked } = event.target;
+      
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        [name]: type === 'checkbox' ? checked : value,
+      }));
     };
 
-    const handleAvatarChange = (event) => {
-      const file = event.target.files[0];
-      if (file) {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          setProfile((prevProfile) => ({
-            ...prevProfile,
-            avatar: e.target.result,
-          }));
-        };
-        reader.readAsDataURL(file);
-      }
-    };
+  //   const handleAvatarChange = (event) => {
+  //   const file = event.target.files[0];
+  //   if (file) {
+  //     setProfile((prevProfile) => ({
+  //       ...prevProfile,
+  //       avatar: file, // Store the file object directly
+  //     }));
+  //   }
+  // };
+
+    // const handleAvatarChange = (event) => {
+    //   const file = event.target.files[0];
+    //   if (file) {
+    //     const reader = new FileReader();
+    //     reader.onload = (e) => {
+    //       setProfile((prevProfile) => ({
+    //         ...prevProfile,
+    //         avatar: e.target.result,
+    //       }));
+    //     };
+    //     reader.readAsDataURL(file);
+    //   }
+    // };
 
     const handleAvailabilityChange = (event) => {
       const { name, checked } = event.target;
       setProfile((prevProfile) => ({ ...prevProfile, [name]: checked }));
     };
 
-    const createProfile = () => {
-      const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-      const users = JSON.parse(localStorage.getItem('Users'));
-      // Find the current user in the Users array
-      const updatedUsers = users.map((user) => {
-      if (user.username === currentUser.username) {
-            user.profile = profile; // Update the user's profile
-          }
-          return user;
-      });
-      localStorage.setItem('Users', JSON.stringify(updatedUsers));
-            
-      navigate("/add-skills");
+    const createProfile = async (e) => {
+      e.preventDefault();
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json', // Don't forget this line for file uploads
+            Authorization: `Bearer ${currentUser.data.token}`,
+          },
+        };
+        
+    const payload = {
+      profile: {
+        firstname: profile.firstname,
+        lastname: profile.lastname,
+        github: profile.github,
+        linkedin: profile.linkedin,
+        portfolio_url: profile.portfolio_url,
+        intro_text: profile.intro_text,
+        biography_text: profile.biography_text,
+        // avatar: profile.avatar,
+        years_of_experience: profile.years_of_experience,
+        location: profile.location,
+        available: profile.available,
+        date_available: profile.date_available,
+      }
+    };
+        console.log('Profile:', payload);
+        const updatedProfile = {
+          ...profile,
+          available: profile.available === 'true', // Convert to boolean
+          years_of_experience: profile.years_of_experience !== '' ? parseInt(profile.years_of_experience) : null,
+        };
+        setProfile(updatedProfile)
+        const response = await api.put('users/update_profile/', {profile}, config);
+  
+        console.log('Profile updated:', response.data);
+        // Handle success (e.g., redirect the user, show a success message)
+      } catch (error) {
+        console.error('Error updating profile:', error);
+        console.log('Error response from server:', error.response); 
+        // Handle error (e.g., show an error message)
+      }
     };
     
 
@@ -73,7 +116,7 @@ const CreateProfile = () => {
               Create your Profile
             </h2>
 
-            <form>
+            <form encType="multipart/form-data">
               <div className='row justify-content-evenly text-center'>
                 <div className='col-md-5 mb-3'>
                   <div className='glass-box border-dark m-3 p-3'>
@@ -83,7 +126,7 @@ const CreateProfile = () => {
                       <input
                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                         type='text'
-                        name='firstName'
+                        name='firstname'
                         placeholder='Enter first name'
                         onChange={handleInputChange}
                       />
@@ -91,31 +134,59 @@ const CreateProfile = () => {
                       <input
                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                         type='text'
-                        name='lastName'
+                        name='lastname'
                         placeholder='Enter last name'
+                        onChange={handleInputChange}
+                      />
+                            location: '',
+                            available: '',
+                            date_available: '',
+                      <label className='fw-bold fs-5'>GitHub URL:</label>
+                      <input
+                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                        type='text'
+                        name='github'
+                        placeholder='Enter GitHub URL'
+                        onChange={handleInputChange}
+                      />
+                      <label className='fw-bold fs-5'>LinkedIn URL:</label>
+                      <input
+                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                        type='text'
+                        name='linkedin'
+                        placeholder='Enter LinkedIn URL'
+                        onChange={handleInputChange}
+                      />
+                      <label className='fw-bold fs-5'>Portfolio Site URL:</label>
+                      <input
+                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                        type='text'
+                        name='portfolio_url'
+                        placeholder='Enter Portfolio Site URL'
                         onChange={handleInputChange}
                       />
                       <label className='fw-bold fs-5'>Introduction:</label>
                       <textarea
                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                        name='intro'
+                        name='intro_text'
                         placeholder='Give a brief introduction to attract clients'
                         onChange={handleInputChange}
                       />
                       <label className='fw-bold fs-5'>Bio:</label>
                       <textarea
                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                        name='bio'
+                        name='biography_text'
                         placeholder='Enter a more detailed bio here, include anything you would want potential clients to know'
                         onChange={handleInputChange}
                       />
-                      <label className='fw-bold fs-5'>Avatar (Upload Image):</label>
+                      {/* <label className='fw-bold fs-5'>Avatar (Upload Image):</label>
                       <input
                         className='border border-dark border-2 p-2 form-control mb-4 hand-writing'
+                        name='avatar'
                         type='file'
                         accept='image/*'
                         onChange={(event) => handleAvatarChange(event)}
-                      />
+                      /> */}
                       {profile.avatar && (
                         <div>
                           <img src={profile.avatar} alt='Avatar Preview' width='100' height='100' />
@@ -129,35 +200,13 @@ const CreateProfile = () => {
                   <div className='glass-box border-dark m-3 p-3'>
                     <h4 className="nasa text-uppercase">Professional Information</h4>
                     <div className='mb-3'>
-                      <label className='fw-bold fs-5'>GitHub URL:</label>
-                      <input
-                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                        type='text'
-                        name='githubUrl'
-                        placeholder='Enter GitHub URL'
-                        onChange={handleInputChange}
-                      />
-                      <label className='fw-bold fs-5'>LinkedIn URL:</label>
-                      <input
-                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                        type='text'
-                        name='linkedinUrl'
-                        placeholder='Enter LinkedIn URL'
-                        onChange={handleInputChange}
-                      />
-                      <label className='fw-bold fs-5'>Portfolio Site URL:</label>
-                      <input
-                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                        type='text'
-                        name='portfolioUrl'
-                        placeholder='Enter Portfolio Site URL'
-                        onChange={handleInputChange}
-                      />
+                      
+                      
                       <label className='fw-bold fs-5'>Years of Experience:</label>
                       <input
                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                         type='text'
-                        name='yearsExperience'
+                        name='years_of_experience'
                         placeholder='Enter years of experience'
                         onChange={handleInputChange}
                       />
@@ -179,6 +228,14 @@ const CreateProfile = () => {
                         name='available'
                         checked={profile.available}
                         onChange={handleAvailabilityChange}
+                      />
+                      <label className='form-label fw-bold fs-5 mt-2'>Date Available:</label>
+                      <input
+                        className="form-control text-center hand-writing"
+                        type='date'
+                        name='date_available'
+                        value={profile.date_available}
+                        onChange={handleInputChange}
                       />
                     </div>
                   </div>

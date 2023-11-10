@@ -9,6 +9,8 @@ Date: [19/10/2023]
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+from django.dispatch import receiver
 from django.utils import timezone
 
 
@@ -20,18 +22,18 @@ class DeveloperProfile(models.Model):
     experience, and other details.
     """
     user = models.OneToOneField(User, on_delete=models.CASCADE)
-    firstname = models.CharField(max_length=50)
-    lastname = models.CharField(max_length=50)
-    github = models.URLField()
-    linkedin = models.URLField()
-    portfolio_url = models.URLField()
-    intro_text = models.TextField()
-    biography_text = models.TextField()
+    firstname = models.CharField(max_length=50, null=True, blank=True)
+    lastname = models.CharField(max_length=50, null=True, blank=True)
+    github = models.URLField(null=True, blank=True)
+    linkedin = models.URLField(null=True, blank=True)
+    portfolio_url = models.URLField(null=True, blank=True)
+    intro_text = models.TextField(null=True, blank=True)
+    biography_text = models.TextField(null=True, blank=True)
     avatar = models.ImageField(null=True, blank=True)
-    years_of_experience = models.PositiveIntegerField()
-    location = models.CharField(max_length=100)
-    available = models.BooleanField(default=False)
-    date_available = models.DateField(default=timezone.now)
+    years_of_experience = models.PositiveIntegerField(null=True, blank=True)
+    location = models.CharField(max_length=100, null=True, blank=True)
+    available = models.BooleanField(default=False, null=True, blank=True)
+    date_available = models.DateField(default=timezone.now, null=True, blank=True)
     skills_level_1 = models.ManyToManyField(
         'Skill', related_name='level_1_skills')
     skills_level_2 = models.ManyToManyField(
@@ -47,7 +49,7 @@ class Skill(models.Model):
     This model represents a specific skill or expertise that
     can be associated with developers.
     """
-    name = models.CharField(max_length=50)
+    name = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return f"{self.name}"

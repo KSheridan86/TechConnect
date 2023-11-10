@@ -3,12 +3,14 @@ The views to control the API.
 """
 
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated, IsAdminUser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
+
 # pylint: disable=W0611
 from .models import (User, DeveloperProfile, Skill, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
@@ -98,6 +100,30 @@ def user_profile(request):
     Return developer profile.
     """
     user = request.user
+    # pylint: disable=E1101
     profile = DeveloperProfile.objects.get(user=user)
     serializer = DeveloperProfileSerializer(profile, many=False)
     return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_profile(request):
+    """
+    Update developer profile.
+    """
+    user = request.user
+    # pylint: disable=E1101
+    profile = DeveloperProfile.objects.get(user=user)
+
+    serializer = DeveloperProfileSerializer(
+                 profile, data=request.data.get('profile', {}), partial=True)
+
+    print(serializer.initial_data)
+    if serializer.is_valid():
+        print("Serializer is valid")
+        serializer.save()
+        updated_data = DeveloperProfileSerializer(serializer.instance).data
+        print("Data after update:", updated_data)
+        return Response(updated_data)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
