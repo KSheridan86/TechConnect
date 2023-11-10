@@ -95,8 +95,9 @@ def register_user(request):
 @permission_classes([IsAuthenticated])
 def user_profile(request):
     """
-    Return single user.
+    Return developer profile.
     """
     user = request.user
-    serializer = UserSerializer(user, many=False)
+    profile = DeveloperProfile.objects.get(user=user)
+    serializer = DeveloperProfileSerializer(profile, many=False)
     return Response(serializer.data)

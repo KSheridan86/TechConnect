@@ -8,6 +8,7 @@ const Developers = () => {
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
     const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
+
     const api = axios.create({
         baseURL: 'http://127.0.0.1:8000/api/',
         withCredentials: true,
@@ -17,7 +18,6 @@ const Developers = () => {
         async function fetchUsers(){
             const { data } = await api.get('users/');
             setUsers(data);
-            console.log(data);
         }
         fetchUsers();
         

@@ -1,7 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
-// import axios from 'axios';
+import axios from 'axios';
+
+const api = axios.create({
+  baseURL: 'http://127.0.0.1:8000/api/',
+  withCredentials: true,
+});
 
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -11,15 +16,29 @@ const Profile = () => {
   const [foundUser, setFoundUser] = useState({}); 
   const navigate = useNavigate();
 
-  // useEffect(() => {
-  //     // Find the current user in the Users array
-  //     const found = users.find(user => user.email === currentUser.email);
-  //     if (found) {
-  //       setFoundUser(found);
-  //       setUserData(found);
-  //     }
-  // }
-  // , []);
+  useEffect(() => {
+    const fetchProfileData = async () => {
+      console.log(currentUser.data.token)
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${currentUser.data.token}`,
+          },
+        };
+        const response = await api.get('users/profile/', config);
+        
+        await setFoundUser(response.data);
+        setUserData(response.data);
+        console.log(foundUser);
+      } catch (error) {
+        console.error('Error fetching profile data:', error);
+        // Handle the error if needed
+      }
+    };
+
+    fetchProfileData();
+  }, []);
 
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
@@ -43,47 +62,48 @@ const Profile = () => {
   //   }));
   // };
 
-  const handleDeleteProject = (indexToDelete) => {
-    const updatedProjectsList = [...userData.projectsList];
-    // Remove the project at the specified index
-    updatedProjectsList.splice(indexToDelete, 1);
-    // Update the user's projectsList in local storage
-    const updatedUserData = { ...userData, projectsList: updatedProjectsList };
-    // const updatedUsers = users.map(user => {
-    //     if (user.username === currentUser.username) {
-    //         return updatedUserData;
-    //     }
-    //     return user;
-    //     });
-    // localStorage.setItem('Users', JSON.stringify(updatedUsers));
-    // Update the state to reflect the changes
-    setUserData(updatedUserData);
-  };
+  // const handleDeleteProject = (indexToDelete) => {
+  //   const updatedProjectsList = [...userData.projectsList];
+  //   // Remove the project at the specified index
+  //   updatedProjectsList.splice(indexToDelete, 1);
+  //   // Update the user's projectsList in local storage
+  //   const updatedUserData = { ...userData, projectsList: updatedProjectsList };
+  //   // const updatedUsers = users.map(user => {
+  //   //     if (user.username === currentUser.username) {
+  //   //         return updatedUserData;
+  //   //     }
+  //   //     return user;
+  //   //     });
+  //   // localStorage.setItem('Users', JSON.stringify(updatedUsers));
+  //   // Update the state to reflect the changes
+  //   setUserData(updatedUserData);
+  // };
   // console.log(userData.profile.githubUrl)
   
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
         <h2 className='nasa-black text-center text-uppercase mt-3'>
-          Hello {userData.username}, Welcome back!
+          Hello {currentUser.data.username}, Welcome back!
         </h2>
         <div className='col-10 col-lg-5 glass-box mb-5'>
           <div className="row">
             <div className="col-6">
               <img
-                src={userData.profile.avatar || defaultAvatar}
+                src={foundUser.avatar || defaultAvatar}
                 alt='User Avatar'
                 className='user-avatar mt-2'
               />
             </div>
             <div className="col-6 mt-3">
-              <p className='nasa-black text-center text-uppercase'>{userData.username}</p>
-              <p className='nasa-black text-center text-uppercase'>{userData.email}</p>
-              <p className='nasa-black text-center text-uppercase'>{userData.profile.githubUrl}</p>
-              <p className='nasa-black text-center text-uppercase'>{userData.profile.linkedinUrl}</p>
-              <p className='nasa-black text-center text-uppercase'>{userData.profile.location}</p>
-              {userData.profile.available === true ? (
-                <p className='nasa-black text-center text-uppercase'>Available for work</p>
+              <p className='nasa-black text-center text-uppercase'>{currentUser.data.username}</p>
+              <p className='nasa-black text-center text-uppercase'>{currentUser.data.email}</p>
+              <p className='nasa-black text-center text-uppercase'>{foundUser.github}</p>
+              <p className='nasa-black text-center text-uppercase'>{foundUser.linkedin}</p>
+              <p className='nasa-black text-center text-uppercase'>{foundUser.location}</p>
+              {foundUser.available === true ? (
+                <p className='nasa-black text-center text-uppercase'>Available for work on <br />{foundUser.date_available}</p>
+                
               ) : (
                 <p className='nasa-black text-center text-uppercase'>Not Available</p>
               )}
@@ -137,7 +157,8 @@ const Profile = () => {
                         <button
                             type='button'
                             className='btn btn-danger btn-sm mb-3'
-                            onClick={() => handleDeleteProject(index)}>
+                            // onClick={() => handleDeleteProject(index)}
+                              >
                             Delete Project
                         </button>
                     </div>

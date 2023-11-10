@@ -30,6 +30,7 @@ const Login = ({ onLogin }) => {
       // Handle the response as needed
       setData(response.data);
       const currentUser = response;
+      // console.log(currentUser);
 
       // Store user details in local storage
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
