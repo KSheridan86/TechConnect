@@ -9,8 +9,8 @@ Date: [19/10/2023]
 
 from django.db import models
 from django.contrib.auth.models import User
-from django.db.models.signals import post_save
-from django.dispatch import receiver
+# from django.db.models.signals import post_save
+# from django.dispatch import receiver
 from django.utils import timezone
 
 
@@ -30,11 +30,11 @@ class DeveloperProfile(models.Model):
     intro_text = models.TextField(null=True, blank=True)
     biography_text = models.TextField(null=True, blank=True)
     avatar = models.ImageField(upload_to='images/', null=True, blank=True)
-    avatarPreview = models.TextField(null=True, blank=True)
     years_of_experience = models.PositiveIntegerField(null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
     available = models.BooleanField(default=False, null=True, blank=True)
-    date_available = models.DateField(default=timezone.now, null=True, blank=True)
+    date_available = models.DateField(default=timezone.now,
+                                      null=True, blank=True)
     skills_level_1 = models.ManyToManyField(
         'Skill', related_name='level_1_skills',
         blank=True)
@@ -124,10 +124,10 @@ class PrivateMessage(models.Model):
     sender = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True,
         related_name='sent_messages')
-    receiver = models.ForeignKey(
+    recipient = models.ForeignKey(
         User, on_delete=models.CASCADE, related_name='received_messages')
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
 
     def __str__(self):
-        return f"{self.sender} to {self.receiver} ({self.date})"
+        return f"{self.sender} to {self.recipient} ({self.date})"

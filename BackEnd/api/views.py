@@ -2,16 +2,14 @@
 The views to control the API.
 """
 
+from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
-from rest_framework.decorators import parser_classes
-from rest_framework.parsers import MultiPartParser, FormParser
 
 # pylint: disable=W0611
 from .models import (User, DeveloperProfile, Skill, Project,
@@ -110,7 +108,6 @@ def user_profile(request):
 
 @api_view(['PUT', 'POST'])
 @permission_classes([IsAuthenticated])
-@parser_classes([MultiPartParser, FormParser])
 def update_profile(request):
     """
     Update developer profile.
