@@ -19,6 +19,7 @@ const CreateProfile = () => {
       intro_text: '',
       biography_text: '',
       avatar: null,
+      // avatarPreview: '',
       years_of_experience: '',
       location: '',
       available: false,
@@ -42,7 +43,7 @@ const CreateProfile = () => {
       setProfile((prevProfile) => ({
         ...prevProfile,
         avatar: file, // Store the file object directly
-        avatarPreview: e.target.result, // Update the preview
+        // avatarPreview: e.target.result, // Update the preview
       }));
     };
     reader.readAsDataURL(file);
@@ -74,11 +75,14 @@ const CreateProfile = () => {
         const formData = new FormData();
 
            // Convert base64 avatar to Blob
-        const avatarBlob = await fetch(profile.avatar).then((res) => res.blob());
-        formData.append('avatar', avatarBlob, 'avatar.jpg');
+        // const avatarBlob = await fetch(profile.avatar).then((res) => res.blob());
+        if (profile.avatar) {
+          formData.append('avatar', profile.avatar, 'avatar.jpg');
+        }
+        // formData.append('avatarPreview', profile.avatarPreview)
 
         Object.entries(profile).forEach(([key, value]) => {
-          if (key !== 'avatarPreview') {
+          if (key !== 'avatar') {
           formData.append(key, value);
           }
         });
@@ -188,9 +192,9 @@ const CreateProfile = () => {
                         accept='image/*'
                         onChange={(event) => handleAvatarChange(event)}
                       />
-                      {profile.avatarPreview && (
+                      {profile.avatar && (
                         <div>
-                          <img src={profile.avatarPreview} alt='Avatar Preview' width='100' height='100' />
+                          <img src={profile.avatar} alt='Avatar Preview' width='100' height='100' />
                         </div>
                       )}
                     </div>
