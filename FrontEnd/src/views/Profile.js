@@ -10,16 +10,13 @@ const api = axios.create({
 
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  // const users = JSON.parse(localStorage.getItem('Users'));
-  // const [userData, setUserData] = useState({});
   const [userData, setUserData] = useState({ profile: {} });
   const [foundUser, setFoundUser] = useState({}); 
-  // const [avatarDataUrl, setAvatarDataUrl] = useState(null);
+  const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      // console.log(currentUser.data.token)
       try {
         const config = {
           headers: {
@@ -31,15 +28,6 @@ const Profile = () => {
         
         await setFoundUser(response.data);
         setUserData(response.data);
-        console.log(foundUser);
-        console.log(foundUser)
-        // if (response.data.avatar) {
-        //   const reader = new FileReader();
-        //   reader.onload = () => {
-        //     setAvatarDataUrl(reader.result);
-        //   };
-        //   reader.readAsDataURL(response.data.avatar);
-        // }
       } catch (error) {
         console.error('Error fetching profile data:', error);
         // Handle the error if needed
@@ -49,6 +37,8 @@ const Profile = () => {
     fetchProfileData();
   }, []);
 
+  console.log(foundUser);
+  console.log(foundUser.avatar)
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
   };
@@ -97,27 +87,12 @@ const Profile = () => {
         </h2>
         <div className='col-10 col-lg-5 glass-box mb-5'>
           <div className="row">
-            {/* <div className="col-6">
-              <img
-                src={avatarDataUrl ? avatarDataUrl : defaultAvatar}
-                alt='User Avatar'
-                className='user-avatar mt-2'
-              />
-            </div> */}
             <div className="col-6">
-              {foundUser ? (
                 <img
-                  src={foundUser.avatarPreview}
+                  src={foundUser && foundUser.avatar ? `${baseAvatarUrl}${foundUser.avatar}` : defaultAvatar}
                   alt='User Avatar'
                   className='user-avatar mt-2'
                 />
-              ) : (
-                <img
-                  src={defaultAvatar}
-                  alt='Default Avatar'
-                  className='user-avatar mt-2'
-                />
-              )}
             </div>
             <div className="col-6 mt-3">
               <p className='nasa-black text-center text-uppercase'>{currentUser.data.username}</p>

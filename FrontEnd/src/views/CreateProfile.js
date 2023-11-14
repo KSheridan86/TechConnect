@@ -19,7 +19,6 @@ const CreateProfile = () => {
       intro_text: '',
       biography_text: '',
       avatar: null,
-      // avatarPreview: '',
       years_of_experience: '',
       location: '',
       available: false,
@@ -43,26 +42,11 @@ const CreateProfile = () => {
       setProfile((prevProfile) => ({
         ...prevProfile,
         avatar: file, // Store the file object directly
-        // avatarPreview: e.target.result, // Update the preview
       }));
     };
     reader.readAsDataURL(file);
     }
   };
-
-    // const handleAvatarChange = (event) => {
-    //   const file = event.target.files[0];
-    //   if (file) {
-    //     const reader = new FileReader();
-    //     reader.onload = (e) => {
-    //       setProfile((prevProfile) => ({
-    //         ...prevProfile,
-    //         avatar: e.target.result,
-    //       }));
-    //     };
-    //     reader.readAsDataURL(file);
-    //   }
-    // };
 
     const handleAvailabilityChange = (event) => {
       const { name, checked } = event.target;
@@ -74,12 +58,9 @@ const CreateProfile = () => {
       try {
         const formData = new FormData();
 
-           // Convert base64 avatar to Blob
-        // const avatarBlob = await fetch(profile.avatar).then((res) => res.blob());
         if (profile.avatar) {
           formData.append('avatar', profile.avatar, 'avatar.jpg');
         }
-        // formData.append('avatarPreview', profile.avatarPreview)
 
         Object.entries(profile).forEach(([key, value]) => {
           if (key !== 'avatar') {
@@ -89,26 +70,18 @@ const CreateProfile = () => {
         console.log("FormData Content:", formData);
         const config = {
           headers: {
-            'Content-Type': 'multipart/form-data', // Don't forget this line for file uploads
+            'Content-Type': 'multipart/form-data', // This line is needed for file uploads
             Authorization: `Bearer ${currentUser.data.token}`,
           },
         };
-        
-        // const updatedProfile = {
-        //   ...profile,
-        //   available: profile.available === 'true', // Convert to boolean
-        //   years_of_experience: profile.years_of_experience !== '' ? parseInt(profile.years_of_experience) : null,
-        // };
-        // setProfile(updatedProfile)
+
         const response = await api.post('users/update_profile/', formData, config);
   
         console.log('Profile updated:', response.data);
         navigate('/profile');
-        // Handle success (e.g., redirect the user, show a success message)
       } catch (error) {
         console.error('Error updating profile:', error);
         console.log('Error response from server:', error.response); 
-        // Handle error (e.g., show an error message)
       }
     };
     
@@ -194,7 +167,7 @@ const CreateProfile = () => {
                       />
                       {profile.avatar && (
                         <div>
-                          <img src={profile.avatar} alt='Avatar Preview' width='100' height='100' />
+                          <img src={URL.createObjectURL(profile.avatar)} alt='Avatar Preview' width='100' height='100' />
                         </div>
                       )}
                     </div>
@@ -234,6 +207,7 @@ const CreateProfile = () => {
                         checked={profile.available}
                         onChange={handleAvailabilityChange}
                       />
+                      <br />
                       <label className='form-label fw-bold fs-5 mt-2'>Date Available:</label>
                       <input
                         className="form-control text-center hand-writing"
