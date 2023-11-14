@@ -10,6 +10,8 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 from rest_framework import status
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
+from rest_framework.decorators import parser_classes
+from rest_framework.parsers import MultiPartParser, FormParser
 
 # pylint: disable=W0611
 from .models import (User, DeveloperProfile, Skill, Project,
@@ -106,8 +108,9 @@ def user_profile(request):
     return Response(serializer.data)
 
 
-@api_view(['PUT'])
+@api_view(['PUT', 'POST'])
 @permission_classes([IsAuthenticated])
+@parser_classes([MultiPartParser, FormParser])
 def update_profile(request):
     """
     Update developer profile.
@@ -117,7 +120,9 @@ def update_profile(request):
     profile = DeveloperProfile.objects.get(user=user)
 
     serializer = DeveloperProfileSerializer(
-                 profile, data=request.data.get('profile', {}), partial=True)
+        profile, data=request.data, partial=True)
+
+    print("Request Data:", request.data)  # Add this line
 
     print(serializer.initial_data)
     if serializer.is_valid():
@@ -126,4 +131,6 @@ def update_profile(request):
         updated_data = DeveloperProfileSerializer(serializer.instance).data
         print("Data after update:", updated_data)
         return Response(updated_data)
+    else:
+        print("Serializer errors:", serializer.errors)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

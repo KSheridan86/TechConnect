@@ -29,15 +29,18 @@ class DeveloperProfile(models.Model):
     portfolio_url = models.URLField(null=True, blank=True)
     intro_text = models.TextField(null=True, blank=True)
     biography_text = models.TextField(null=True, blank=True)
-    avatar = models.ImageField(null=True, blank=True)
+    avatar = models.ImageField(upload_to='images/', null=True, blank=True)
+    avatarPreview = models.TextField(null=True, blank=True)
     years_of_experience = models.PositiveIntegerField(null=True, blank=True)
     location = models.CharField(max_length=100, null=True, blank=True)
     available = models.BooleanField(default=False, null=True, blank=True)
     date_available = models.DateField(default=timezone.now, null=True, blank=True)
     skills_level_1 = models.ManyToManyField(
-        'Skill', related_name='level_1_skills')
+        'Skill', related_name='level_1_skills',
+        blank=True)
     skills_level_2 = models.ManyToManyField(
-        'Skill', related_name='level_2_skills')
+        'Skill', related_name='level_2_skills',
+        blank=True)
 
     def __str__(self):
         return f"{self.user}"

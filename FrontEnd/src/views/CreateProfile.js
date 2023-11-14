@@ -18,7 +18,7 @@ const CreateProfile = () => {
       portfolio_url: '',
       intro_text: '',
       biography_text: '',
-      // avatar: null,
+      avatar: null,
       years_of_experience: '',
       location: '',
       available: false,
@@ -34,15 +34,20 @@ const CreateProfile = () => {
       }));
     };
 
-  //   const handleAvatarChange = (event) => {
-  //   const file = event.target.files[0];
-  //   if (file) {
-  //     setProfile((prevProfile) => ({
-  //       ...prevProfile,
-  //       avatar: file, // Store the file object directly
-  //     }));
-  //   }
-  // };
+    const handleAvatarChange = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+      setProfile((prevProfile) => ({
+        ...prevProfile,
+        avatar: file, // Store the file object directly
+        avatarPreview: e.target.result, // Update the preview
+      }));
+    };
+    reader.readAsDataURL(file);
+    }
+  };
 
     // const handleAvatarChange = (event) => {
     //   const file = event.target.files[0];
@@ -66,39 +71,35 @@ const CreateProfile = () => {
     const createProfile = async (e) => {
       e.preventDefault();
       try {
+        const formData = new FormData();
+
+           // Convert base64 avatar to Blob
+        const avatarBlob = await fetch(profile.avatar).then((res) => res.blob());
+        formData.append('avatar', avatarBlob, 'avatar.jpg');
+
+        Object.entries(profile).forEach(([key, value]) => {
+          if (key !== 'avatarPreview') {
+          formData.append(key, value);
+          }
+        });
+        console.log("FormData Content:", formData);
         const config = {
           headers: {
-            'Content-Type': 'application/json', // Don't forget this line for file uploads
+            'Content-Type': 'multipart/form-data', // Don't forget this line for file uploads
             Authorization: `Bearer ${currentUser.data.token}`,
           },
         };
         
-    const payload = {
-      profile: {
-        firstname: profile.firstname,
-        lastname: profile.lastname,
-        github: profile.github,
-        linkedin: profile.linkedin,
-        portfolio_url: profile.portfolio_url,
-        intro_text: profile.intro_text,
-        biography_text: profile.biography_text,
-        // avatar: profile.avatar,
-        years_of_experience: profile.years_of_experience,
-        location: profile.location,
-        available: profile.available,
-        date_available: profile.date_available,
-      }
-    };
-        console.log('Profile:', payload);
-        const updatedProfile = {
-          ...profile,
-          available: profile.available === 'true', // Convert to boolean
-          years_of_experience: profile.years_of_experience !== '' ? parseInt(profile.years_of_experience) : null,
-        };
-        setProfile(updatedProfile)
-        const response = await api.put('users/update_profile/', {profile}, config);
+        // const updatedProfile = {
+        //   ...profile,
+        //   available: profile.available === 'true', // Convert to boolean
+        //   years_of_experience: profile.years_of_experience !== '' ? parseInt(profile.years_of_experience) : null,
+        // };
+        // setProfile(updatedProfile)
+        const response = await api.post('users/update_profile/', formData, config);
   
         console.log('Profile updated:', response.data);
+        navigate('/profile');
         // Handle success (e.g., redirect the user, show a success message)
       } catch (error) {
         console.error('Error updating profile:', error);
@@ -179,17 +180,17 @@ const CreateProfile = () => {
                         placeholder='Enter a more detailed bio here, include anything you would want potential clients to know'
                         onChange={handleInputChange}
                       />
-                      {/* <label className='fw-bold fs-5'>Avatar (Upload Image):</label>
+                      <label className='fw-bold fs-5'>Avatar (Upload Image):</label>
                       <input
                         className='border border-dark border-2 p-2 form-control mb-4 hand-writing'
                         name='avatar'
                         type='file'
                         accept='image/*'
                         onChange={(event) => handleAvatarChange(event)}
-                      /> */}
-                      {profile.avatar && (
+                      />
+                      {profile.avatarPreview && (
                         <div>
-                          <img src={profile.avatar} alt='Avatar Preview' width='100' height='100' />
+                          <img src={profile.avatarPreview} alt='Avatar Preview' width='100' height='100' />
                         </div>
                       )}
                     </div>

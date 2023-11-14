@@ -14,11 +14,12 @@ const Profile = () => {
   // const [userData, setUserData] = useState({});
   const [userData, setUserData] = useState({ profile: {} });
   const [foundUser, setFoundUser] = useState({}); 
+  // const [avatarDataUrl, setAvatarDataUrl] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     const fetchProfileData = async () => {
-      console.log(currentUser.data.token)
+      // console.log(currentUser.data.token)
       try {
         const config = {
           headers: {
@@ -31,6 +32,14 @@ const Profile = () => {
         await setFoundUser(response.data);
         setUserData(response.data);
         console.log(foundUser);
+        console.log(foundUser)
+        // if (response.data.avatar) {
+        //   const reader = new FileReader();
+        //   reader.onload = () => {
+        //     setAvatarDataUrl(reader.result);
+        //   };
+        //   reader.readAsDataURL(response.data.avatar);
+        // }
       } catch (error) {
         console.error('Error fetching profile data:', error);
         // Handle the error if needed
@@ -88,12 +97,27 @@ const Profile = () => {
         </h2>
         <div className='col-10 col-lg-5 glass-box mb-5'>
           <div className="row">
-            <div className="col-6">
+            {/* <div className="col-6">
               <img
-                src={foundUser.avatar || defaultAvatar}
+                src={avatarDataUrl ? avatarDataUrl : defaultAvatar}
                 alt='User Avatar'
                 className='user-avatar mt-2'
               />
+            </div> */}
+            <div className="col-6">
+              {foundUser ? (
+                <img
+                  src={foundUser.avatarPreview}
+                  alt='User Avatar'
+                  className='user-avatar mt-2'
+                />
+              ) : (
+                <img
+                  src={defaultAvatar}
+                  alt='Default Avatar'
+                  className='user-avatar mt-2'
+                />
+              )}
             </div>
             <div className="col-6 mt-3">
               <p className='nasa-black text-center text-uppercase'>{currentUser.data.username}</p>
