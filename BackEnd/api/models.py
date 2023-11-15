@@ -24,6 +24,7 @@ class DeveloperProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     firstname = models.CharField(max_length=50, null=True, blank=True)
     lastname = models.CharField(max_length=50, null=True, blank=True)
+    email = models.CharField(max_length=100, null=True, blank=True)
     github = models.URLField(null=True, blank=True)
     linkedin = models.URLField(null=True, blank=True)
     portfolio_url = models.URLField(null=True, blank=True)
@@ -37,12 +38,6 @@ class DeveloperProfile(models.Model):
                                       null=True, blank=True)
     skills_level_1 = models.CharField(max_length=255, blank=True)
     skills_level_2 = models.CharField(max_length=255, blank=True)
-    # skills_level_1 = models.ManyToManyField(
-    #     'Skill', related_name='level_1_skills',
-    #     blank=True)
-    # skills_level_2 = models.ManyToManyField(
-    #     'Skill', related_name='level_2_skills',
-    #     blank=True)
 
     def __str__(self):
         return f"{self.user}"

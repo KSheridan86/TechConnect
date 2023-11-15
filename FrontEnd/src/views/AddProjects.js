@@ -179,7 +179,7 @@ const AddProjects = () => {
                             type='button'
                             className='btn btn-warning btn-lg'
                             onClick={() => navigate("/profile")}>
-                            View Profile
+                            Skip
                         </button>
                     </div>
                 </div>

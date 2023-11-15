@@ -74,6 +74,21 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
             'avatar': {'required': False, 'allow_null': True},
         }
 
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+
+        # Convert comma-separated skills to lists
+        data['skills_level_1'] = self.split_skills(data['skills_level_1'])
+        data['skills_level_2'] = self.split_skills(data['skills_level_2'])
+
+        return data
+
+    def split_skills(self, skills):
+        # Check if skills is a string before splitting
+        if isinstance(skills, str):
+            return [s.strip() for s in skills.split(',') if s.strip()]
+        return skills
+
 
 # class SkillSerializer(serializers.ModelSerializer):
 #     """
@@ -109,13 +124,6 @@ class DeveloperReviewSerializer(serializers.ModelSerializer):
         """
         model = DeveloperReview
         fields = '__all__'
-
-    def to_representation(self, instance):
-        data = super().to_representation(instance)
-        # Convert comma-separated skills to lists
-        data['skills_level_1'] = data['skills_level_1'].split(',')
-        data['skills_level_2'] = data['skills_level_2'].split(',')
-        return data
 
 
 class ProjectReviewSerializer(serializers.ModelSerializer):

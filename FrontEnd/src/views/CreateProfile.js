@@ -13,6 +13,7 @@ const CreateProfile = () => {
     const [profile, setProfile] = useState({
       firstname: '',
       lastname: '',
+      email: currentUser.data.email,
       github: '',
       linkedin: '',
       portfolio_url: '',

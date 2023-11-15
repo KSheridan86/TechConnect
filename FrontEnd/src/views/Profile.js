@@ -8,6 +8,11 @@ const api = axios.create({
   withCredentials: true,
 });
 
+// Function to capitalize the first letter of a string
+const capitalizeFirstLetter = (string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1);
+};
+
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [userData, setUserData] = useState({ profile: {} });
@@ -39,6 +44,7 @@ const Profile = () => {
 
   console.log(foundUser);
   console.log(foundUser.avatar)
+  console.log(typeof foundUser.skills_level_1)
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
   };
@@ -109,14 +115,32 @@ const Profile = () => {
             </div>
           </div>
         
-          <h3 className='nasa-black text-center text-uppercase mt-3'>Your Skills:</h3>
-          
-          {userData.skills && userData.skills.length > 0 && (
-            <p className='nasa-black text-center text-uppercase mt-3'>
-              {userData.skills.join(', ')}.
-            </p>
+          <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h3>
+          {foundUser.skills_level_1 && (
+              <p className='nasa-black text-center mt-3'>
+                {Array.isArray(foundUser.skills_level_1)
+                    ? foundUser.skills_level_1
+                        .filter(skill => typeof skill === 'string')
+                        .map(skill => capitalizeFirstLetter(skill.trim()))
+                        .join(', ')
+                    : foundUser.skills_level_1
+                }
+              </p>
           )}
-          {userData.email === currentUser.email && (
+
+          <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h3>
+          {foundUser.skills_level_2 && (
+              <p className='nasa-black text-center mt-3'>
+              {Array.isArray(foundUser.skills_level_2)
+                  ? foundUser.skills_level_2
+                      .filter(skill => typeof skill === 'string')
+                      .map(skill => capitalizeFirstLetter(skill.trim()))
+                      .join(', ')
+                  : foundUser.skills_level_2
+              }
+          </p>
+          )}
+          {foundUser.email === currentUser.data.email && (
             <div className="text-center hand-writing">
               <button
                 type='button'
