@@ -43,18 +43,6 @@ class DeveloperProfile(models.Model):
         return f"{self.user}"
 
 
-# Skill Model
-# class Skill(models.Model):
-#     """
-#     This model represents a specific skill or expertise that
-#     can be associated with developers.
-#     """
-#     name = models.CharField(max_length=50, null=True, blank=True)
-
-#     def __str__(self):
-#         return f"{self.name}"
-
-
 # Project Model
 class Project(models.Model):
     """

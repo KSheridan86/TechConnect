@@ -3,8 +3,8 @@ _summary_
 """
 
 from rest_framework import serializers
-from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.validators import UniqueValidator
+from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from .models import (DeveloperProfile, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
@@ -76,7 +76,6 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-
         # Convert comma-separated skills to lists
         data['skills_level_1'] = self.split_skills(data['skills_level_1'])
         data['skills_level_2'] = self.split_skills(data['skills_level_2'])
@@ -84,22 +83,13 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         return data
 
     def split_skills(self, skills):
+        """
+        Function to split skills into a list
+        """
         # Check if skills is a string before splitting
         if isinstance(skills, str):
             return [s.strip() for s in skills.split(',') if s.strip()]
         return skills
-
-
-# class SkillSerializer(serializers.ModelSerializer):
-#     """
-#     Serializes the Skill model.
-#     """
-#     class Meta:
-#         """
-#         _summary_
-#         """
-#         model = Skill
-#         fields = '__all__'
 
 
 class ProjectSerializer(serializers.ModelSerializer):

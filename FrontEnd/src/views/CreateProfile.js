@@ -2,14 +2,19 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
+// Create an Axios instance with a base URL and credentials
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
   withCredentials: true,
 });
 
+// Component for creating a user profile
 const CreateProfile = () => {
+  // Retrieve current user information from local storage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const navigate = useNavigate();
+
+    // State to manage the user profile form data
     const [profile, setProfile] = useState({
       firstname: '',
       lastname: '',
@@ -28,11 +33,12 @@ const CreateProfile = () => {
       skills_level_2: [],
     });
 
+    // Update local storage whenever profile changes
     useEffect(() => {
-      // Update local storage whenever profile changes
       localStorage.setItem('formData', JSON.stringify(profile));
     }, [profile]);
 
+    // Handle input changes for form fields
     const handleInputChange = (event) => {
       const { name, value, type, checked } = event.target;
       
@@ -42,6 +48,7 @@ const CreateProfile = () => {
       }));
     };
 
+    // Handle avatar file change
     const handleAvatarChange = (event) => {
     const file = event.target.files[0];
     if (file) {
@@ -56,26 +63,31 @@ const CreateProfile = () => {
     }
   };
 
+  // Handle availability checkbox change
     const handleAvailabilityChange = (event) => {
       const { name, checked } = event.target;
       setProfile((prevProfile) => ({ ...prevProfile, [name]: checked }));
     };
 
+    // Handle the profile creation process
     const createProfile = async (e) => {
       e.preventDefault();
       try {
         const formData = new FormData();
 
+        // Append avatar file to the form data if available
         if (profile.avatar) {
           formData.append('avatar', profile.avatar, 'avatar.jpg');
         }
 
+        // Append other profile fields to the form data
         Object.entries(profile).forEach(([key, value]) => {
           if (key !== 'avatar') {
           formData.append(key, value);
           }
         });
-        // console.log("FormData Content:", formData);
+
+        // Configuration for the API request, including authorization header
         const config = {
           headers: {
             'Content-Type': 'multipart/form-data', // This line is needed for file uploads
@@ -83,10 +95,11 @@ const CreateProfile = () => {
           },
         };
 
+        // Make a POST request to update the user profile
         const response = await api.post('users/update_profile/', formData, config);
   
         console.log('Profile updated:', response.data);
-        navigate('/add-skills');
+        navigate('/add-skills'); // Redirect to the next step
       } catch (error) {
         console.error('Error updating profile:', error);
         console.log('Error response from server:', error.response); 
@@ -102,7 +115,9 @@ const CreateProfile = () => {
               Create your Profile
             </h2>
 
+            {/* Profile creation form */}
             <form encType="multipart/form-data">
+              {/* Personal Information section */}
               <div className='row justify-content-evenly text-center'>
                 <div className='col-md-5 mb-3'>
                   <div className='glass-box border-dark m-3 p-3'>
@@ -182,6 +197,7 @@ const CreateProfile = () => {
                   </div>
                 </div>
 
+                {/* Professional Information section */}
                 <div className='col-md-5 mb-3'>
                   <div className='glass-box border-dark m-3 p-3'>
                     <h4 className="nasa text-uppercase">Professional Information</h4>
@@ -228,6 +244,7 @@ const CreateProfile = () => {
                   </div>
                 </div>
               </div>
+              {/* Button to submit the form */}
               <div className='text-center'>
                 <button
                   type='submit'

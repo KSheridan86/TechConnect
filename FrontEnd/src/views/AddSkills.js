@@ -2,24 +2,28 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
+// Create an Axios instance with a base URL and credentials
 const api = axios.create({
     baseURL: 'http://127.0.0.1:8000/api/',
     withCredentials: true,
 });
 
+// Component for adding skills to the user's profile
 const AddSkills = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
 
-    console.log('returnUrl from state:', returnUrl);
+    // State variables to manage user input for primary and secondary skills
     const [primarySkills, setPrimarySkills] = useState('');
     const [secondarySkills, setSecondarySkills] = useState('');
+
+    // State variables to store the user's current primary and secondary skills
     const [currentSkills1, setCurrentSkills1] = useState([]);
     const [currentSkills2, setCurrentSkills2] = useState([]);
 
+    // Fetch current skills when the component mounts
     useEffect(() => {
-        // Fetch current skills when the component mounts
         const fetchSkills = async () => {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             try {
@@ -27,14 +31,11 @@ const AddSkills = () => {
                     headers: {
                         'Content-Type': 'application/json',
                         Authorization: `Bearer ${currentUser.data.token}`,
-                    },
-                };
+                    },};
                 
                 const response = await api.get('users/profile/', config);
                 setCurrentSkills1(response.data.skills_level_1);
-                console.log('Current skills level 1:', response.data.skills_level_1);
                 setCurrentSkills2(response.data.skills_level_2);
-                console.log('Current skills level 2:', response.data.skills_level_2);
             } catch (error) {
                 console.error('Error fetching current skills:', error);
             }
@@ -43,13 +44,15 @@ const AddSkills = () => {
         fetchSkills();
     }, []);
 
+    // Handle the process of adding skills to the user's profile
     const addSkills = async () => {
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         const formData = new FormData();
 
-        // Create a function to join skills with commas
+        // Function to join skills with commas
         const joinSkills = (skills) => (skills.length > 0 ? skills.join(', ') : '');
 
+        // Create new arrays by adding the entered skills to the current skills
         const newSkills1 = [...currentSkills1, primarySkills];
         const newSkills2 = [...currentSkills2, secondarySkills];
 
@@ -65,10 +68,11 @@ const AddSkills = () => {
                 },
             };
 
+            // Make a POST request to update the user profile with the new skills
             const response = await api.post('users/update_profile/', formData, config);
 
-            console.log('Profile updated with skills:', response.data);
-            if (returnUrl) {
+            // Redirect to the appropriate page based on returnUrl or default to '/add-projects'
+            if (response && returnUrl) {
             navigate('/profile');
             } else {
             navigate('/add-projects');
@@ -86,7 +90,7 @@ const AddSkills = () => {
                     <h2 className='nasa-black text-center text-uppercase mt-3'>
                     Add Skills to your Profile
                     </h2>
-
+                    {/* Skills input form */}
                     <form>
                         <div className='row justify-content-evenly text-center'>
                             <div className='col-md-10 mb-3'>
@@ -114,6 +118,7 @@ const AddSkills = () => {
                             </div>
                             </div>
                         </div>
+                        {/* Button to submit the form */}
                         <div className='text-center hand-writing'>
                             <button
                                 type='button'

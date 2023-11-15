@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
 import axios from 'axios';
 
+// Create an Axios instance with a base URL and credentials
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
   withCredentials: true,
@@ -13,6 +14,7 @@ const capitalizeFirstLetter = (string) => {
   return string.charAt(0).toUpperCase() + string.slice(1);
 };
 
+// Component to display and manage user profile
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [userData, setUserData] = useState({ profile: {} });
@@ -20,15 +22,18 @@ const Profile = () => {
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
 
+  // Fetch user profile data when the component mounts
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        // Configuration for the API request, including authorization header
         const config = {
           headers: {
             'Content-Type': 'application/json',
             Authorization: `Bearer ${currentUser.data.token}`,
           },
         };
+        // Make a GET request to retrieve the user profile and set variables
         const response = await api.get('users/profile/', config);
         
         await setFoundUser(response.data);
@@ -38,13 +43,10 @@ const Profile = () => {
         // Handle the error if needed
       }
     };
-
     fetchProfileData();
   }, []);
 
-  console.log(foundUser);
-  console.log(foundUser.avatar)
-  console.log(typeof foundUser.skills_level_1)
+   // Function to navigate to the 'Add Skills' page
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
   };
