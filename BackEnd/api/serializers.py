@@ -6,7 +6,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.tokens import RefreshToken
 from rest_framework.validators import UniqueValidator
 from django.contrib.auth.models import User
-from .models import (DeveloperProfile, Skill, Project,
+from .models import (DeveloperProfile, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 
 
@@ -75,16 +75,16 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         }
 
 
-class SkillSerializer(serializers.ModelSerializer):
-    """
-    Serializes the Skill model.
-    """
-    class Meta:
-        """
-        _summary_
-        """
-        model = Skill
-        fields = '__all__'
+# class SkillSerializer(serializers.ModelSerializer):
+#     """
+#     Serializes the Skill model.
+#     """
+#     class Meta:
+#         """
+#         _summary_
+#         """
+#         model = Skill
+#         fields = '__all__'
 
 
 class ProjectSerializer(serializers.ModelSerializer):
@@ -109,6 +109,13 @@ class DeveloperReviewSerializer(serializers.ModelSerializer):
         """
         model = DeveloperReview
         fields = '__all__'
+
+    def to_representation(self, instance):
+        data = super().to_representation(instance)
+        # Convert comma-separated skills to lists
+        data['skills_level_1'] = data['skills_level_1'].split(',')
+        data['skills_level_2'] = data['skills_level_2'].split(',')
+        return data
 
 
 class ProjectReviewSerializer(serializers.ModelSerializer):

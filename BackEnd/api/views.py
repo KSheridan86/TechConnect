@@ -12,10 +12,10 @@ from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 
 # pylint: disable=W0611
-from .models import (User, DeveloperProfile, Skill, Project,
+from .models import (User, DeveloperProfile, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, UserSerializerWithToken,
-                          DeveloperProfileSerializer, SkillSerializer,
+                          DeveloperProfileSerializer,
                           ProjectSerializer, DeveloperReviewSerializer,
                           ProjectReviewSerializer, PrivateMessageSerializer)
 

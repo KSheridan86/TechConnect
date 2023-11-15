@@ -2,12 +2,12 @@
 This file is used to register the models in the admin panel.
 """
 from django.contrib import admin
-from .models import (DeveloperProfile, Skill, Project,
+from .models import (DeveloperProfile, Project,
                      DeveloperReview, ProjectReview, PrivateMessage)
 # Register your models here.
 
 admin.site.register(DeveloperProfile)
-admin.site.register(Skill)
+# admin.site.register(Skill)
 admin.site.register(Project)
 admin.site.register(DeveloperReview)
 admin.site.register(ProjectReview)

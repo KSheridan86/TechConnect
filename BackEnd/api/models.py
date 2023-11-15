@@ -35,27 +35,29 @@ class DeveloperProfile(models.Model):
     available = models.BooleanField(default=False, null=True, blank=True)
     date_available = models.DateField(default=timezone.now,
                                       null=True, blank=True)
-    skills_level_1 = models.ManyToManyField(
-        'Skill', related_name='level_1_skills',
-        blank=True)
-    skills_level_2 = models.ManyToManyField(
-        'Skill', related_name='level_2_skills',
-        blank=True)
+    skills_level_1 = models.CharField(max_length=255, blank=True)
+    skills_level_2 = models.CharField(max_length=255, blank=True)
+    # skills_level_1 = models.ManyToManyField(
+    #     'Skill', related_name='level_1_skills',
+    #     blank=True)
+    # skills_level_2 = models.ManyToManyField(
+    #     'Skill', related_name='level_2_skills',
+    #     blank=True)
 
     def __str__(self):
         return f"{self.user}"
 
 
 # Skill Model
-class Skill(models.Model):
-    """
-    This model represents a specific skill or expertise that
-    can be associated with developers.
-    """
-    name = models.CharField(max_length=50, null=True, blank=True)
+# class Skill(models.Model):
+#     """
+#     This model represents a specific skill or expertise that
+#     can be associated with developers.
+#     """
+#     name = models.CharField(max_length=50, null=True, blank=True)
 
-    def __str__(self):
-        return f"{self.name}"
+#     def __str__(self):
+#         return f"{self.name}"
 
 
 # Project Model

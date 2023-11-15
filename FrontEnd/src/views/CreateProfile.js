@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -23,7 +23,14 @@ const CreateProfile = () => {
       location: '',
       available: false,
       date_available: '',
+      skills_level_1: [],
+      skills_level_2: [],
     });
+
+    useEffect(() => {
+      // Update local storage whenever profile changes
+      localStorage.setItem('formData', JSON.stringify(profile));
+    }, [profile]);
 
     const handleInputChange = (event) => {
       const { name, value, type, checked } = event.target;
@@ -67,7 +74,7 @@ const CreateProfile = () => {
           formData.append(key, value);
           }
         });
-        console.log("FormData Content:", formData);
+        // console.log("FormData Content:", formData);
         const config = {
           headers: {
             'Content-Type': 'multipart/form-data', // This line is needed for file uploads
@@ -78,7 +85,7 @@ const CreateProfile = () => {
         const response = await api.post('users/update_profile/', formData, config);
   
         console.log('Profile updated:', response.data);
-        navigate('/profile');
+        navigate('/add-skills');
       } catch (error) {
         console.error('Error updating profile:', error);
         console.log('Error response from server:', error.response); 

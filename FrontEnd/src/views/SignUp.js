@@ -41,7 +41,7 @@ const SignUp = ({ onLogin }) => {
               
             }, config);
             if (response) {
-                console.log('User registered successfully:', response.data);
+                // console.log('User registered successfully:', response.data);
             // Log the user in after signup
             await loginAfterSignup();
             }
@@ -62,7 +62,7 @@ const SignUp = ({ onLogin }) => {
             'password': userData.password,
           }, config);
           const currentUser = response;
-          console.log('User logged in successfully:', response.data);
+          // console.log('User logged in successfully:', response.data);
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
           onLogin();
         } catch (error) {
