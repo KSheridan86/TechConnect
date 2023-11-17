@@ -126,6 +126,12 @@ const AddSkills = () => {
                                 onClick={addSkills}>
                                 Add Skills
                             </button>
+                            <button
+                                type='button'
+                                className='btn btn-warning btn-lg m-3'
+                                onClick={() => {navigate('/profile');}}>
+                                {returnUrl ? 'Back' : 'Skip'}
+                            </button>
                         </div>
                     </form>
                 </div>
