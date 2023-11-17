@@ -147,13 +147,22 @@ const handleInputChange = (event) => {
         } catch (error) {
             console.error('Error updating profile:', error);
             console.log('Error response from server:', error.response);
+            setErrors({ general: "Whoops, looks like there's an issue with your details. Please try again later." });
         }
     };
 
     return (
       <div className='container fill-screen'>
         <div className='row justify-content-center login'>
+        {errors.general && (
+            <div className='notification-overlay fs-3'>
+              <div className='alert alert-success' role='alert'>
+                {errors.general}
+              </div>
+            </div>
+          )}
             <div className='col-12'>
+                
                 <h2 className='nasa-black text-center text-uppercase mt-3'>
                     Create your Profile
                 </h2>
@@ -188,7 +197,50 @@ const handleInputChange = (event) => {
                             {errors.lastname && (
                                 <div className='text-danger'>{errors.lastname}</div>
                             )}
-                            <label className='fw-bold fs-5'>GitHub URL:</label>
+                            <label className='fw-bold fs-5'>Introduction:</label>
+                            <textarea
+                                className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                name='intro_text'
+                                placeholder='Give a brief introduction to attract clients'
+                                onChange={handleInputChange}
+                            />
+                            {errors.intro_text && (
+                                <div className='text-danger'>{errors.intro_text}</div>
+                            )}
+                            <label className='fw-bold fs-5'>Bio:</label>
+                            <textarea
+                                className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                name='biography_text'
+                                placeholder='Enter a more detailed bio here, include anything you would want potential clients to know'
+                                rows={5}
+                                onChange={handleInputChange}
+                            />
+                            {errors.biography_text && (
+                            <div className='text-danger'>{errors.biography_text}</div>
+                            )}
+                            <label className='fw-bold fs-5'>Avatar (Upload Image):</label>
+                            <input
+                                className='border border-dark border-2 p-2 form-control mb-3 hand-writing'
+                                name='avatar'
+                                type='file'
+                                accept='image/*'
+                                onChange={(event) => handleAvatarChange(event)}
+                            />
+                            {profile.avatar && (
+                            <div>
+                                <img src={URL.createObjectURL(profile.avatar)} alt='Avatar Preview' width='100' height='100' />
+                            </div>
+                            )}
+                        </div>
+                        </div>
+                    </div>
+
+                    {/* Professional Information section */}
+                    <div className='col-md-5 mb-3'>
+                        <div className='glass-box border-dark m-3 p-3'>
+                        <h4 className='nasa text-uppercase'>Professional Information</h4>
+                        <div className='mb-3'>
+                        <label className='fw-bold fs-5'>GitHub URL:</label>
                             <input
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
@@ -221,48 +273,6 @@ const handleInputChange = (event) => {
                             {errors.portfolio_url && (
                                 <div className='text-danger'>{errors.portfolio_url}</div>
                             )}
-                            <label className='fw-bold fs-5'>Introduction:</label>
-                            <textarea
-                                className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                                name='intro_text'
-                                placeholder='Give a brief introduction to attract clients'
-                                onChange={handleInputChange}
-                            />
-                            {errors.intro_text && (
-                                <div className='text-danger'>{errors.intro_text}</div>
-                            )}
-                            <label className='fw-bold fs-5'>Bio:</label>
-                            <textarea
-                                className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                                name='biography_text'
-                                placeholder='Enter a more detailed bio here, include anything you would want potential clients to know'
-                                onChange={handleInputChange}
-                            />
-                            {errors.biography_text && (
-                            <div className='text-danger'>{errors.biography_text}</div>
-                            )}
-                            <label className='fw-bold fs-5'>Avatar (Upload Image):</label>
-                            <input
-                                className='border border-dark border-2 p-2 form-control mb-4 hand-writing'
-                                name='avatar'
-                                type='file'
-                                accept='image/*'
-                                onChange={(event) => handleAvatarChange(event)}
-                            />
-                            {profile.avatar && (
-                            <div>
-                                <img src={URL.createObjectURL(profile.avatar)} alt='Avatar Preview' width='100' height='100' />
-                            </div>
-                            )}
-                        </div>
-                        </div>
-                    </div>
-
-                    {/* Professional Information section */}
-                    <div className='col-md-5 mb-3'>
-                        <div className='glass-box border-dark m-3 p-3'>
-                        <h4 className='nasa text-uppercase'>Professional Information</h4>
-                        <div className='mb-3'>
                             <label className='fw-bold fs-5'>Years of Experience:</label>
                             <input
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
@@ -285,9 +295,9 @@ const handleInputChange = (event) => {
                             {errors.location && (
                                 <div className='text-danger'>{errors.location}</div>
                             )}
-                            <label className='form-label fw-bold fs-5 mt-2'>Available:</label>
+                            <label className='form-label fw-bold fs-5 mt-2'>Available?</label>
                             <br />
-                            <small>Check this box if you are available for work</small>
+                            <small>Check this box if you are.</small>
                             <br />
                             <input
                                 className='form-check-input mt-2'
@@ -300,9 +310,11 @@ const handleInputChange = (event) => {
                                 <div className='text-danger'>{errors.available}</div>
                             )}
                             <br />
-                            <label className='form-label fw-bold fs-5 mt-2'>Date Available:</label>
+                            <label className='form-label fw-bold fs-5 mt-2'></label>
+                            <small>Provide a date for when you are available</small>
+                            <br />
                             <input
-                                className="form-control text-center hand-writing"
+                                className="form-control text-center hand-writing mt-2"
                                 type='date'
                                 name='date_available'
                                 value={profile.date_available}

@@ -61,25 +61,20 @@ const Login = ({ onLogin }) => {
       onLogin();
 
       // Display success message
-      setMessage(`Welcome back ${currentUser.data.username}!`);
+      // setMessage(`Welcome back ${currentUser.data.username}!`);
 
       if (data !== null) {
         onLogin();
       }
 
       if (currentUser.data.account_type === 'Developer') {
-        setTimeout(() => {
           setMessage('');
           navigate('/profile');
-        }, 1250);
-
       } else {
-        setTimeout(() => {
           setMessage('');
           navigate('/developers');
-        }, 1250);
-
       }
+
     } catch (error) {
       setMessage('');
       console.error('Error while making the API call:', error);
@@ -95,11 +90,11 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="container login fill-screen">
+    <div className="container login fill-screen main-content">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
       <div className="row">
 
-        <div className="col-md-6">
+        <div className="col-md-6 animate-slide-left">
           {errors.general && (
             <div className='notification-overlay fs-3'>
               <div className='alert alert-danger' role='alert'>
@@ -158,7 +153,7 @@ const Login = ({ onLogin }) => {
           </form>
         </div>
 
-        <div className="col-md-6 hand-writing">
+        <div className="col-md-6 hand-writing animate-slide-right">
           <div className="glass-box m-3 fw-bold p-3 text-center">
             <p className="fs-5">Don't have an account yet?</p>
             <p>Are you a Developer looking to showcase your talents or find work? <br /> Sign up here!</p>

@@ -59,7 +59,7 @@ const Home = ({loggedIn}) => {
         <div className="container mt-4 fill-screen">
             <div className="row justify-content-center">
 
-                <div className="col-md-6">
+                <div className="col-md-6 animate-slide-left">
                     <div className="glass-box border-dark m-3 nasa p-4 text-center">
                         <div className="circle-image m-auto mb-3">
                             <img src={logo} alt="Circle" />
@@ -84,7 +84,7 @@ const Home = ({loggedIn}) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-6">
+                <div className="col-md-6 animate-slide-right">
                     <div className="p-3 text-center glass-box m-3 border-dark">
                         <h1 className='nasa'>Developers!</h1>
                         <p>

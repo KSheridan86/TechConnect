@@ -1,3 +1,12 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+body {
+  overflow-x: hidden;
+}
+
 /* custom nasa font & text effects*/
 @font-face {
   font-family: 'NasaFont';
@@ -127,7 +136,7 @@ p {
 }
 
 .fill-screen {
-  min-height: 100vh;
+  min-height: 95vh;
 }
 
 /* Back to top btn styles & animation */
@@ -195,4 +204,29 @@ div > a {
 
 .user-avatar {
   width: 100%;
+}
+
+/* animations */
+
+.animate-slide-left {
+  transform: translateX(-360px);
+  animation: come-in 1s ease forwards;
+  opacity: 0;
+}
+
+.animate-slide-right{
+  transform: translateX(360px);
+  animation: come-in 1s ease forwards;
+  opacity: 0;
+}
+
+@keyframes come-in {
+  to {
+      transform: translateX(0);
+      opacity: 1;
+  }
+}
+
+.max {
+  max-height: 75vh;
 }

@@ -100,6 +100,7 @@ const SignUp = ({ onLogin }) => {
       onLogin();
     } catch (error) {
       console.error('Error logging in after signup:', error);
+      setErrors({ general: "Whoops, we couldn't log you in. Please try again." });
     }
 
     // Redirect based on account type
@@ -125,7 +126,7 @@ const SignUp = ({ onLogin }) => {
   return (
     <div className="container login fill-screen mt-4">
       <div className="row mt-3 justify-content-center">
-        <div className="col-md-6">
+        <div className="col-md-6 animate-slide-left">
           {errors.general && (
             <div className='notification-overlay fs-3'>
               <div className='alert alert-success' role='alert'>

@@ -45,6 +45,7 @@ const Profile = () => {
     };
     fetchProfileData();
   }, []);
+  console.log(foundUser.email)
 
    // Function to navigate to the 'Add Skills' page
   const updateSkills = () => {
@@ -93,7 +94,7 @@ const Profile = () => {
         <h2 className='nasa-black text-center text-uppercase mt-3'>
           Hello {currentUser.data.username}, Welcome back!
         </h2>
-        <div className='col-10 col-lg-5 glass-box mb-5'>
+        <div className='col-10 col-lg-5 glass-box mb-5 animate-slide-left'>
           <div className="row">
             <div className="col-6">
                 <img
@@ -155,7 +156,7 @@ const Profile = () => {
           )}
           
         </div>
-        <div className='col-10 col-lg-5 glass-box mb-5'>
+        <div className='col-10 col-lg-5 glass-box mb-5 animate-slide-right'>
           {userData.projectsList && userData.projectsList.length > 0 && (
           <div>
             <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>

@@ -24,7 +24,7 @@ const Logout = ({ onLogout }) => {
     return (
       <div className='container fill-screen'>
         <div className="row justify-content-center logout">
-          <div className="col-12 col-lg-6">
+          <div className="col-12 col-lg-6 animate-slide-left">
             <h1 className="glass-box fw-bold p-4 m-5 text-center">Are you sure you want to Logout?</h1>
             <div className="col-12 text-center hand-writing">
               <button 

@@ -13,6 +13,7 @@ const AddSkills = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
+    const [errors, setErrors] = useState({});
 
     // State variables to manage user input for primary and secondary skills
     const [primarySkills, setPrimarySkills] = useState('');
@@ -21,6 +22,24 @@ const AddSkills = () => {
     // State variables to store the user's current primary and secondary skills
     const [currentSkills1, setCurrentSkills1] = useState([]);
     const [currentSkills2, setCurrentSkills2] = useState([]);
+
+    const validateSkills = () => {
+        let isValid = true;
+        const newErrors = {};
+    
+        if (!primarySkills.trim()) {
+            newErrors.primarySkills = 'Please enter your primary skills';
+            isValid = false;
+        }
+    
+        if (!secondarySkills.trim()) {
+            newErrors.secondarySkills = 'Please enter your secondary skills';
+            isValid = false;
+        }
+    
+        setErrors(newErrors);
+        return isValid;
+    };
 
     // Fetch current skills when the component mounts
     useEffect(() => {
@@ -38,6 +57,7 @@ const AddSkills = () => {
                 setCurrentSkills2(response.data.skills_level_2);
             } catch (error) {
                 console.error('Error fetching current skills:', error);
+                setErrors({ general: "Whoops, we couldn't find your current skills, you have skills don't you??" });
             }
         };
 
@@ -45,7 +65,12 @@ const AddSkills = () => {
     }, []);
 
     // Handle the process of adding skills to the user's profile
-    const addSkills = async () => {
+    const addSkills = async (e) => {
+        e.preventDefault();
+        // Validate skills
+        if (!validateSkills()) {
+            return;
+        }
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
         const formData = new FormData();
 
@@ -80,46 +105,64 @@ const AddSkills = () => {
         } catch (error) {
             console.error('Error updating profile with skills:', error);
             console.log('Error response from server:', error.response);
+            setErrors({ general: "Whoops, we couldn't save your skills. Please try again later." });
         }
     };
 
     return (
-        <div className='container mt-4 fill-screen'>
+        <div className='container mt-2 fill-screen'>
             <div className='row justify-content-center login'>
-                <div className='col-12'>
-                    <h2 className='nasa-black text-center text-uppercase mt-3'>
-                    Add Skills to your Profile
-                    </h2>
+                <div className='col-12 mb-5'>
+                {errors.general && (
+                    <div className='notification-overlay fs-3'>
+                        <div className='alert alert-danger' role='alert'>
+                            {errors.general}
+                        </div>
+                    </div>
+                )}
+                    
                     {/* Skills input form */}
                     <form>
+                        
                         <div className='row justify-content-evenly text-center'>
-                            <div className='col-md-10 mb-3'>
-                            <div className='glass-box border-dark m-3 p-3'>
-                                <h3 className="nasa text-uppercase">Skills</h3>
+                            <div className='col-md-8 mb-0'>
+                                
+                            <div className='glass-box border-dark m-3 p-4'>
+                                <h2 className='nasa-black text-center text-uppercase mt-2'>
+                                    Add Skills to your Profile
+                                </h2>
                                 <div className='mb-3'>
                                 <h4 className="fw-bold">Use this space to inform clients of your abilities, ie "React", "Python" etc...</h4>
                                 <br />
-                                <label className='fw-bold'>Lets start with your primary skills, the ones you're most proficient and comfortable with.</label>
-                                <textarea
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                <label className='fw-bold mb-2'>Lets start with your primary skills, the ones you're most proficient and comfortable with.</label>
+                                <textarea style={{maxWidth: '75%'}}
+                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
                                     name='skills_level_1'
                                     placeholder='Add your PRIMARY skills here separated by commas'
                                     onChange={(e) => setPrimarySkills(e.target.value)}
+                                    rows={1}
                                 />
+                                {errors.primarySkills && (
+                                    <div className="text-danger">{errors.primarySkills}</div>
+                                )}
                                 <br />
-                                <label className='fw-bold'>Now add your secondary skills, skills you're familiar with but not a pro in.</label>
-                                <textarea
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                <label className='fw-bold mb-2'>Now add your secondary skills, skills you're familiar with but not a pro in.</label>
+                                <textarea style={{maxWidth: '75%'}}
+                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
                                     name='skills_level_2'
                                     placeholder='Add your SECONDARY skills here separated by commas'
                                     onChange={(e) => setSecondarySkills(e.target.value)}
+                                    rows={1}
                                 />
+                                {errors.secondarySkills && (
+                                    <div className="text-danger">{errors.secondarySkills}</div>
+                                )}
                                 </div>
                             </div>
                             </div>
                         </div>
                         {/* Button to submit the form */}
-                        <div className='text-center hand-writing'>
+                        <div className='text-center hand-writing mb-5'>
                             <button
                                 type='button'
                                 className='btn btn-warning btn-lg'
