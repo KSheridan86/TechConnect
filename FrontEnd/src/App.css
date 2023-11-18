@@ -208,22 +208,100 @@ div > a {
 
 /* animations */
 
+/* Slide in from the left */
 .animate-slide-left {
   transform: translateX(-360px);
   animation: come-in 1s ease forwards;
   opacity: 0;
 }
 
+/* Slide in from the right */
 .animate-slide-right{
   transform: translateX(360px);
   animation: come-in 1s ease forwards;
   opacity: 0;
 }
 
+/* Slide out to the left */
+.animate-slide-out-left {
+  animation: go-out-left 1s ease forwards;
+}
+
+/* Slide out to the right */
+.animate-slide-out-right {
+  animation: go-out-right 1s ease forwards;
+}
+
+/* Slide in from the top */
+.animate-slide-top {
+  transform: translateY(-360px);
+  animation: come-in-top 1s ease forwards;
+  opacity: 0;
+}
+
+/* Slide in from the bottom */
+.animate-slide-bottom {
+  transform: translateY(360px);
+  animation: come-in-bottom 1s ease forwards;
+  opacity: 0;
+}
+
+/* Slide out to the top */
+.animate-slide-out-top {
+  animation: go-out-top 1s ease forwards;
+}
+
+/* Slide out to the bottom */
+.animate-slide-out-bottom {
+  animation: go-out-bottom 1s ease forwards;
+}
+
 @keyframes come-in {
   to {
       transform: translateX(0);
       opacity: 1;
+  }
+}
+
+@keyframes go-out-left {
+  to {
+    transform: translateX(-360px);
+    opacity: 0;
+  }
+}
+
+@keyframes go-out-right {
+  to {
+    transform: translateX(360px);
+    opacity: 0;
+  }
+}
+
+@keyframes come-in-top {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes come-in-bottom {
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes go-out-top {
+  to {
+    transform: translateY(-360px);
+    opacity: 0;
+  }
+}
+
+@keyframes go-out-bottom {
+  to {
+    transform: translateY(360px);
+    opacity: 0;
   }
 }
 

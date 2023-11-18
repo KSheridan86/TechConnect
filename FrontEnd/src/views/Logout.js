@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -8,13 +8,17 @@ const api = axios.create({
 });
 
 const Logout = ({ onLogout }) => {
+  const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const navigate = useNavigate();
 
     const handleLogout = async () => {
         try {
             // api.post('/logout');
             onLogout();
-            navigate('/');
+            setShouldSlideOut(true);
+            setTimeout(() => {
+              navigate('/');
+            }, 1000);
         } catch (error) {
             console.error('Logout failed:', error);
         }
@@ -24,7 +28,7 @@ const Logout = ({ onLogout }) => {
     return (
       <div className='container fill-screen'>
         <div className="row justify-content-center logout">
-          <div className="col-12 col-lg-6 animate-slide-left">
+          <div className={`col-12 col-lg-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
             <h1 className="glass-box fw-bold p-4 m-5 text-center">Are you sure you want to Logout?</h1>
             <div className="col-12 text-center hand-writing">
               <button 

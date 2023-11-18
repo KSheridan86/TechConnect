@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
@@ -13,7 +13,22 @@ const Login = ({ onLogin }) => {
   const [errors, setErrors] = useState({});
   const [data, setData] = useState(null);
   const [message, setMessage] = useState('');
+  const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
+    if (storedShouldSlideOut) {
+      // console.log('storedShouldSlideOut:', storedShouldSlideOut);
+      // setShouldSlideOut(true);
+      // console.log('shouldSlideOut:', shouldSlideOut);
+      setTimeout(() => {
+        localStorage.removeItem('shouldSlideOut');
+      }, 1000);
+      const check = JSON.parse(localStorage.getItem('shouldSlideOut'));
+      console.log('storedShouldSlideOut:', check);
+    }
+  }, []);
 
   const validateLoginDetails = () => {
     let isValid = true;
@@ -60,19 +75,23 @@ const Login = ({ onLogin }) => {
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       onLogin();
 
-      // Display success message
-      // setMessage(`Welcome back ${currentUser.data.username}!`);
-
       if (data !== null) {
         onLogin();
       }
 
       if (currentUser.data.account_type === 'Developer') {
           setMessage('');
-          navigate('/profile');
+          setShouldSlideOut(true);
+          setTimeout(() => {
+            navigate('/profile');
+          }, 1000); 
+          
       } else {
           setMessage('');
-          navigate('/developers');
+          setShouldSlideOut(true);
+          setTimeout(() => {
+            navigate('/developers');
+          }, 1000); 
       }
 
     } catch (error) {
@@ -94,7 +113,7 @@ const Login = ({ onLogin }) => {
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
       <div className="row">
 
-        <div className="col-md-6 animate-slide-left">
+        <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           {errors.general && (
             <div className='notification-overlay fs-3'>
               <div className='alert alert-danger' role='alert'>
@@ -153,7 +172,7 @@ const Login = ({ onLogin }) => {
           </form>
         </div>
 
-        <div className="col-md-6 hand-writing animate-slide-right">
+        <div className={`col-md-6 hand-writing ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
           <div className="glass-box m-3 fw-bold p-3 text-center">
             <p className="fs-5">Don't have an account yet?</p>
             <p>Are you a Developer looking to showcase your talents or find work? <br /> Sign up here!</p>

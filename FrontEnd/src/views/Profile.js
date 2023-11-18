@@ -20,6 +20,7 @@ const Profile = () => {
   const [userData, setUserData] = useState({ profile: {} });
   const [foundUser, setFoundUser] = useState({}); 
   const baseAvatarUrl = 'http://127.0.0.1:8000';
+  const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const navigate = useNavigate();
 
   // Fetch user profile data when the component mounts
@@ -48,11 +49,17 @@ const Profile = () => {
 
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
-    navigate('/add-skills', { state: { returnUrl: '/profile' } });
+    setShouldSlideOut(true);
+    setTimeout(() => {
+      navigate('/add-skills', { state: { returnUrl: '/profile' } });
+    }, 1000);
   };
 
   const addProjects = () => {
-    navigate('/add-projects', { state: { returnUrl: '/profile' } });
+    setShouldSlideOut(true);
+    setTimeout(() => {
+      navigate('/add-projects', { state: { returnUrl: '/profile' } });
+    }, 1000);
   };
 
   // const deleteAllSkills = () => {
@@ -72,6 +79,35 @@ const Profile = () => {
   //     skills: [],
   //   }));
   // };
+
+  // Function to delete all skills for the current user
+const deleteSkills = async () => {
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${currentUser.data.token}`,
+      },
+    };
+
+    // Make a request to the API endpoint to delete skills
+    await api.post('users/update_profile/', { delete_skills: true }, config);
+
+    // Update the state to reflect the changes (set skills to an empty array)
+    setFoundUser((prevUser) => ({
+      ...prevUser,
+      skills_level_1: [],
+      skills_level_2: [],
+    }));
+
+    // Optionally, you can also update the local storage if needed
+    // localStorage.setItem('Users', JSON.stringify(updatedUsers));
+
+  } catch (error) {
+    console.error('Error deleting skills:', error);
+    // Handle the error if needed
+  }
+};
 
   // const handleDeleteProject = (indexToDelete) => {
   //   const updatedProjectsList = [...userData.projectsList];
@@ -97,7 +133,7 @@ const Profile = () => {
         <h2 className='nasa-black text-center text-uppercase mt-3'>
           Hello {currentUser.data.username}, Welcome back!
         </h2>
-        <div className='col-10 col-lg-5 glass-box mb-5 animate-slide-left'>
+        <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
           <div className="row">
             <div className="col-6">
                 <img
@@ -127,8 +163,7 @@ const Profile = () => {
                 {Array.isArray(foundUser.skills_level_1)
                     ? foundUser.skills_level_1
                         .filter(skill => typeof skill === 'string')
-                        .map(skill => capitalizeFirstLetter(skill.trim()))
-                        .join(', ')
+                        .map(skill => capitalizeFirstLetter(skill.trim())).slice(2).join(', ')
                     : foundUser.skills_level_1
                 }
               </p>
@@ -140,18 +175,17 @@ const Profile = () => {
               {Array.isArray(foundUser.skills_level_2)
                   ? foundUser.skills_level_2
                       .filter(skill => typeof skill === 'string')
-                      .map(skill => capitalizeFirstLetter(skill.trim()))
-                      .join(', ')
+                      .map(skill => capitalizeFirstLetter(skill.trim())).slice(2).join(', ')
                   : foundUser.skills_level_2
               }
-          </p>
+            </p>
           )}
           {foundUser.email === currentUser.data.email && (
             <div className="text-center hand-writing">
               <button
                 type='button'
                 className='btn btn-danger btn-lg mb-4'
-                // onClick={deleteAllSkills}
+                onClick={deleteSkills}
                 >
                 Delete All Skills
               </button>
@@ -159,7 +193,7 @@ const Profile = () => {
           )}
           
         </div>
-        <div className='col-10 col-lg-5 glass-box mb-5 animate-slide-right'>
+        <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
           {userData.projectsList && userData.projectsList.length > 0 && (
           <div>
             <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>

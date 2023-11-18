@@ -14,7 +14,19 @@ const Home = ({loggedIn}) => {
     const [profileData, setProfileData] = useState(null);
     const location = useLocation();
     const navigate = useNavigate();
+    const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const dataFromLogin = location.state?.data;
+
+    // useEffect(() => {
+    //     console.log('Home useEffect triggered');
+    //     const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
+    //     console.log('storedShouldSlideOut:', storedShouldSlideOut);
+    //     if (storedShouldSlideOut === true) {
+    //         setShouldSlideOut(true);
+    //         console.log('shouldSlideOut set to true');
+    //         // localStorage.removeItem('shouldSlideOut');
+    //     }
+    // }, [shouldSlideOut]);
     
     useEffect(() => {
         // Check if UserData & profileData exists in local storage
@@ -26,6 +38,9 @@ const Home = ({loggedIn}) => {
         if (storedUserData) {
             setUserData(storedUserData);
         }
+        // Capture the initial value of 'shouldSlideOut'
+        const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
+        setShouldSlideOut(storedShouldSlideOut); // Update the state variable
 
         if (dataFromLogin !== undefined || loggedIn) {
             fetchProfileData(dataFromLogin);
@@ -52,14 +67,17 @@ const Home = ({loggedIn}) => {
     };
 
     const handleSignUp = (accountType) => {
-        navigate("/signup", { state: { accountType } });
+        setShouldSlideOut(true);
+        setTimeout(() => {
+            navigate("/signup", { state: { accountType } });
+        }, 1000);
     }
 
     return (
         <div className="container mt-4 fill-screen">
             <div className="row justify-content-center">
 
-                <div className="col-md-6 animate-slide-left">
+                <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
                     <div className="glass-box border-dark m-3 nasa p-4 text-center">
                         <div className="circle-image m-auto mb-3">
                             <img src={logo} alt="Circle" />
@@ -84,7 +102,7 @@ const Home = ({loggedIn}) => {
                         </div>
                     </div>
                 </div>
-                <div className="col-md-6 animate-slide-right">
+                <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
                     <div className="p-3 text-center glass-box m-3 border-dark">
                         <h1 className='nasa'>Developers!</h1>
                         <p>

@@ -12,6 +12,7 @@ const SignUp = ({ onLogin }) => {
   const accountType = location.state?.accountType;
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const initialUserData = {
     username: '',
     email: '',
@@ -103,30 +104,34 @@ const SignUp = ({ onLogin }) => {
       setErrors({ general: "Whoops, we couldn't log you in. Please try again." });
     }
 
-    // Redirect based on account type
+    // Redirect based on account type and display errors
     if (accountType === "Developer") {
       if (errors){
         setTimeout(() => {
           setErrors('');
-          navigate('/create-profile');
-        }, 1250);
+        }, 2500);
       }
-      navigate('/create-profile');
+      setShouldSlideOut(true);
+      setTimeout(() => {
+        navigate('/create-profile');
+      }, 1000);
     } else {
       if (errors){
         setTimeout(() => {
           setErrors('');
-          navigate('/developers');
-        }, 1250);
+        }, 2500);
       }
-      navigate('/developers');
+      setShouldSlideOut(true);
+      setTimeout(() => {
+        navigate('/developers');
+      }, 1000);
     }
   };
 
   return (
     <div className="container login fill-screen mt-4">
       <div className="row mt-3 justify-content-center">
-        <div className="col-md-6 animate-slide-left">
+        <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
           {errors.general && (
             <div className='notification-overlay fs-3'>
               <div className='alert alert-success' role='alert'>

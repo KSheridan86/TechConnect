@@ -14,6 +14,7 @@ const AddSkills = () => {
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
     const [errors, setErrors] = useState({});
+    const [shouldSlideOut, setShouldSlideOut] = useState(false);
 
     // State variables to manage user input for primary and secondary skills
     const [primarySkills, setPrimarySkills] = useState('');
@@ -94,9 +95,15 @@ const AddSkills = () => {
 
             // Redirect to the appropriate page based on returnUrl or default to '/add-projects'
             if (response && returnUrl) {
-            navigate('/profile');
+                setShouldSlideOut(true);
+                setTimeout(() => {
+                    navigate('/profile');
+                }, 1000);
             } else {
-            navigate('/add-projects');
+                setShouldSlideOut(true);
+                setTimeout(() => {
+                    navigate('/add-projects');
+                }, 1000);
             }
         } catch (error) {
             console.error('Error updating profile with skills:', error);
@@ -121,7 +128,7 @@ const AddSkills = () => {
                     <form>
                         
                         <div className='row justify-content-evenly text-center'>
-                            <div className='col-md-8 mb-0 animate-slide-left'>
+                            <div className={`col-md-8 mb-0 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                                 
                             <div className='glass-box border-dark m-3 p-4'>
                                 <h2 className='nasa-black text-center text-uppercase mt-2'>
@@ -168,7 +175,11 @@ const AddSkills = () => {
                             <button
                                 type='button'
                                 className='btn btn-warning btn-lg m-3'
-                                onClick={() => {navigate('/profile');}}>
+                                onClick={() => {
+                                    setShouldSlideOut(true);
+                                    setTimeout(() => {
+                                        navigate("/profile");
+                                    }, 1000);}}>
                                 {returnUrl ? 'Back' : 'Skip'}
                             </button>
                         </div>

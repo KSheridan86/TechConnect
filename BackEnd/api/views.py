@@ -116,6 +116,16 @@ def update_profile(request):
     # pylint: disable=E1101
     profile = DeveloperProfile.objects.get(user=user)
 
+    if request.data.get('delete_skills'):
+        # Clear the skills fields
+        profile.skills_level_1 = "",
+        profile.skills_level_2 = "",
+
+        # Save the profile to persist the changes
+        profile.save()
+
+        return Response({'message': 'Skills deleted successfully'})
+
     serializer = DeveloperProfileSerializer(
         profile, data=request.data, partial=True)
 
