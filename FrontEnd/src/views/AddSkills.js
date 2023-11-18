@@ -27,13 +27,9 @@ const AddSkills = () => {
         let isValid = true;
         const newErrors = {};
     
-        if (!primarySkills.trim()) {
-            newErrors.primarySkills = 'Please enter your primary skills';
-            isValid = false;
-        }
-    
-        if (!secondarySkills.trim()) {
-            newErrors.secondarySkills = 'Please enter your secondary skills';
+        if (!primarySkills.trim() && !secondarySkills.trim()) {
+            newErrors.primarySkills = 'Please enter at least one skill in any class of skills';
+            newErrors.secondarySkills = 'Please enter at least one skill in any class of skills';
             isValid = false;
         }
     
@@ -125,7 +121,7 @@ const AddSkills = () => {
                     <form>
                         
                         <div className='row justify-content-evenly text-center'>
-                            <div className='col-md-8 mb-0'>
+                            <div className='col-md-8 mb-0 animate-slide-left'>
                                 
                             <div className='glass-box border-dark m-3 p-4'>
                                 <h2 className='nasa-black text-center text-uppercase mt-2'>

@@ -45,11 +45,14 @@ const Profile = () => {
     };
     fetchProfileData();
   }, []);
-  console.log(foundUser.email)
 
-   // Function to navigate to the 'Add Skills' page
+   // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
     navigate('/add-skills', { state: { returnUrl: '/profile' } });
+  };
+
+  const addProjects = () => {
+    navigate('/add-projects', { state: { returnUrl: '/profile' } });
   };
 
   // const deleteAllSkills = () => {
@@ -204,7 +207,7 @@ const Profile = () => {
             </button>
             <button
               className='btn btn-warning btn-lg mx-2'
-              onClick={() => navigate('/add-projects')}
+              onClick={addProjects}
             >
               Add Projects
             </button>

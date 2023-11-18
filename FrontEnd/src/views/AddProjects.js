@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const AddProjects = () => {
     const navigate = useNavigate();
+    const location = useLocation();
+    const returnUrl = location.state ? location.state.returnUrl : null;
     const [project, setProject] = useState({
         name: '',
         description: '',
@@ -179,7 +181,7 @@ const AddProjects = () => {
                             type='button'
                             className='btn btn-warning btn-lg'
                             onClick={() => navigate("/profile")}>
-                            Skip
+                            {returnUrl ? 'Back' : 'Skip'}
                         </button>
                     </div>
                 </div>

@@ -171,7 +171,7 @@ const handleInputChange = (event) => {
                 <form encType="multipart/form-data">
                     {/* Personal Information section */}
                     <div className='row justify-content-evenly text-center'>
-                    <div className='col-md-5 mb-3'>
+                    <div className='col-md-5 mb-3 animate-slide-left'>
                         <div className='glass-box border-dark m-3 p-3'>
                         <h4 className="nasa text-uppercase">Personal Information</h4>
                         <div className='mb-3'>
@@ -236,7 +236,7 @@ const handleInputChange = (event) => {
                     </div>
 
                     {/* Professional Information section */}
-                    <div className='col-md-5 mb-3'>
+                    <div className='col-md-5 mb-3 animate-slide-right'>
                         <div className='glass-box border-dark m-3 p-3'>
                         <h4 className='nasa text-uppercase'>Professional Information</h4>
                         <div className='mb-3'>
