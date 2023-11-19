@@ -256,6 +256,33 @@ div > a {
   animation: go-out-bottom 1s ease forwards;
 }
 
+/* Button fade in & out */
+.fade-out {
+  animation: fadeOut 1s ease forwards;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease forwards;
+}
+
+@keyframes fadeOut {
+  from {
+    opacity: 1;
+  }
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
 @keyframes come-in {
   to {
       transform: translateX(0);

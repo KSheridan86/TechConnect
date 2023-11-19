@@ -168,13 +168,13 @@ const AddSkills = () => {
                         <div className='text-center hand-writing mb-5'>
                             <button
                                 type='button'
-                                className='btn btn-warning btn-lg'
+                                className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
                                 onClick={addSkills}>
                                 Add Skills
                             </button>
                             <button
                                 type='button'
-                                className='btn btn-warning btn-lg m-3'
+                                className={`btn btn-warning btn-lg m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
                                 onClick={() => {
                                     setShouldSlideOut(true);
                                     setTimeout(() => {

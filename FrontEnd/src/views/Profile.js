@@ -109,23 +109,16 @@ const deleteSkills = async () => {
   }
 };
 
-  // const handleDeleteProject = (indexToDelete) => {
-  //   const updatedProjectsList = [...userData.projectsList];
-  //   // Remove the project at the specified index
-  //   updatedProjectsList.splice(indexToDelete, 1);
-  //   // Update the user's projectsList in local storage
-  //   const updatedUserData = { ...userData, projectsList: updatedProjectsList };
-  //   // const updatedUsers = users.map(user => {
-  //   //     if (user.username === currentUser.username) {
-  //   //         return updatedUserData;
-  //   //     }
-  //   //     return user;
-  //   //     });
-  //   // localStorage.setItem('Users', JSON.stringify(updatedUsers));
-  //   // Update the state to reflect the changes
-  //   setUserData(updatedUserData);
-  // };
-  // console.log(userData.profile.githubUrl)
+  const updateProfile = () => {
+    localStorage.setItem('userProfile', JSON.stringify(foundUser));
+    const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
+    console.log(retrievedProfile)
+    setShouldSlideOut(true);
+          setTimeout(() => {
+            navigate('/create-profile');
+          }, 1000); 
+  };
+
   
   return (
     <div className='container mt-4 fill-screen mb-2'>
@@ -182,9 +175,15 @@ const deleteSkills = async () => {
           )}
           {foundUser.email === currentUser.data.email && (
             <div className="text-center hand-writing">
+            <button
+              className='btn btn-warning btn-lg mb-4 mx-2'
+              onClick={updateSkills}
+            >
+              Add Skills
+            </button>
               <button
                 type='button'
-                className='btn btn-danger btn-lg mb-4'
+                className='btn btn-danger btn-lg mb-4 mx-2'
                 onClick={deleteSkills}
                 >
                 Delete All Skills
@@ -230,15 +229,7 @@ const deleteSkills = async () => {
           ))}
           </div>
           )}
-        </div>
-
-        <div className='text-center mt-5 mb-5 hand-writing'>
-            <button
-              className='btn btn-warning btn-lg mx-2'
-              onClick={updateSkills}
-            >
-              Add Skills
-            </button>
+          <div className='text-center mt-5 mb-5 hand-writing'>
             <button
               className='btn btn-warning btn-lg mx-2'
               onClick={addProjects}
@@ -246,7 +237,17 @@ const deleteSkills = async () => {
               Add Projects
             </button>
           </div>
-        <div style={{ height: '10rem' }}></div>
+        </div>
+
+        <div className='text-center mt-2 mb-1 hand-writing'>
+            <button
+              className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+              onClick={updateProfile}
+            >
+              Edit Profile
+            </button>
+          </div>
+        <div style={{ height: '12rem' }}></div>
       </div>
     </div>
   );

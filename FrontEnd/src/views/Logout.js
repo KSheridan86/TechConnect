@@ -17,6 +17,7 @@ const Logout = ({ onLogout }) => {
             onLogout();
             setShouldSlideOut(true);
             setTimeout(() => {
+              localStorage.clear();
               navigate('/');
             }, 1000);
         } catch (error) {

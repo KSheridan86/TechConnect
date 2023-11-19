@@ -13,25 +13,53 @@ const CreateProfile = () => {
   // Retrieve current user information from local storage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const navigate = useNavigate();
+    const [shouldSlideOut, setShouldSlideOut] = useState(false);
+    const [profile, setProfile] = useState({});
+    const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
 
-  // State to manage the user profile form data
-    const [profile, setProfile] = useState({
-        firstname: '',
-        lastname: '',
-        email: currentUser.data.email,
-        github: '',
-        linkedin: '',
-        portfolio_url: '',
-        intro_text: '',
-        biography_text: '',
-        avatar: null,
-        years_of_experience: '',
-        location: '',
-        available: false,
-        date_available: '',
-        skills_level_1: [],
-        skills_level_2: [],
-    });
+    useEffect(() => {
+        
+        console.log(retrievedProfile);
+    
+        if (retrievedProfile) {
+            setProfile({
+                firstname: retrievedProfile.firstname,
+                lastname: retrievedProfile.lastname,
+                intro_text: retrievedProfile.intro_text,
+                biography_text: retrievedProfile.biography_text,
+                github: retrievedProfile.github,
+                linkedin: retrievedProfile.linkedin,
+                portfolio_url: retrievedProfile.portfolio_url,
+                years_of_experience: retrievedProfile.years_of_experience,
+                location: retrievedProfile.location,
+                available: retrievedProfile.available === false ? false : true,
+                date_available: retrievedProfile && retrievedProfile.date_available ? retrievedProfile.date_available : '2023-12-01',
+                avatar: retrievedProfile.avatar instanceof File ? retrievedProfile.avatar : null,
+            });
+        } else {
+            // Initialize profile state using useState
+            const initialProfileState = {
+                firstname: '',
+                lastname: '',
+                email: currentUser.data.email,
+                github: '',
+                linkedin: '',
+                portfolio_url: '',
+                intro_text: '',
+                biography_text: '',
+                avatar: null,
+                years_of_experience: '',
+                location: '',
+                available: false,
+                date_available: '',
+                skills_level_1: [],
+                skills_level_2: [],
+            };
+    
+            // Set the initial profile state
+            setProfile(initialProfileState);
+        }
+    }, []); 
 
     // State to manage form errors
     const [errors, setErrors] = useState({});
@@ -77,16 +105,26 @@ const handleInputChange = (event) => {
 
     // Handle avatar file change
     const handleAvatarChange = (event) => {
+        // Get the selected file from the input element
         const file = event.target.files[0];
+
+        // Check if a file is selected
         if (file) {
+            // Create a new FileReader object
             const reader = new FileReader();
+
+            // Set up an event handler for when the FileReader has loaded the file
             reader.onload = (e) => {
+                // Update the state using the setProfile function
+                // The setProfile function takes the previous profile state and returns a new state
                 setProfile((prevProfile) => ({
-                ...prevProfile,
-                avatar: file, // Store the file object directly
-            }));
-        };
-        reader.readAsDataURL(file);
+                    ...prevProfile,  // Copy the previous profile properties
+                    avatar: file,   // Update the avatar property with the new file object
+                }));
+            };
+
+            // Read the file as a data URL (base64-encoded string)
+            reader.readAsDataURL(file);
         }
     };
 
@@ -121,6 +159,9 @@ const handleInputChange = (event) => {
 
             // Append avatar file to the form data if available
             if (profile.avatar) {
+                // if (updatedAvatar) {
+                //     formData.append('avatar', updatedAvatar, 'avatar.jpg');
+                // }
                 formData.append('avatar', profile.avatar, 'avatar.jpg');
             }
 
@@ -143,7 +184,18 @@ const handleInputChange = (event) => {
             const response = await api.post('users/update_profile/', formData, config);
 
             console.log('Profile updated:', response.data);
-            navigate('/add-skills'); // Redirect to the next step
+            if (retrievedProfile) {
+                setShouldSlideOut(true);
+                setTimeout(() => {
+                    navigate('/profile');
+                }, 1000);
+            } else {
+                setShouldSlideOut(true);
+                setTimeout(() => {
+                    navigate('/add-skills');
+                }, 1000)
+            }
+            
         } catch (error) {
             console.error('Error updating profile:', error);
             console.log('Error response from server:', error.response);
@@ -171,7 +223,7 @@ const handleInputChange = (event) => {
                 <form encType="multipart/form-data">
                     {/* Personal Information section */}
                     <div className='row justify-content-evenly text-center'>
-                    <div className='col-md-5 mb-3 animate-slide-left'>
+                    <div className={`col-md-5 mb-3 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
                         <div className='glass-box border-dark m-3 p-3'>
                         <h4 className="nasa text-uppercase">Personal Information</h4>
                         <div className='mb-3'>
@@ -180,7 +232,7 @@ const handleInputChange = (event) => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='firstname'
-                                placeholder='Enter first name'
+                                placeholder={profile.firstname ? profile.firstname : 'Enter first name'}
                                 onChange={handleInputChange}
                             />
                             {errors.firstname && (
@@ -191,7 +243,7 @@ const handleInputChange = (event) => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='lastname'
-                                placeholder='Enter last name'
+                                placeholder={profile.lastname ? profile.lastname : 'Enter last name'}
                                 onChange={handleInputChange}
                             />
                             {errors.lastname && (
@@ -201,7 +253,7 @@ const handleInputChange = (event) => {
                             <textarea
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 name='intro_text'
-                                placeholder='Give a brief introduction to attract clients'
+                                placeholder={profile.intro_text ? profile.intro_text : 'Enter a short introduction here'}
                                 onChange={handleInputChange}
                             />
                             {errors.intro_text && (
@@ -211,7 +263,7 @@ const handleInputChange = (event) => {
                             <textarea
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 name='biography_text'
-                                placeholder='Enter a more detailed bio here, include anything you would want potential clients to know'
+                                placeholder={profile.biography_text ? profile.biography_text : 'Enter a short biography here'}
                                 rows={5}
                                 onChange={handleInputChange}
                             />
@@ -236,7 +288,7 @@ const handleInputChange = (event) => {
                     </div>
 
                     {/* Professional Information section */}
-                    <div className='col-md-5 mb-3 animate-slide-right'>
+                    <div className={`col-md-5 mb-3 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
                         <div className='glass-box border-dark m-3 p-3'>
                         <h4 className='nasa text-uppercase'>Professional Information</h4>
                         <div className='mb-3'>
@@ -245,7 +297,7 @@ const handleInputChange = (event) => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='github'
-                                placeholder='Enter GitHub URL'
+                                placeholder={profile.github ? profile.github : 'Enter GitHub URL'}
                                 onChange={handleInputChange}
                             />
                             {errors.github && (
@@ -256,7 +308,7 @@ const handleInputChange = (event) => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='linkedin'
-                                placeholder='Enter LinkedIn URL'
+                                placeholder={profile.linkedin ? profile.linkedin : 'Enter LinkedIn URL'}
                                 onChange={handleInputChange}
                             />
                             {errors.linkedin && (
@@ -267,7 +319,7 @@ const handleInputChange = (event) => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='portfolio_url'
-                                placeholder='Enter Portfolio Site URL'
+                                placeholder={profile.portfolio_url ? profile.portfolio_url : 'Enter portfolio site URL'}
                                 onChange={handleInputChange}
                             />
                             {errors.portfolio_url && (
@@ -278,7 +330,7 @@ const handleInputChange = (event) => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='years_of_experience'
-                                placeholder='Enter years of experience'
+                                placeholder={profile.years_of_experience ? profile.years_of_experience : 'Enter years of experience'}
                                 onChange={handleInputChange}
                             />
                             {errors.years_of_experience && (
@@ -289,7 +341,7 @@ const handleInputChange = (event) => {
                                 className="form-control text-center hand-writing"
                                 type='text'
                                 name='location'
-                                placeholder='Enter location'
+                                placeholder={profile.location ? profile.location : 'Enter your location'}
                             onChange={handleInputChange}
                             />
                             {errors.location && (
@@ -331,10 +383,10 @@ const handleInputChange = (event) => {
                     <div className='text-center'>
                     <button
                         type='submit'
-                        className='btn btn-warning btn-lg'
+                        className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
                         onClick={createProfile}
                     >
-                        Create Profile
+                        {retrievedProfile ? 'Update Profile' : 'Create Profile'}
                     </button>
                     </div>
                 </form>
