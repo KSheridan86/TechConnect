@@ -27,26 +27,51 @@ const AddProjects = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [buttonTxt, setButtonTxt] = useState(true);
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
+    // Initialize the project state
     const [project, setProject] = useState({
         name: '',
         description: '',
         site_url: '',
         repo_url: '',
         tech_stack: '',
+        image: null,
     });
 
-    const [errors, setErrors] = useState({});
-
+    // Function to handle changes to the inputs in the form
     const handleInputChange = (event) => {
         const { name, value } = event.target;
         setProject((prevProject) => ({ ...prevProject, [name]: value }));
     };
 
+    // Function to handle image change
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+
+        if (file) {
+            // Create a new FileReader object
+            const reader = new FileReader();
+
+            // Set up an event handler for when the FileReader has loaded the file
+            reader.onload = (e) => {
+                // Update the state using the setProject function
+                setProject((prevProject) => ({
+                    ...prevProject,
+                    image: file,
+                }));
+            };
+
+            // Read the file as a data URL (base64-encoded string)
+            reader.readAsDataURL(file);
+        }
+    };
+
+    // Function to validate the form
     const validateForm = () => {
         const validationErrors = {};
 
@@ -57,10 +82,10 @@ const AddProjects = () => {
         if (!project.tech_stack) validationErrors.tech_stack = 'Tech Stack is required';
 
         setErrors(validationErrors);
-
         return Object.keys(validationErrors).length === 0;
     };
 
+    // Function to add the project to the database
     const addProject = async () => {
         try {
             // Validate the form
@@ -75,6 +100,10 @@ const AddProjects = () => {
             setErrors({});
 
             const formData = new FormData();
+            // Append avatar file to the form data if available
+            if (project.avatar) {
+                formData.append('avatar', project.avatar, 'avatar.jpg');
+            }
             // Append project fields to the form data
             Object.entries(project).forEach(([key, value]) => {
                 formData.append(key, value);
@@ -90,33 +119,26 @@ const AddProjects = () => {
 
             // Make a POST request to add the project
             const response = await api.post('users/add_project/', formData, config);
-
             console.log('Project added:', response.data);
 
-           
-            
-
-            // setShouldSlideOut(true);
+            // Clear the input fields and initiate animations on the form
             setIsSubmitted(true);
             setTimeout(() => {
-                // Clear the input fields
                 setProject({
                     name: '',
                     description: '',
                     site_url: '',
                     repo_url: '',
                     tech_stack: '',
+                    image: null,
                 });
                 setButtonTxt(false);
                 setIsSubmitted(false);
             }, 1000);
 
-            // Show any success message or perform other actions
-
         } catch (error) {
             console.error('Error adding project:', error);
             console.log('Error response from server:', error.response);
-            // Handle errors as needed
         }
     };
 
@@ -204,6 +226,20 @@ const AddProjects = () => {
                                     />
                                     {errors.repo_url && (
                                         <div className='invalid-feedback'>{errors.repo_url}</div>
+                                    )}
+
+                                    <label className='fw-bold fs-5'>Image (Upload):</label>
+                                    <input
+                                        className={`border border-dark border-2 p-2 form-control mb-3 hand-writing`}
+                                        name='image'
+                                        type='file'
+                                        accept='image/*'
+                                        onChange={handleImageChange}
+                                    />
+                                    {project.image && (
+                                        <div>
+                                            <img src={URL.createObjectURL(project.image)} alt='Preview' width='100' height='100' />
+                                        </div>
                                     )}
                                 </div>
                             </div>

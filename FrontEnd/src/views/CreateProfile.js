@@ -159,9 +159,6 @@ const handleInputChange = (event) => {
 
             // Append avatar file to the form data if available
             if (profile.avatar) {
-                // if (updatedAvatar) {
-                //     formData.append('avatar', updatedAvatar, 'avatar.jpg');
-                // }
                 formData.append('avatar', profile.avatar, 'avatar.jpg');
             }
 
