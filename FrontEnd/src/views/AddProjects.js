@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 
 const AddProjects = () => {
+    const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
@@ -81,10 +82,17 @@ const AddProjects = () => {
         }
     };
 
+    const returnToProfile = () => {
+        setShouldSlideOut(true);
+        setTimeout(() => {
+            navigate("/profile")
+        }, 1000);
+    }
+
     return (
         <div className='container fill-screen'>
             <div className='row justify-content-center login'>
-                <div className='col-12'>
+                <div className={`col-12 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                     <h2 className='nasa-black text-center text-uppercase mt-3'>
                         Add projects to your Profile
                     </h2>
@@ -176,11 +184,11 @@ const AddProjects = () => {
                             </div>
                         </div>
                     </form>
-                    <div className='text-center hand-writing mt-5'>
+                    <div className='text-center hand-writing mt-5 animate-slide-bottom'>
                         <button
                             type='button'
-                            className='btn btn-warning btn-lg'
-                            onClick={() => navigate("/profile")}>
+                            className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                            onClick={returnToProfile}>
                             {returnUrl ? 'Back' : 'Skip'}
                         </button>
                     </div>

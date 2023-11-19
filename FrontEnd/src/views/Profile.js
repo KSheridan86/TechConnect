@@ -62,24 +62,6 @@ const Profile = () => {
     }, 1000);
   };
 
-  // const deleteAllSkills = () => {
-  //   // Find the current user in the Users array
-  //   const updatedUsers = users.map((user) => {
-  //     if (user.email === currentUser.email) {
-  //       user.skills = []; // Set skills array to an empty array
-  //     }
-  //     return user;
-  //   });
-
-  //   localStorage.setItem('Users', JSON.stringify(updatedUsers));
-
-  //   // Update the userData state to reflect the changes
-  //   setUserData((prevUserData) => ({
-  //     ...prevUserData,
-  //     skills: [],
-  //   }));
-  // };
-
   // Function to delete all skills for the current user
 const deleteSkills = async () => {
   try {
@@ -99,16 +81,13 @@ const deleteSkills = async () => {
       skills_level_1: [],
       skills_level_2: [],
     }));
-
-    // Optionally, you can also update the local storage if needed
-    // localStorage.setItem('Users', JSON.stringify(updatedUsers));
-
   } catch (error) {
     console.error('Error deleting skills:', error);
     // Handle the error if needed
   }
 };
 
+  // Function to update the user profile
   const updateProfile = () => {
     localStorage.setItem('userProfile', JSON.stringify(foundUser));
     const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
@@ -119,7 +98,6 @@ const deleteSkills = async () => {
           }, 1000); 
   };
 
-  
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
@@ -153,23 +131,25 @@ const deleteSkills = async () => {
           <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h3>
           {foundUser.skills_level_1 && (
               <p className='nasa-black text-center mt-3'>
-                {Array.isArray(foundUser.skills_level_1)
-                    ? foundUser.skills_level_1
-                        .filter(skill => typeof skill === 'string')
-                        .map(skill => capitalizeFirstLetter(skill.trim())).slice(2).join(', ')
-                    : foundUser.skills_level_1
-                }
-              </p>
+              {Array.isArray(foundUser.skills_level_1)
+                ? foundUser.skills_level_1
+                    .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                    .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                    .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+                : foundUser.skills_level_1
+              }
+            </p>
           )}
 
           <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h3>
           {foundUser.skills_level_2 && (
               <p className='nasa-black text-center mt-3'>
               {Array.isArray(foundUser.skills_level_2)
-                  ? foundUser.skills_level_2
-                      .filter(skill => typeof skill === 'string')
-                      .map(skill => capitalizeFirstLetter(skill.trim())).slice(2).join(', ')
-                  : foundUser.skills_level_2
+                ? foundUser.skills_level_2
+                    .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                    .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                    .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+                : foundUser.skills_level_2
               }
             </p>
           )}
