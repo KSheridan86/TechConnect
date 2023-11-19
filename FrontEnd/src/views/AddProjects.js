@@ -9,10 +9,10 @@ const AddProjects = () => {
     const [project, setProject] = useState({
         name: '',
         description: '',
-        techStack: '',
-        siteUrl: '',
-        repoUrl: '',
-        image: '',
+        url: '',
+        // image: '',
+        tech_stack: '',
+        developer: null,
     });
 
     const [showNotification, setShowNotification] = useState(false);
@@ -104,43 +104,50 @@ const AddProjects = () => {
                         </div>
                     )}
 
-                    <form>
+                    <form encType="multipart/form-data">
+                        {/* Hidden input for the developer field */}
+                        <input
+                            type="hidden"
+                            name="developer"
+                            value={currentUser.id}  // Assuming id is the field representing the current user's ID
+                        />
+
                         <div className='glass-box border-dark m-3 p-3'>
                             <h4 className="nasa text-uppercase">Add Projects</h4>
                             <div className='row'>
                                 <div className='col-md-6'>
-                                <label className='fw-bold fs-5'>Name:</label>
-                                <input
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                                    type='text'
-                                    name='name'
-                                    placeholder='Enter Name of Project'
-                                    onChange={handleInputChange}
-                                    value={project.name} // Add this line to bind the input value
-                                />
+                                    <label className='fw-bold fs-5'>Name:</label>
+                                    <input
+                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        type='text'
+                                        name='name'
+                                        placeholder='Enter Name of Project'
+                                        onChange={handleInputChange}
+                                        value={project.name} // Add this line to bind the input value
+                                    />
 
-                                <label className='fw-bold fs-5'>Description:</label>
-                                <input
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                                    type='text'
-                                    name='description'
-                                    placeholder='Enter Description of project'
-                                    onChange={handleInputChange}
-                                    value={project.description} // Add this line to bind the input value
-                                />
+                                    <label className='fw-bold fs-5'>Description:</label>
+                                    <input
+                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        type='text'
+                                        name='description'
+                                        placeholder='Enter Description of project'
+                                        onChange={handleInputChange}
+                                        value={project.description} // Add this line to bind the input value
+                                    />
 
-                                <label className='fw-bold fs-5'>Tech Stack:</label>
-                                <input
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
-                                    type='text'
-                                    name='techStack'
-                                    placeholder='Enter the Tech Stack used on Project'
-                                    onChange={handleInputChange}
-                                    value={project.techStack} // Add this line to bind the input value
-                                />
-                        </div>
+                                    <label className='fw-bold fs-5'>Tech Stack:</label>
+                                    <input
+                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        type='text'
+                                        name='techStack'
+                                        placeholder='Enter the Tech Stack used on Project'
+                                        onChange={handleInputChange}
+                                        value={project.techStack} // Add this line to bind the input value
+                                    />
+                                </div>
                                 <div className='col-md-6'>
-                                <label className='fw-bold fs-5'>Site URL:</label>
+                                    <label className='fw-bold fs-5'>Site URL:</label>
                                     <input
                                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                         type='text'

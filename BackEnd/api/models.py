@@ -49,13 +49,15 @@ class Project(models.Model):
     This model represents a project and includes information
     such as project name, description, and the associated developer.
     """
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    url = models.URLField()
+    name = models.CharField(max_length=100, null=True, blank=True)
+    description = models.TextField(null=True, blank=True)
+    site_url = models.URLField(null=True, blank=True)
+    repo_url = models.URLField(null=True, blank=True)
     image = models.ImageField(null=True, blank=True)
-    tech_stack = models.TextField()
+    tech_stack = models.TextField(null=True, blank=True)
     developer = models.ForeignKey(
-        DeveloperProfile, on_delete=models.CASCADE, related_name='projects')
+        DeveloperProfile, on_delete=models.CASCADE,
+        null=True, blank=True, related_name='projects')
 
     def __str__(self):
         return f"{self.name}"
