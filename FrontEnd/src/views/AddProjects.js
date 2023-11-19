@@ -1,183 +1,209 @@
+
+    // const handleImageChange = (event) => {
+    //     const file = event.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onload = (e) => {
+    //             setProject((prevProject) => ({
+    //                 ...prevProject,
+    //                 image: e.target.result,
+    //             }));
+    //         };
+    //         reader.readAsDataURL(file);
+    //     }
+    // };
+
 import React, { useState } from 'react';
+import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+
+// Create an Axios instance with a base URL and credentials
+const api = axios.create({
+    baseURL: 'http://127.0.0.1:8000/api/',
+    withCredentials: true,
+});
 
 const AddProjects = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
+    const [isSubmitted, setIsSubmitted] = useState(false);
+    const [buttonTxt, setButtonTxt] = useState(true);
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
+    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+
     const [project, setProject] = useState({
         name: '',
         description: '',
-        url: '',
-        // image: '',
+        site_url: '',
+        repo_url: '',
         tech_stack: '',
-        developer: null,
     });
 
-    const [showNotification, setShowNotification] = useState(false);
-    const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    // Initialize projectsList with the current user's projects
-    const [projectsList, setProjectsList] = useState(currentUser.projectsList || []);
+    const [errors, setErrors] = useState({});
 
-
-    const handleInputChange = event => {
+    const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setProject(prevProject => ({ ...prevProject, [name]: value }));
+        setProject((prevProject) => ({ ...prevProject, [name]: value }));
     };
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onload = (e) => {
-                setProject((prevProject) => ({
-                    ...prevProject,
-                    image: e.target.result,
-                }));
+    const validateForm = () => {
+        const validationErrors = {};
+
+        if (!project.name) validationErrors.name = 'Project name is required';
+        if (!project.description) validationErrors.description = 'Project description is required';
+        if (!project.site_url) validationErrors.site_url = 'Site URL is required';
+        if (!project.repo_url) validationErrors.repo_url = 'Repo URL is required';
+        if (!project.tech_stack) validationErrors.tech_stack = 'Tech Stack is required';
+
+        setErrors(validationErrors);
+
+        return Object.keys(validationErrors).length === 0;
+    };
+
+    const addProject = async () => {
+        try {
+            // Validate the form
+            const isFormValid = validateForm();
+
+            if (!isFormValid) {
+                console.error('Validation errors:', errors);
+                return;
+            }
+
+            // Clear previous errors
+            setErrors({});
+
+            const formData = new FormData();
+            // Append project fields to the form data
+            Object.entries(project).forEach(([key, value]) => {
+                formData.append(key, value);
+            });
+
+            // Configuration for the API request, including authorization header
+            const config = {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // This line is needed for file uploads
+                    Authorization: `Bearer ${currentUser.data.token}`,
+                },
             };
-            reader.readAsDataURL(file);
-        }
-    };
 
-    const addProject = () => {
-        if (project.name) {
-            // Create a copy of the current project
-            const newProject = { ...project };
+            // Make a POST request to add the project
+            const response = await api.post('users/add_project/', formData, config);
 
-            // Load the Users array from local storage
-            const users = JSON.parse(localStorage.getItem('Users'));
+            console.log('Project added:', response.data);
 
-            // Find the currently logged in user within the Users array
-            const updatedUsers = users.map(user => {
-                if (user.username === currentUser.username) {
-                    // Update the user's projectsList with the new project
-                    user.projectsList.push(newProject);
-                }
-                return user;
-            });
+           
+            
 
-            // Update the Users array in local storage
-            localStorage.setItem('Users', JSON.stringify(updatedUsers));
-
-            // Clear the input fields
-            setProject({
-                name: '',
-                description: '',
-                techStack: '',
-                siteUrl: '',
-                repoUrl: '',
-                image: '',
-            });
-            // Manually clear the input file field
-            document.getElementById('image-input').value = '';
-
-            // Show the notification
-            setShowNotification(true);
-
-            // Hide the notification after a few seconds (e.g., 3 seconds)
+            // setShouldSlideOut(true);
+            setIsSubmitted(true);
             setTimeout(() => {
-                setShowNotification(false);
-            }, 3000);
+                // Clear the input fields
+                setProject({
+                    name: '',
+                    description: '',
+                    site_url: '',
+                    repo_url: '',
+                    tech_stack: '',
+                });
+                setButtonTxt(false);
+                setIsSubmitted(false);
+            }, 1000);
+
+            // Show any success message or perform other actions
+
+        } catch (error) {
+            console.error('Error adding project:', error);
+            console.log('Error response from server:', error.response);
+            // Handle errors as needed
         }
     };
 
     const returnToProfile = () => {
         setShouldSlideOut(true);
         setTimeout(() => {
-            navigate("/profile")
+            navigate(returnUrl || '/profile');
         }, 1000);
-    }
+    };
 
     return (
         <div className='container fill-screen'>
-            <div className='row justify-content-center login'>
+            <div className={`row justify-content-center login ${isSubmitted ? 'fade-out' : 'fade-in'}`}>
                 <div className={`col-12 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                     <h2 className='nasa-black text-center text-uppercase mt-3'>
                         Add projects to your Profile
                     </h2>
-                    {showNotification && (
-                        <div className='notification-overlay'>
-                            <div className='alert alert-success' role='alert'>
-                                Project added successfully! You can add another one.
-                            </div>
-                        </div>
-                    )}
 
                     <form encType="multipart/form-data">
-                        {/* Hidden input for the developer field */}
-                        <input
-                            type="hidden"
-                            name="developer"
-                            value={currentUser.id}  // Assuming id is the field representing the current user's ID
-                        />
-
                         <div className='glass-box border-dark m-3 p-3'>
                             <h4 className="nasa text-uppercase">Add Projects</h4>
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <label className='fw-bold fs-5'>Name:</label>
                                     <input
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        className={`text-center border border-dark border-2 p-2 form-control mb-2 hand-writing ${errors.name ? 'is-invalid' : ''}`}
                                         type='text'
                                         name='name'
                                         placeholder='Enter Name of Project'
                                         onChange={handleInputChange}
-                                        value={project.name} // Add this line to bind the input value
+                                        value={project.name}
                                     />
+                                    {errors.name && (
+                                        <div className='invalid-feedback'>{errors.name}</div>
+                                    )}
 
                                     <label className='fw-bold fs-5'>Description:</label>
                                     <input
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        className={`text-center border border-dark border-2 p-2 form-control mb-2 hand-writing ${errors.description ? 'is-invalid' : ''}`}
                                         type='text'
                                         name='description'
                                         placeholder='Enter Description of project'
                                         onChange={handleInputChange}
-                                        value={project.description} // Add this line to bind the input value
+                                        value={project.description}
                                     />
+                                    {errors.description && (
+                                        <div className='invalid-feedback'>{errors.description}</div>
+                                    )}
 
                                     <label className='fw-bold fs-5'>Tech Stack:</label>
                                     <input
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        className={`text-center border border-dark border-2 p-2 form-control mb-2 hand-writing ${errors.tech_stack ? 'is-invalid' : ''}`}
                                         type='text'
-                                        name='techStack'
+                                        name='tech_stack'
                                         placeholder='Enter the Tech Stack used on Project'
                                         onChange={handleInputChange}
-                                        value={project.techStack} // Add this line to bind the input value
+                                        value={project.tech_stack}
                                     />
+                                    {errors.tech_stack && (
+                                        <div className='invalid-feedback'>{errors.tech_stack}</div>
+                                    )}
                                 </div>
                                 <div className='col-md-6'>
                                     <label className='fw-bold fs-5'>Site URL:</label>
                                     <input
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        className={`text-center border border-dark border-2 p-2 form-control mb-2 hand-writing ${errors.site_url ? 'is-invalid' : ''}`}
                                         type='text'
-                                        name='siteUrl'
+                                        name='site_url'
                                         placeholder='Enter Site URL'
                                         onChange={handleInputChange}
-                                        value={project.siteUrl} // Add this line to bind the input value
+                                        value={project.site_url}
                                     />
+                                    {errors.site_url && (
+                                        <div className='invalid-feedback'>{errors.site_url}</div>
+                                    )}
 
                                     <label className='fw-bold fs-5'>Repo URL:</label>
                                     <input
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
+                                        className={`text-center border border-dark border-2 p-2 form-control mb-2 hand-writing ${errors.repo_url ? 'is-invalid' : ''}`}
                                         type='text'
-                                        name='repoUrl'
+                                        name='repo_url'
                                         placeholder='Enter Repo URL'
                                         onChange={handleInputChange}
-                                        value={project.repoUrl} // Add this line to bind the input value
+                                        value={project.repo_url}
                                     />
-
-                                    <label className='fw-bold fs-5'>Image:</label>
-                                    <input id='image-input'
-                                        className='border border-dark border-2 p-2 form-control mb-4 hand-writing'
-                                        type='file'
-                                        accept='image/*'
-                                        onChange={(event) => handleImageChange(event)}
-                                    />
-                                    {project.image && (
-                                        <div>
-                                            <img src={project.image} alt='Avatar Preview' width='100' height='100' />
-                                        </div>
+                                    {errors.repo_url && (
+                                        <div className='invalid-feedback'>{errors.repo_url}</div>
                                     )}
                                 </div>
                             </div>
@@ -186,11 +212,12 @@ const AddProjects = () => {
                                     type='button'
                                     className='btn btn-warning btn-lg'
                                     onClick={addProject}>
-                                    Add Project
+                                    {buttonTxt ? 'Add Project' : 'Add Another?'}
                                 </button>
                             </div>
                         </div>
                     </form>
+
                     <div className='text-center hand-writing mt-5 animate-slide-bottom'>
                         <button
                             type='button'
@@ -200,7 +227,6 @@ const AddProjects = () => {
                         </button>
                     </div>
                 </div>
-                {/* <div style={{ height: '120px' }}></div> */}
             </div>
         </div>
     );

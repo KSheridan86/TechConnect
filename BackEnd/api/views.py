@@ -2,6 +2,7 @@
 The views to control the API.
 """
 
+from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated
@@ -15,8 +16,8 @@ from django.db import IntegrityError
 from .models import (User, DeveloperProfile)
 # from .models import (Project, DeveloperReview, ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, UserSerializerWithToken,
-                          DeveloperProfileSerializer,)
-# from .serializers import (ProjectSerializer, DeveloperReviewSerializer,
+                          DeveloperProfileSerializer, ProjectSerializer,)
+# from .serializers import ( DeveloperReviewSerializer,
 #                           ProjectReviewSerializer, PrivateMessageSerializer)
 
 
@@ -140,4 +141,27 @@ def update_profile(request):
         return Response(updated_data)
     else:
         print("Serializer errors:", serializer.errors)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET', 'POST', 'PUT',])
+@permission_classes([IsAuthenticated])
+def add_project(request):
+    """
+    View to add a project.
+    """
+
+    # Fetch the DeveloperProfile associated with the current user
+    developer_profile = get_object_or_404(DeveloperProfile, user=request.user)
+    # Make a copy of the request data
+    mutable_data = request.data.copy()
+    # Modify the 'developer' field in the copy
+    mutable_data['developer'] = developer_profile.id
+    # Continue with project creation
+    serializer = ProjectSerializer(data=mutable_data)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

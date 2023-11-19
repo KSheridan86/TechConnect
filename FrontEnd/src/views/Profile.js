@@ -101,7 +101,7 @@ const deleteSkills = async () => {
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
-        <h2 className='nasa-black text-center text-uppercase mt-3'>
+        <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
           Hello {currentUser.data.username}, Welcome back!
         </h2>
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
