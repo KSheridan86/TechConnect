@@ -21,7 +21,7 @@ const Developers = () => {
         }
         fetchUsers();
         
-    },);
+    }, [] ); // empty array left here to prevent the api call from being made repeatedly
 
     const handleSearch = () => {
         // Filter users based on the search term

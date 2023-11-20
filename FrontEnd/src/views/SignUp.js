@@ -14,6 +14,7 @@ const SignUp = ({ onLogin }) => {
   const accountType = location.state?.accountType;
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
+  const [message, setMessage] = useState('');
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
   const [transition, setTransition] = useState(false);
@@ -103,37 +104,71 @@ const SignUp = ({ onLogin }) => {
       const currentUser = response;
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       onLogin();
+
+      setShouldSlideOut(true);
+
+      const displayMessage = () => {
+        setMessage('');
+        if (accountType === 'Developer') {
+          setTimeout(() => {
+            setTransition(true)
+            setTimeout(() => {
+                navigate('/create-profile');
+            }, 1000);
+          }, 1750);
+      } else {
+          setTimeout(() => {
+            setTransition(true)
+            setTimeout(() => {
+              navigate('/developers');
+            }, 1000);
+          }, 1750);
+      }
+    }
+
+    setTimeout(() => {
+      setSuccessMessage(true)
+      displayMessage();
+    }, 1000);
+  
     } catch (error) {
       console.error('Error logging in after signup:', error);
       setErrors({ general: "Whoops, we couldn't log you in. Please try again." });
     }
 
-    // Redirect based on account type and display errors
-    if (accountType === "Developer") {
-      if (errors){
-        setTimeout(() => {
-          setErrors('');
-        }, 2500);
-      }
-      setShouldSlideOut(true);
+    if (errors){
       setTimeout(() => {
-        navigate('/create-profile');
-      }, 1000);
-    } else {
-      if (errors){
-        setTimeout(() => {
-          setErrors('');
-        }, 2500);
-      }
-      setShouldSlideOut(true);
-      setTimeout(() => {
-        navigate('/developers');
-      }, 1000);
+        setErrors('');
+      }, 2500);
     }
   };
 
+   
+    // Redirect based on account type and display errors
+  //   if (accountType === "Developer") {
+  //     setTimeout(() => {
+  //       navigate('/create-profile');
+  //     }, 1000);
+  //   } else {
+  //     if (errors){
+  //       setTimeout(() => {
+  //         setErrors('');
+  //       }, 2500);
+  //     }
+  //     setShouldSlideOut(true);
+  //     setTimeout(() => {
+  //       navigate('/developers');
+  //     }, 1000);
+  //   }
+  // };
+
+
+
   return (
     <div className="container login fill-screen mt-4">
+
+      {!successMessage ? (
+
       <div className="row mt-3 justify-content-center">
         <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
           {errors.general && (
@@ -210,6 +245,18 @@ const SignUp = ({ onLogin }) => {
           </div>
         </div>
       </div>
+) :
+<div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+  <div className="col-5 mt-5 glass-box">
+      <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+        Account Created!
+        <br />
+        <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+      </h2>
+  </div>
+</div>
+  }
+
     </div>
   );
 };
