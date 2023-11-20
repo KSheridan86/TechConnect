@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 
 const Developers = () => {
@@ -21,7 +21,7 @@ const Developers = () => {
         }
         fetchUsers();
         
-    }, []);
+    },);
 
     const handleSearch = () => {
         // Filter users based on the search term
@@ -60,10 +60,6 @@ const Developers = () => {
                     <p className="hand-writing fs-4 text-center mb-3">
                             Simply input your particular criteria below and we'll do the rest!
                         </p>
-                        {/* <div className="d-flex justify-content-evenly align-items-center mt-3 mb-4">
-                            <FontAwesomeIcon icon={faLongArrowAltDown} />
-                            <FontAwesomeIcon icon={faLongArrowAltDown} />
-                        </div> */}
                         <div className="row justify-content-center text-center">
                             <div className="col-8">
                             <input

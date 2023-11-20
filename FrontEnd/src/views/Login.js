@@ -1,6 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
+
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
@@ -14,21 +17,20 @@ const Login = ({ onLogin }) => {
   const [data, setData] = useState(null);
   const [message, setMessage] = useState('');
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [transition, setTransition] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
-    if (storedShouldSlideOut) {
-      // console.log('storedShouldSlideOut:', storedShouldSlideOut);
-      // setShouldSlideOut(true);
-      // console.log('shouldSlideOut:', shouldSlideOut);
-      setTimeout(() => {
-        localStorage.removeItem('shouldSlideOut');
-      }, 1000);
-      const check = JSON.parse(localStorage.getItem('shouldSlideOut'));
-      console.log('storedShouldSlideOut:', check);
-    }
-  }, []);
+  // useEffect(() => {
+  //   const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
+  //   if (storedShouldSlideOut) {
+  //     setTimeout(() => {
+  //       localStorage.removeItem('shouldSlideOut');
+  //     }, 1000);
+  //     const check = JSON.parse(localStorage.getItem('shouldSlideOut'));
+  //     console.log('storedShouldSlideOut:', check);
+  //   }
+  // }, []);
 
   const validateLoginDetails = () => {
     let isValid = true;
@@ -70,6 +72,7 @@ const Login = ({ onLogin }) => {
       // Handle the response as needed
       setData(response.data);
       const currentUser = response;
+      // setSuccessMessage(`Welcome back, ${currentUser.data.username}!`);
 
       // Store user details in local storage
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
@@ -79,21 +82,31 @@ const Login = ({ onLogin }) => {
         onLogin();
       }
 
-      if (currentUser.data.account_type === 'Developer') {
-          setMessage('');
-          setShouldSlideOut(true);
-          setTimeout(() => {
-            navigate('/profile');
-          }, 1000); 
-          
-      } else {
-          setMessage('');
-          setShouldSlideOut(true);
-          setTimeout(() => {
-            navigate('/developers');
-          }, 1000); 
-      }
+      setShouldSlideOut(true);
 
+      const displayMessage = () => {
+          if (currentUser.data.account_type === 'Developer') {
+            setMessage('');
+            setTimeout(() => {
+              setTransition(true)
+              setTimeout(() => {
+                  navigate('/profile');
+              }, 1000);
+            }, 1750);
+        } else {
+            setMessage('');
+            setTimeout(() => {
+              setTransition(true)
+              setTimeout(() => {
+                navigate('/developers');
+              }, 1000);
+            }, 1750);
+        }
+      }
+      setTimeout(() => {
+        setSuccessMessage(true)
+        displayMessage();
+      }, 1000);
     } catch (error) {
       setMessage('');
       console.error('Error while making the API call:', error);
@@ -111,7 +124,8 @@ const Login = ({ onLogin }) => {
   return (
     <div className="container login fill-screen main-content">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-      <div className="row">
+      {!successMessage ? (
+        <div className='row'>
 
         <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           {errors.general && (
@@ -191,6 +205,18 @@ const Login = ({ onLogin }) => {
 
         </div>
       </div>
+        ) :
+        <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+          <div className="col-5 mt-5 glass-box">
+              <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                Login Successful!
+                <br />
+                <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+              </h2>
+          </div>
+        </div>
+          }
+      
     </div>
   );
 };

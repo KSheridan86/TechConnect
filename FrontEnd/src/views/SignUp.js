@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
@@ -13,6 +15,8 @@ const SignUp = ({ onLogin }) => {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [transition, setTransition] = useState(false);
   const initialUserData = {
     username: '',
     email: '',
