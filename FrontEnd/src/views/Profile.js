@@ -22,6 +22,9 @@ const Profile = () => {
   const [foundUser, setFoundUser] = useState({}); 
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
+  const [confirmation, setConfirmation] = useState(false);
+  const [fadeButton, setFadeButton] = useState(false);
+
   const navigate = useNavigate();
 
   // Fetch user profile data when the component mounts
@@ -41,6 +44,7 @@ const Profile = () => {
         await setFoundUser(response.data);
         await setProjects(response.data.projects)
         setUserData(response.data);
+        console.log(foundUser.skills_level_1)
       } catch (error) {
         console.error('Error fetching profile data:', error);
         // Handle the error if needed
@@ -64,6 +68,20 @@ const Profile = () => {
     }, 1000);
   };
 
+  const confirmDelete = () => {
+    setFadeButton(true);
+    setTimeout(() => {
+      setConfirmation(true);
+    }, 1000);
+  }
+
+  const cancelDelete = () => {
+    setFadeButton(false);
+    setTimeout(() => {
+      setConfirmation(false);
+    }, 1000);
+  }
+
   // Function to delete all skills for the current user
 const deleteSkills = async () => {
   try {
@@ -74,15 +92,21 @@ const deleteSkills = async () => {
       },
     };
 
-    // Make a request to the API endpoint to delete skills
-    await api.post('users/update_profile/', { delete_skills: true }, config);
-
-    // Update the state to reflect the changes (set skills to an empty array)
-    setFoundUser((prevUser) => ({
-      ...prevUser,
-      skills_level_1: [],
-      skills_level_2: [],
-    }));
+    setFadeButton(false);
+    setTimeout(() => {
+      setConfirmation(false);
+      // Make a request to the API endpoint to delete skills
+      api.post('users/update_profile/', { delete_skills: true }, config)
+        .then(() => {
+        // Update the state to reflect the changes (set skills to an empty array)
+          setFoundUser((prevUser) => ({
+            ...prevUser,
+            skills_level_1: [],
+            skills_level_2: [],
+          }
+        ));
+      })
+    }, 1000);
   } catch (error) {
     console.error('Error deleting skills:', error);
     // Handle the error if needed
@@ -129,19 +153,21 @@ const deleteSkills = async () => {
               )}
             </div>
           </div>
-        
-          <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h3>
-          {foundUser.skills_level_1 && (
-              <p className='nasa-black text-center mt-3'>
-              {Array.isArray(foundUser.skills_level_1)
-                ? foundUser.skills_level_1
-                    .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-                    .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-                    .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                : foundUser.skills_level_1
-              }
-            </p>
-          )}
+          <h2 className='nasa-black text-center text-uppercase mt-3'>Skills</h2>
+            {foundUser.skills_level_1 && (
+              <div>
+              <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h3>
+                <p className='nasa-black text-center mt-3'>
+                {Array.isArray(foundUser.skills_level_1)
+                  ? foundUser.skills_level_1
+                      .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                      .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                      .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+                  : foundUser.skills_level_1
+                }
+              </p>
+              </div>
+            )}
 
           <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h3>
           {foundUser.skills_level_2 && (
@@ -155,21 +181,41 @@ const deleteSkills = async () => {
               }
             </p>
           )}
+
           {foundUser.email === currentUser.data.email && (
             <div className="text-center hand-writing">
-            <button
-              className='btn btn-warning btn-lg mb-4 mx-2'
-              onClick={updateSkills}
-            >
-              Add Skills
-            </button>
-              <button
-                type='button'
-                className='btn btn-danger btn-lg mb-4 mx-2'
-                onClick={deleteSkills}
+              {confirmation ? ( 
+              <div className={`${fadeButton ? 'fade-in' : 'fade-out'}`}>
+                <button
+                  className='btn btn-warning btn-lg mb-4 mx-2'
+                  onClick={cancelDelete}
                 >
-                Delete All Skills
-              </button>
+                  Cancel
+                </button>
+                <button
+                  type='button'
+                  className='btn btn-danger btn-lg mb-4 mx-2'
+                  onClick={deleteSkills}
+                >
+                  Confirm
+                </button> 
+                <p className="text-danger fw-bold">This will delete all your skills??</p>
+              </div> ) : (
+              <div className={`${fadeButton ? 'fade-out' : 'fade-in'}`}>
+                <button
+                  className='btn btn-warning btn-lg mb-4 mx-2'
+                  onClick={updateSkills}
+                >
+                  Add Skills
+                </button>
+                <button
+                  type='button'
+                  className='btn btn-danger btn-lg mb-4 mx-2'
+                  onClick={confirmDelete}
+                  >
+                  Delete Skills
+                </button>
+              </div> ) }
             </div>
           )}
           
