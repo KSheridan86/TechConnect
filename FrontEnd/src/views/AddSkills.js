@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faCheck } from '@fortawesome/free-solid-svg-icons';
 
 // Create an Axios instance with a base URL and credentials
 const api = axios.create({
@@ -15,6 +17,8 @@ const AddSkills = () => {
     const returnUrl = location.state ? location.state.returnUrl : null;
     const [errors, setErrors] = useState({});
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
+    const [successMessage, setSuccessMessage] = useState(false);
+    const [transition, setTransition] = useState(false);
 
     // State variables to manage user input for primary and secondary skills
     const [primarySkills, setPrimarySkills] = useState('');
@@ -93,18 +97,38 @@ const AddSkills = () => {
             // Make a POST request to update the user profile with the new skills
             const response = await api.post('users/update_profile/', formData, config);
 
-            // Redirect to the appropriate page based on returnUrl or default to '/add-projects'
-            if (response && returnUrl) {
-                setShouldSlideOut(true);
-                setTimeout(() => {
-                    navigate('/profile');
-                }, 1000);
-            } else {
-                setShouldSlideOut(true);
-                setTimeout(() => {
-                    navigate('/add-projects');
-                }, 1000);
+
+            const displayMessage = () => {
+                // setMessage('');
+                if (response && returnUrl) {
+                  setTimeout(() => {
+                    setTransition(true)
+                    setTimeout(() => {
+                        navigate('/profile');
+                    }, 1000);
+                  }, 1750);
+              } else {
+                  setTimeout(() => {
+                    setTransition(true)
+                    setTimeout(() => {
+                      navigate('/add-projects');
+                    }, 1000);
+                  }, 1750);
+              }
             }
+
+
+            // Redirect to the appropriate page based on returnUrl or default to '/add-projects'
+            if (response) {
+                setShouldSlideOut(true);
+                setTimeout(() => {
+                    setSuccessMessage(true)
+                    displayMessage();
+                  }, 1000);
+            }
+
+
+
         } catch (error) {
             console.error('Error updating profile with skills:', error);
             console.log('Error response from server:', error.response);
@@ -114,6 +138,8 @@ const AddSkills = () => {
 
     return (
         <div className='container mt-2 fill-screen'>
+
+        {!successMessage ? (
             <div className='row justify-content-center login'>
                 <div className='col-12 mb-5'>
                 {errors.general && (
@@ -186,6 +212,17 @@ const AddSkills = () => {
                     </form>
                 </div>
             </div>
+            ) :
+            <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+              <div className="col-5 mt-5 glass-box">
+                  <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                    Skills Updated!
+                    <br />
+                    <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+                  </h2>
+              </div>
+            </div>
+              }
         </div>
     );
 };
