@@ -27,6 +27,8 @@ const AddProjects = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [buttonTxt, setButtonTxt] = useState(true);
+    const [successMessage, setSuccessMessage] = useState(false);
+    const [transition, setTransition] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
@@ -68,6 +70,23 @@ const AddProjects = () => {
 
             // Read the file as a data URL (base64-encoded string)
             reader.readAsDataURL(file);
+        } else {
+            // Clear the value of the file input if no file is selected (image is cleared)
+            event.target.value = '';
+        }
+    };
+
+    // Function to handle clearing the image field
+    const clearImageField = () => {
+        setProject((prevProject) => ({
+        ...prevProject,
+        image: null,
+        }));
+    
+        // Clear the value of the file input
+        const imageInput = document.getElementById('imageInput');
+        if (imageInput) {
+        imageInput.value = '';
         }
     };
 
@@ -101,12 +120,17 @@ const AddProjects = () => {
 
             const formData = new FormData();
             // Append avatar file to the form data if available
-            if (project.avatar) {
-                formData.append('avatar', project.avatar, 'avatar.jpg');
+            // if (project.avatar) {
+            //     formData.append('avatar', project.avatar, 'avatar.jpg');
+            // }
+            if (project.image) {
+                formData.append('image', project.image, 'project_image.jpg');
             }
             // Append project fields to the form data
             Object.entries(project).forEach(([key, value]) => {
-                formData.append(key, value);
+                if (value !== null && key !== 'image') {
+                    formData.append(key, value);
+                }
             });
 
             // Configuration for the API request, including authorization header
@@ -132,6 +156,7 @@ const AddProjects = () => {
                     tech_stack: '',
                     image: null,
                 });
+                clearImageField();
                 setButtonTxt(false);
                 setIsSubmitted(false);
             }, 1000);
@@ -152,14 +177,11 @@ const AddProjects = () => {
     return (
         <div className='container fill-screen'>
             <div className={`row justify-content-center login ${isSubmitted ? 'fade-out' : 'fade-in'}`}>
-                <div className={`col-12 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
-                    <h2 className='nasa-black text-center text-uppercase mt-3'>
-                        Add projects to your Profile
-                    </h2>
+                <div className={`col-10 col-lg-8 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
 
                     <form encType="multipart/form-data">
                         <div className='glass-box border-dark m-3 p-3'>
-                            <h4 className="nasa text-uppercase">Add Projects</h4>
+                            <h4 className="nasa text-uppercase text-center">Add a Project</h4>
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <label className='fw-bold fs-5'>Name:</label>
@@ -230,6 +252,7 @@ const AddProjects = () => {
 
                                     <label className='fw-bold fs-5'>Image (Upload):</label>
                                     <input
+                                        id="imageInput"
                                         className={`border border-dark border-2 p-2 form-control mb-3 hand-writing`}
                                         name='image'
                                         type='file'
@@ -239,6 +262,13 @@ const AddProjects = () => {
                                     {project.image && (
                                         <div>
                                             <img src={URL.createObjectURL(project.image)} alt='Preview' width='100' height='100' />
+                                            <button
+                                                type='button'
+                                                className='btn btn-danger btn-sm ms-2'
+                                                onClick={clearImageField}
+                                                >
+                                                Clear Image
+                                            </button>
                                         </div>
                                     )}
                                 </div>

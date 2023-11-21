@@ -28,8 +28,8 @@ const Logout = ({ onLogout }) => {
 
     return (
       <div className='container fill-screen'>
-        <div className="row justify-content-center logout">
-          <div className={`col-12 col-lg-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
+        <div className="row justify-content-center logout mt-5">
+          <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
             <h1 className="glass-box fw-bold p-4 m-5 text-center">
               <strong className="nasa">Are you sure you want to Logout?</strong>
             </h1>

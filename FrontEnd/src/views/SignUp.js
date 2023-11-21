@@ -14,7 +14,7 @@ const SignUp = ({ onLogin }) => {
   const accountType = location.state?.accountType;
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  const [message, setMessage] = useState('');
+  // const [message, setMessage] = useState('');
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
   const [transition, setTransition] = useState(false);
@@ -107,8 +107,9 @@ const SignUp = ({ onLogin }) => {
 
       setShouldSlideOut(true);
 
+      //  Redirect and start animation after 1.75 seconds
       const displayMessage = () => {
-        setMessage('');
+        // setMessage('');
         if (accountType === 'Developer') {
           setTimeout(() => {
             setTransition(true)
@@ -125,11 +126,11 @@ const SignUp = ({ onLogin }) => {
           }, 1750);
       }
     }
-
-    setTimeout(() => {
-      setSuccessMessage(true)
-      displayMessage();
-    }, 1000);
+    // Display success message, Call function to  and redirect after 1 second
+      setTimeout(() => {
+        setSuccessMessage(true)
+        displayMessage();
+      }, 1000);
   
     } catch (error) {
       console.error('Error logging in after signup:', error);
@@ -142,27 +143,6 @@ const SignUp = ({ onLogin }) => {
       }, 2500);
     }
   };
-
-   
-    // Redirect based on account type and display errors
-  //   if (accountType === "Developer") {
-  //     setTimeout(() => {
-  //       navigate('/create-profile');
-  //     }, 1000);
-  //   } else {
-  //     if (errors){
-  //       setTimeout(() => {
-  //         setErrors('');
-  //       }, 2500);
-  //     }
-  //     setShouldSlideOut(true);
-  //     setTimeout(() => {
-  //       navigate('/developers');
-  //     }, 1000);
-  //   }
-  // };
-
-
 
   return (
     <div className="container login fill-screen mt-4">
