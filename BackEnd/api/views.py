@@ -13,8 +13,8 @@ from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
 
 # pylint: disable=W0611
-from .models import (User, DeveloperProfile)
-# from .models import (Project, DeveloperReview, ProjectReview, PrivateMessage)
+from .models import (User, DeveloperProfile, Project)
+# from .models import (DeveloperReview, ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, UserSerializerWithToken,
                           DeveloperProfileSerializer, ProjectSerializer,)
 # from .serializers import ( DeveloperReviewSerializer,
@@ -100,10 +100,14 @@ def user_profile(request):
     """
     Return developer profile.
     """
-    user = request.user
     # pylint: disable=E1101
+    user = request.user
     profile = DeveloperProfile.objects.get(user=user)
-    serializer = DeveloperProfileSerializer(profile, many=False)
+    projects = Project.objects.filter(developer=profile)
+    print("Projects:", projects)
+
+    serializer = DeveloperProfileSerializer(
+        profile, context={'projects': projects})
     return Response(serializer.data)
 
 

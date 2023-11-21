@@ -18,6 +18,7 @@ const capitalizeFirstLetter = (string) => {
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [userData, setUserData] = useState({ profile: {} });
+  const [projects, setProjects] = useState([]);
   const [foundUser, setFoundUser] = useState({}); 
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
@@ -38,6 +39,7 @@ const Profile = () => {
         const response = await api.get('users/profile/', config);
         
         await setFoundUser(response.data);
+        await setProjects(response.data.projects)
         setUserData(response.data);
       } catch (error) {
         console.error('Error fetching profile data:', error);
@@ -172,52 +174,43 @@ const deleteSkills = async () => {
           )}
           
         </div>
+
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
-          {userData.projectsList && userData.projectsList.length > 0 && (
-          <div>
-            <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
-                      
-              {userData.projectsList.map((project, index) => (
-                <div className="glass-box w-75 m-auto mb-3">
-                  <p className='nasa-black text-center text-uppercase mt-3' key={index}>
-                  {project.name}
-                  </p>
-                  <p className='nasa-black text-center text-uppercase mt-3' key={index}>
-                  {project.description}
-                  </p>
-                  <p className='nasa-black text-center text-uppercase mt-3' key={index}>
-                  {project.techStack}
-                  </p>
-                  <p className='nasa-black text-center text-uppercase mt-3' key={index}>
-                  {project.siteUrl}
-                  </p>
-                  <p className='nasa-black text-center text-uppercase mt-3' key={index}>
-                  {project.repoUrl}
-                  </p>
-                  {currentUser.email === foundUser.email && (
-                    <div className='text-center hand-writing'>
-                        <button
-                            type='button'
-                            className='btn btn-danger btn-sm mb-3'
-                            // onClick={() => handleDeleteProject(index)}
-                              >
-                            Delete Project
-                        </button>
-                    </div>
-                )}
-                </div>
-          ))}
-          </div>
+  {projects && projects.length > 0 && (
+    <div>
+      <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
+      {projects.map((project, index) => (
+        <div className="glass-box w-75 m-auto mb-3" key={index}>
+          <p className='nasa-black text-center text-uppercase mt-3'>{project.name}</p>
+          {/* <p className='nasa-black text-center text-uppercase mt-3'>{project.description}</p> */}
+          <p className='nasa-black text-center text-uppercase mt-3'>{project.tech_stack}</p>
+          {/* <p className='nasa-black text-center text-uppercase mt-3'>{project.site_url}</p>
+          <p className='nasa-black text-center text-uppercase mt-3'>{project.repo_url}</p> */}
+          {/* Add image rendering logic here */}
+          {currentUser.email === foundUser.email && (
+            <div className='text-center hand-writing'>
+              <button
+                type='button'
+                className='btn btn-danger btn-sm mb-3'
+                // onClick={() => handleDeleteProject(index)}
+              >
+                Delete Project
+              </button>
+            </div>
           )}
-          <div className='text-center mt-5 mb-5 hand-writing'>
-            <button
-              className='btn btn-warning btn-lg mx-2'
-              onClick={addProjects}
-            >
-              Add Projects
-            </button>
-          </div>
         </div>
+      ))}
+    </div>
+  )}
+  <div className='text-center mt-5 mb-5 hand-writing'>
+    <button
+      className='btn btn-warning btn-lg mx-2'
+      onClick={addProjects}
+    >
+      Add Projects
+    </button>
+  </div>
+</div>
 
         <div className='text-center mt-2 mb-1 hand-writing'>
             <button
