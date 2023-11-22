@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
 import axios from 'axios';
 
@@ -45,7 +45,6 @@ const Profile = () => {
         await setFoundUser(response.data);
         await setProjects(response.data.projects)
         setUserData(response.data);
-        console.log(foundUser.skills_level_1)
       } catch (error) {
         console.error('Error fetching profile data:', error);
         // Handle the error if needed
@@ -54,6 +53,10 @@ const Profile = () => {
     fetchProfileData();
   }, []);
 
+  setTimeout(() => {
+    localStorage.setItem('userProjects', JSON.stringify(projects));
+  }, 1000);
+  
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
     setShouldSlideOut(true);
@@ -123,6 +126,16 @@ const deleteSkills = async () => {
           setTimeout(() => {
             navigate('/create-profile');
           }, 1000); 
+  };
+
+  const handleProjectLinkClick = (projectId) => {
+    // Perform any actions you need before navigating
+    console.log(`Project link clicked. Project ID: ${projectId}`);
+    // For example, you might want to update some state or perform some logic
+    setShouldSlideOut(true);
+    setTimeout(() => {
+      navigate(`/project/${projectId}`);
+    }, 1000);
   };
 
   const isSkillsDefinedAndNotEmpty =
@@ -245,6 +258,11 @@ const deleteSkills = async () => {
       <div>
         {projects.map((project, index) => (
           <div className="project-box glass-box w-75 m-auto mb-3" key={index}>
+            <Link to="#" 
+                  key={index} 
+                  className="project-link"
+                  onClick={() => handleProjectLinkClick(project.id)}
+                  >
             {project.image && (
               <img
                 src={`${baseAvatarUrl}${project.image}`}
@@ -254,6 +272,7 @@ const deleteSkills = async () => {
               />
             )}
             <p className='nasa-black text-center text-uppercase mt-1'>{project.name}</p>
+            </Link>
           </div>
         ))}
       </div>

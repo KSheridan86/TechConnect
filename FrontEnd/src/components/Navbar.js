@@ -13,6 +13,7 @@ import EditProfile from '../views/EditProfile';
 import CreateProfile from '../views/CreateProfile';
 import AddSkills from '../views/AddSkills';
 import AddProjects from '../views/AddProjects';
+import ProjectDetail from '../views/ProjectDetail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
 
@@ -99,6 +100,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
         <Route path="/create-profile" element={<CreateProfile />} />
         <Route path="/add-skills" element={<AddSkills />} />
         <Route path="/add-projects" element={<AddProjects />} />
+        <Route path="/project/:projectId" element={<ProjectDetail />} />
       </Routes>
     </Router>
   );
