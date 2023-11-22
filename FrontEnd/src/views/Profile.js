@@ -24,7 +24,6 @@ const Profile = () => {
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
-
   const navigate = useNavigate();
 
   // Fetch user profile data when the component mounts
@@ -124,6 +123,13 @@ const deleteSkills = async () => {
           }, 1000); 
   };
 
+  const isSkillsDefinedAndNotEmpty =
+    foundUser.skills_level_1 &&
+    foundUser.skills_level_1.length > 0 &&
+    !(foundUser.skills_level_1.length === 2 &&
+      foundUser.skills_level_1[0] === "(''," &&
+      foundUser.skills_level_1[1] === ')');
+
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
@@ -153,37 +159,44 @@ const deleteSkills = async () => {
               )}
             </div>
           </div>
+
           <h2 className='nasa-black text-center text-uppercase mt-3'>Skills</h2>
-            {foundUser.skills_level_1 && (
-              <div>
-              <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h3>
-                <p className='nasa-black text-center mt-3'>
-                {Array.isArray(foundUser.skills_level_1)
-                  ? foundUser.skills_level_1
-                      .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-                      .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-                      .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                  : foundUser.skills_level_1
-                }
-              </p>
-              </div>
-            )}
+          {isSkillsDefinedAndNotEmpty ? (<div>
 
-          <h3 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h3>
-          {foundUser.skills_level_2 && (
-              <p className='nasa-black text-center mt-3'>
-              {Array.isArray(foundUser.skills_level_2)
-                ? foundUser.skills_level_2
-                    .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-                    .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-                    .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                : foundUser.skills_level_2
-              }
-            </p>
-          )}
+{foundUser.skills_level_1 && (
+  <div>
+    <h5 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h5>
+    <p className='nasa-black text-center mt-3'>
+      {Array.isArray(foundUser.skills_level_1)
+        ? foundUser.skills_level_1
+          .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+          .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+          .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+        : foundUser.skills_level_1
+      }
+    </p>
+  </div>
+)}
 
+<h5 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h5>
+{foundUser.skills_level_2 && (
+  <p className='nasa-black text-center mt-3'>
+    {Array.isArray(foundUser.skills_level_2)
+      ? foundUser.skills_level_2
+         .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+        .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+        .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+      : foundUser.skills_level_2
+    }
+  </p>
+)}
+</div>) : <div className='nasa-black text-center text-uppercase mt-3 mb-3'>You have no saved skills, add some below to show off how great you are!</div>}
+          
+
+          {/* Conditionally render buttons if the user is the owner of the profile */}
           {foundUser.email === currentUser.data.email && (
             <div className="text-center hand-writing">
+              {/* Conditionally render different buttons as confirmation of DELETE action */}
               {confirmation ? ( 
               <div className={`${fadeButton ? 'fade-in' : 'fade-out'}`}>
                 <button

@@ -163,7 +163,7 @@ const AddSkills = () => {
                                 <div className='mb-3'>
                                 <h4 className="fw-bold">Use this space to inform clients of your abilities, ie "React", "Python" etc...</h4>
                                 <br />
-                                <label className='fw-bold mb-2'>Lets start with your primary skills, the ones you're most proficient and comfortable with.</label>
+                                <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>Lets start with your primary skills, the ones you're most proficient and comfortable with.</label>
                                 <textarea style={{maxWidth: '75%'}}
                                     className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
                                     name='skills_level_1'
@@ -175,7 +175,7 @@ const AddSkills = () => {
                                     <div className="text-danger">{errors.primarySkills}</div>
                                 )}
                                 <br />
-                                <label className='fw-bold mb-2'>Now add your secondary skills, skills you're familiar with but not a pro in.</label>
+                                <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>Now add your secondary skills, skills you're familiar with but not a pro in.</label>
                                 <textarea style={{maxWidth: '75%'}}
                                     className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
                                     name='skills_level_2'
@@ -198,7 +198,8 @@ const AddSkills = () => {
                                 onClick={addSkills}>
                                 Add Skills
                             </button>
-                            <button
+                            {returnUrl && (
+                                <button
                                 type='button'
                                 className={`btn btn-warning btn-lg m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
                                 onClick={() => {
@@ -206,8 +207,10 @@ const AddSkills = () => {
                                     setTimeout(() => {
                                         navigate("/profile");
                                     }, 1000);}}>
-                                {returnUrl ? 'Back' : 'Skip'}
+                                Back
                             </button>
+                            )}
+                            
                         </div>
                     </form>
                 </div>
