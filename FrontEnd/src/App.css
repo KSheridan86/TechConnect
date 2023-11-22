@@ -337,3 +337,39 @@ div > a {
 .max {
   max-height: 75vh;
 }
+
+.project-image {
+  width: 75%;
+  height: 70%;
+  object-fit: cover;
+}
+
+.project-box {
+  height: 7rem;
+  width: 100%;
+}
+
+.project-container {
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* Styles for Webkit browsers (Chrome, Safari) */
+.project-container::-webkit-scrollbar {
+  width: 12px;
+}
+
+.project-container::-webkit-scrollbar-thumb {
+  background-color: #f1916d;
+  border-radius: 10px;
+}
+
+/* Styles for Firefox */
+.project-container {
+  scrollbar-color: #f1916d transparent;
+  scrollbar-width: thin;
+}
+
+.project-container::-webkit-scrollbar-thumb:active {
+  background-color: #f1916d;
+}

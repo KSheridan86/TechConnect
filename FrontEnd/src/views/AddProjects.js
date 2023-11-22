@@ -1,18 +1,3 @@
-
-    // const handleImageChange = (event) => {
-    //     const file = event.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = (e) => {
-    //             setProject((prevProject) => ({
-    //                 ...prevProject,
-    //                 image: e.target.result,
-    //             }));
-    //         };
-    //         reader.readAsDataURL(file);
-    //     }
-    // };
-
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -27,8 +12,6 @@ const AddProjects = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [buttonTxt, setButtonTxt] = useState(true);
-    const [successMessage, setSuccessMessage] = useState(false);
-    const [transition, setTransition] = useState(false);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();

@@ -117,15 +117,15 @@ const SignUp = ({ onLogin }) => {
                 navigate('/create-profile');
             }, 1000);
           }, 1750);
-      } else {
-          setTimeout(() => {
-            setTransition(true)
+        } else {
             setTimeout(() => {
-              navigate('/developers');
-            }, 1000);
-          }, 1750);
+              setTransition(true)
+              setTimeout(() => {
+                navigate('/developers');
+              }, 1000);
+            }, 1750);
+        }
       }
-    }
     // Display success message, Call function to  and redirect after 1 second
       setTimeout(() => {
         setSuccessMessage(true)

@@ -22,6 +22,8 @@ const Profile = () => {
   const [foundUser, setFoundUser] = useState({}); 
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(false);
+  const [transition, setTransition] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
   const navigate = useNavigate();
@@ -142,7 +144,7 @@ const deleteSkills = async () => {
                 <img
                   src={foundUser && foundUser.avatar ? `${baseAvatarUrl}${foundUser.avatar}` : defaultAvatar}
                   alt='User Avatar'
-                  className='user-avatar mt-2'
+                  className='user-avatar mt-2 rounded'
                 />
             </div>
             <div className="col-6 mt-3">
@@ -163,34 +165,37 @@ const deleteSkills = async () => {
           <h2 className='nasa-black text-center text-uppercase mt-3'>Skills</h2>
           {isSkillsDefinedAndNotEmpty ? (<div>
 
-{foundUser.skills_level_1 && (
-  <div>
-    <h5 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h5>
-    <p className='nasa-black text-center mt-3'>
-      {Array.isArray(foundUser.skills_level_1)
-        ? foundUser.skills_level_1
-          .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-          .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-          .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-        : foundUser.skills_level_1
-      }
-    </p>
-  </div>
-)}
+            {foundUser.skills_level_1 && (
+              <div>
+                <h5 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h5>
+                <p className='nasa-black text-center mt-3'>
+                  {Array.isArray(foundUser.skills_level_1)
+                    ? foundUser.skills_level_1
+                      .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                      .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                      .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+                    : foundUser.skills_level_1
+                  }
+                </p>
+              </div>
+            )}
 
-<h5 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h5>
-{foundUser.skills_level_2 && (
-  <p className='nasa-black text-center mt-3'>
-    {Array.isArray(foundUser.skills_level_2)
-      ? foundUser.skills_level_2
-         .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-        .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-        .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-      : foundUser.skills_level_2
-    }
-  </p>
-)}
-</div>) : <div className='nasa-black text-center text-uppercase mt-3 mb-3'>You have no saved skills, add some below to show off how great you are!</div>}
+            <h5 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h5>
+            {foundUser.skills_level_2 && (
+              <p className='nasa-black text-center mt-3'>
+                {Array.isArray(foundUser.skills_level_2)
+                  ? foundUser.skills_level_2
+                    .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                    .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                    .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+                  : foundUser.skills_level_2
+                }
+              </p>
+            )}
+            </div>) : 
+            <div className='nasa-black text-center text-uppercase mt-3 mb-3'>
+              You have no saved skills, add some below to show off how great you are!
+            </div>}
           
 
           {/* Conditionally render buttons if the user is the owner of the profile */}
@@ -231,44 +236,39 @@ const deleteSkills = async () => {
               </div> ) }
             </div>
           )}
-          
         </div>
 
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
-  {projects && projects.length > 0 && (
-    <div>
-      <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
-      {projects.map((project, index) => (
-        <div className="glass-box w-75 m-auto mb-3" key={index}>
-          <p className='nasa-black text-center text-uppercase mt-3'>{project.name}</p>
-          {/* <p className='nasa-black text-center text-uppercase mt-3'>{project.description}</p> */}
-          <p className='nasa-black text-center text-uppercase mt-3'>{project.tech_stack}</p>
-          {/* <p className='nasa-black text-center text-uppercase mt-3'>{project.site_url}</p>
-          <p className='nasa-black text-center text-uppercase mt-3'>{project.repo_url}</p> */}
-          {/* Add image rendering logic here */}
-          {currentUser.email === foundUser.email && (
-            <div className='text-center hand-writing'>
-              <button
-                type='button'
-                className='btn btn-danger btn-sm mb-3'
-                // onClick={() => handleDeleteProject(index)}
-              >
-                Delete Project
-              </button>
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
-  )}
-  <div className='text-center mt-5 mb-5 hand-writing'>
-    <button
-      className='btn btn-warning btn-lg mx-2'
-      onClick={addProjects}
-    >
-      Add Projects
-    </button>
+  <div className="project-container mt-3">
+    <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
+    {projects && projects.length > 0 && (
+      <div>
+        {projects.map((project, index) => (
+          <div className="project-box glass-box w-75 m-auto mb-3" key={index}>
+            {project.image && (
+              <img
+                src={`${baseAvatarUrl}${project.image}`}
+                alt={`Project ${project.name}`}
+                className='project-image rounded m-auto'
+                style={{ display: 'block' }} 
+              />
+            )}
+            <p className='nasa-black text-center text-uppercase mt-1'>{project.name}</p>
+          </div>
+        ))}
+      </div>
+    )}
+
+    
   </div>
+  <div className='text-center mt-5 mb-5 hand-writing'>
+      <button
+        className='btn btn-warning btn-lg mx-2'
+        onClick={addProjects}
+      >
+        Add Projects
+      </button>
+    </div>
 </div>
 
         <div className='text-center mt-2 mb-1 hand-writing'>
@@ -279,7 +279,7 @@ const deleteSkills = async () => {
               Edit Profile
             </button>
           </div>
-        <div style={{ height: '12rem' }}></div>
+        <div style={{ height: '8rem' }}></div>
       </div>
     </div>
   );
