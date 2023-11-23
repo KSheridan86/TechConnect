@@ -15,33 +15,26 @@ const capitalizeFirstLetter = (string) => {
 };
 
 // Component to display and manage user profile
-const Profile = (props) => {
+const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const [userData, setUserData] = useState({ profile: {} });
   const [projects, setProjects] = useState([]);
   const [foundUser, setFoundUser] = useState({}); 
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
-  const [successMessage, setSuccessMessage] = useState(false);
-  const [transition, setTransition] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-
-  
 
   // Fetch user profile data when the component mounts
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
         const searchedProfile = location.state?.userId;
-        console.log("searchedProfile", searchedProfile)
         // Configuration for the API request, including authorization header
         const config = {
           headers: {
             'Content-Type': 'application/json',
-            // Authorization: `Bearer ${currentUser?.data?.token}`,
           },
         };
         // Make a GET request to retrieve the user profile and set variables
@@ -49,12 +42,10 @@ const Profile = (props) => {
           const response = await api.get(`users/profile/${searchedProfile}`, config);
           await setFoundUser(response.data);
           await setProjects(response.data.projects)
-          setUserData(response.data);
         } else if (currentUser?.data?.id) {
           const response = await api.get(`users/profile/${currentUser.data.id}`, config);
           await setFoundUser(response.data);
           await setProjects(response.data.projects)
-          setUserData(response.data);
         }
         
       } catch (error) {
@@ -63,12 +54,9 @@ const Profile = (props) => {
       }
     };
     fetchProfileData();
+    // empty array left here to prevent the api call from being made repeatedly
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  console.log(currentUser)
-  console.log(foundUser)
-  setTimeout(() => {
-    localStorage.setItem('userProjects', JSON.stringify(projects));
-  }, 1000);
   
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
@@ -100,35 +88,35 @@ const Profile = (props) => {
   }
 
   // Function to delete all skills for the current user
-const deleteSkills = async () => {
-  try {
-    const config = {
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${currentUser.data.token}`,
-      },
-    };
+  const deleteSkills = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser.data.token}`,
+        },
+      };
 
-    setFadeButton(false);
-    setTimeout(() => {
-      setConfirmation(false);
-      // Make a request to the API endpoint to delete skills
-      api.post('users/update_profile/', { delete_skills: true }, config)
-        .then(() => {
-        // Update the state to reflect the changes (set skills to an empty array)
-          setFoundUser((prevUser) => ({
-            ...prevUser,
-            skills_level_1: [],
-            skills_level_2: [],
-          }
-        ));
-      })
-    }, 1000);
-  } catch (error) {
-    console.error('Error deleting skills:', error);
-    // Handle the error if needed
-  }
-};
+      setFadeButton(false);
+      setTimeout(() => {
+        setConfirmation(false);
+        // Make a request to the API endpoint to delete skills
+        api.post('users/update_profile/', { delete_skills: true }, config)
+          .then(() => {
+          // Update the state to reflect the changes (set skills to an empty array)
+            setFoundUser((prevUser) => ({
+              ...prevUser,
+              skills_level_1: [],
+              skills_level_2: [],
+            }
+          ));
+        })
+      }, 1000);
+    } catch (error) {
+      console.error('Error deleting skills:', error);
+      // Handle the error if needed
+    }
+  };
 
   // Function to update the user profile
   const updateProfile = () => {
@@ -141,13 +129,10 @@ const deleteSkills = async () => {
           }, 1000); 
   };
 
-  const handleProjectLinkClick = (projectId) => {
-    // Perform any actions you need before navigating
-    console.log(`Project link clicked. Project ID: ${projectId}`);
-    // For example, you might want to update some state or perform some logic
+  const handleProjectLinkClick = (project) => {
     setShouldSlideOut(true);
     setTimeout(() => {
-      navigate(`/project/${projectId}`);
+      navigate(`/project/${project.id}`, { state: { project } });
     }, 1000);
   };
 
@@ -273,59 +258,53 @@ const deleteSkills = async () => {
                 </div> ) }
               </div>
             )}</div>) : (null) } 
-            
-            
-          {/* Conditionally render buttons if the user is the owner of the profile */}
-          
         </div>
 
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
-  <div className="project-container mt-3">
-    <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
-    {projects && projects.length > 0 && (
-      <div>
-        {projects.map((project, index) => (
-          <div className="project-box glass-box w-75 m-auto mb-3" key={index}>
-            <Link to="#" 
-                  key={index} 
-                  className="project-link"
-                  onClick={() => handleProjectLinkClick(project.id)}
-                  >
-            {project.image && (
-              <img
-                src={`${baseAvatarUrl}${project.image}`}
-                alt={`Project ${project.name}`}
-                className='project-image rounded m-auto'
-                style={{ display: 'block' }} 
-              />
+          <div className="project-container mt-3">
+            <h3 className='nasa-black text-center text-uppercase mt-3'>Your Projects:</h3>
+            {projects && projects.length > 0 && (
+              <div>
+                {projects.map((project, index) => (
+                  <div className="project-box glass-box w-75 m-auto mb-3" key={index}>
+                    <Link to="#" 
+                          key={index} 
+                          className="project-link"
+                          onClick={() => handleProjectLinkClick(project)}
+                          >
+                    {project.image && (
+                      <img
+                        src={`${baseAvatarUrl}${project.image}`}
+                        alt={`Project ${project.name}`}
+                        className='project-image rounded m-auto'
+                        style={{ display: 'block' }} 
+                      />
+                    )}
+                    <p className='nasa-black text-center text-uppercase mt-1'>{project.name}</p>
+                    </Link>
+                  </div>
+                ))}
+              </div>
             )}
-            <p className='nasa-black text-center text-uppercase mt-1'>{project.name}</p>
-            </Link>
           </div>
-        ))}
-      </div>
-    )}
-
-    
-  </div>
-  <div className='text-center mt-5 mb-5 hand-writing'>
-      <button
-        className='btn btn-warning btn-lg mx-2'
-        onClick={addProjects}
-      >
-        Add Projects
-      </button>
-    </div>
-</div>
-
-        <div className='text-center mt-2 mb-1 hand-writing'>
+          <div className='text-center mt-5 mb-5 hand-writing'>
             <button
-              className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
-              onClick={updateProfile}
+              className='btn btn-warning btn-lg mx-2'
+              onClick={addProjects}
             >
-              Edit Profile
+              Add Projects
             </button>
           </div>
+        </div>
+
+        <div className='text-center mt-2 mb-1 hand-writing'>
+          <button
+            className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+            onClick={updateProfile}
+          >
+            Edit Profile
+          </button>
+        </div>
         <div style={{ height: '8rem' }}></div>
       </div>
     </div>

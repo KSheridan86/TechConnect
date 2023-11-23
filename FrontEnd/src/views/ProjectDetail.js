@@ -1,24 +1,21 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 const ProjectDetails = () => {
-  const { projectId } = useParams();
   const [project, setProject] = useState(null);
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
+  const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    // Retrieve projects from localStorage
-    const userProjects = JSON.parse(localStorage.getItem('userProjects'));
-    console.log("userProjects from the detail page", userProjects)
-    console.log("projectId from the detail page", projectId)
-    // Find the project with the matching ID
-    const selectedProject = userProjects.find(p => p.id === parseInt(projectId));
-    console.log("selectedProject from the detail page", selectedProject)
-    setProject(selectedProject);
-  }, [projectId]);
+    // Retrieve project from location state
+    const projectDetails = location.state?.project;
 
+    if (projectDetails) {
+      setProject(projectDetails);
+    }
+  }, [location.state?.project]);
   if (!project) {
     return <p>Loading...</p>;
   }

@@ -1,6 +1,4 @@
 import React, { useState, useEffect } from 'react';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-// import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 
@@ -22,9 +20,10 @@ const Developers = () => {
             setUsers(data);
         }
         fetchUsers();
-        
-    }, [] ); // empty array left here to prevent the api call from being made repeatedly
-    console.log("users", users)
+
+    // empty array left here to prevent the api call from being made repeatedly
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []); 
     const handleSearch = () => {
         // Filter users based on the search term
         const filteredUsers = users.filter((user) =>
@@ -47,7 +46,6 @@ const Developers = () => {
     const handleUserClick = (userId) => {
         // Use navigate to go to the profile page and pass user.id as state
         navigate(`/profile`, { state: { userId } });
-        console.log("userId", userId)
     };
 
     return (
