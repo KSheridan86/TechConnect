@@ -52,7 +52,7 @@ const Home = ({loggedIn}) => {
 
     const fetchProfileData = async (userId) => {
         try {
-            const response = await api.get(`/api/users/${userId}`);
+            const response = await api.get(`users/${userId}`);
             setUserData(response.data);
             // Store the profileData in local storage
             localStorage.setItem('UserData', JSON.stringify(response.data));

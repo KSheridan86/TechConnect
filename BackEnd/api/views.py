@@ -3,14 +3,16 @@ The views to control the API.
 """
 
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.hashers import make_password
+from django.db import IntegrityError
+from django.middleware.csrf import rotate_token
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
-from django.contrib.auth.hashers import make_password
-from django.db import IntegrityError
+from rest_framework_simplejwt.tokens import RefreshToken
 
 # pylint: disable=W0611
 from .models import (User, DeveloperProfile, Project)
@@ -59,6 +61,20 @@ class MyTokenObtainPairView(TokenObtainPairView):
     View for the token.
     """
     serializer_class = MyTokenObtainPairSerializer
+
+
+@api_view(['POST'])
+def logout(request):
+    """
+    View to logout a user.
+    """
+    try:
+        # Optionally, you can perform additional logout logic here
+        request.session.flush()  # Clear the session data
+        return Response({'success': 'Logout successful'})
+    except Exception as e:
+        print(str(e))
+        return Response({'error': 'Logout failed'}, status=400)
 
 
 # pylint: disable=W0613

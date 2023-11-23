@@ -3,27 +3,30 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'http://16.171.133.35:4000/api',
+  baseURL: 'http://127.0.0.1:8000/api/',
   withCredentials: true,
 });
 
 const Logout = ({ onLogout }) => {
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
-    const navigate = useNavigate();
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const refreshToken = currentUser.data.refresh
+  console.log(refreshToken);
+  const navigate = useNavigate();
 
     const handleLogout = async () => {
+      
         try {
-            // api.post('/logout');
-            onLogout();
+          const response = await api.post('users/logout/');
+          console.log(response.data);  // Handle the success message
             setShouldSlideOut(true);
             setTimeout(() => {
-              localStorage.clear();
+              onLogout();
               navigate('/');
             }, 1000);
         } catch (error) {
-            console.error('Logout failed:', error);
+            console.error('Logout failed:', error.response.data);
         }
-        onLogout();
     };
 
     return (
