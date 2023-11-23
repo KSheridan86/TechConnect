@@ -88,9 +88,10 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
       <Routes>
         <Route path="/" element={<Home loggedIn={isLoggedIn} />} />
         <Route path="/developers" element={<Developers />} />
-        <Route path="/profile" element={
+        {/* <Route path="/profile" element={
             isLoggedIn && currentUser.data.account_type === 'Developer' ? (
-              <Profile /> ) : ( <Navigate to="/" /> )} />
+              <Profile /> ) : ( <Navigate to="/" /> )} /> */}
+        <Route path="/profile" element={<Profile />} />
         <Route path="/signup" element={<SignUp onLogin={onLogin} />} />
         <Route path="/delete-user" element={<DeleteUser onLogout={onLogout} />} />
         <Route path="/login" element={<Login onLogin={onLogin} />} /> 

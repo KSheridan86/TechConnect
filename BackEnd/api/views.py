@@ -5,7 +5,7 @@ The views to control the API.
 from django.shortcuts import get_object_or_404
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from rest_framework.response import Response
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
@@ -95,13 +95,17 @@ def register_user(request):
 
 
 @api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def user_profile(request):
+@permission_classes([AllowAny])
+def user_profile(request, user_id=None):
     """
     Return developer profile.
     """
     # pylint: disable=E1101
-    user = request.user
+    if user_id:
+        user = get_object_or_404(User, id=user_id)
+        print("ID:", user_id)
+    else:
+        user = request.user
     profile = DeveloperProfile.objects.get(user=user)
     projects = Project.objects.filter(developer=profile)
     print("Projects:", projects)

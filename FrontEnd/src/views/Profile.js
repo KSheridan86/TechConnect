@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate, Link, useLocation } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
 import axios from 'axios';
 
@@ -15,7 +15,7 @@ const capitalizeFirstLetter = (string) => {
 };
 
 // Component to display and manage user profile
-const Profile = () => {
+const Profile = (props) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [userData, setUserData] = useState({ profile: {} });
   const [projects, setProjects] = useState([]);
@@ -27,24 +27,36 @@ const Profile = () => {
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+
+  
 
   // Fetch user profile data when the component mounts
   useEffect(() => {
     const fetchProfileData = async () => {
       try {
+        const searchedProfile = location.state?.userId;
+        console.log("searchedProfile", searchedProfile)
         // Configuration for the API request, including authorization header
         const config = {
           headers: {
             'Content-Type': 'application/json',
-            Authorization: `Bearer ${currentUser.data.token}`,
+            // Authorization: `Bearer ${currentUser?.data?.token}`,
           },
         };
         // Make a GET request to retrieve the user profile and set variables
-        const response = await api.get('users/profile/', config);
+        if (searchedProfile) {
+          const response = await api.get(`users/profile/${searchedProfile}`, config);
+          await setFoundUser(response.data);
+          await setProjects(response.data.projects)
+          setUserData(response.data);
+        } else if (currentUser?.data?.id) {
+          const response = await api.get(`users/profile/${currentUser.data.id}`, config);
+          await setFoundUser(response.data);
+          await setProjects(response.data.projects)
+          setUserData(response.data);
+        }
         
-        await setFoundUser(response.data);
-        await setProjects(response.data.projects)
-        setUserData(response.data);
       } catch (error) {
         console.error('Error fetching profile data:', error);
         // Handle the error if needed
@@ -52,7 +64,8 @@ const Profile = () => {
     };
     fetchProfileData();
   }, []);
-
+  console.log(currentUser)
+  console.log(foundUser)
   setTimeout(() => {
     localStorage.setItem('userProjects', JSON.stringify(projects));
   }, 1000);
@@ -148,9 +161,13 @@ const deleteSkills = async () => {
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
-        <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-          Hello {currentUser.data.username}, Welcome back!
-        </h2>
+
+      {currentUser ? ( // Conditionally render content only if currentUser exists
+          <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+            Hello {currentUser.data.username}, Welcome back!
+          </h2>
+        ) : null}
+
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
           <div className="row">
             <div className="col-6">
@@ -160,9 +177,16 @@ const deleteSkills = async () => {
                   className='user-avatar mt-2 rounded'
                 />
             </div>
+            
             <div className="col-6 mt-3">
-              <p className='nasa-black text-center text-uppercase'>{currentUser.data.username}</p>
-              <p className='nasa-black text-center text-uppercase'>{currentUser.data.email}</p>
+            {currentUser ? (
+              <div>
+                <p className='nasa-black text-center text-uppercase'>{currentUser.data.username}</p>
+                <p className='nasa-black text-center text-uppercase'>{currentUser.data.email}</p>
+              </div>
+              
+            ) : (null)}
+              
               <p className='nasa-black text-center text-uppercase'>{foundUser.github}</p>
               <p className='nasa-black text-center text-uppercase'>{foundUser.linkedin}</p>
               <p className='nasa-black text-center text-uppercase'>{foundUser.location}</p>
@@ -173,6 +197,7 @@ const deleteSkills = async () => {
                 <p className='nasa-black text-center text-uppercase'>Not Available</p>
               )}
             </div>
+
           </div>
 
           <h2 className='nasa-black text-center text-uppercase mt-3'>Skills</h2>
@@ -210,45 +235,48 @@ const deleteSkills = async () => {
               You have no saved skills, add some below to show off how great you are!
             </div>}
           
-
-          {/* Conditionally render buttons if the user is the owner of the profile */}
-          {foundUser.email === currentUser.data.email && (
-            <div className="text-center hand-writing">
-              {/* Conditionally render different buttons as confirmation of DELETE action */}
-              {confirmation ? ( 
-              <div className={`${fadeButton ? 'fade-in' : 'fade-out'}`}>
-                <button
-                  className='btn btn-warning btn-lg mb-4 mx-2'
-                  onClick={cancelDelete}
-                >
-                  Cancel
-                </button>
-                <button
-                  type='button'
-                  className='btn btn-danger btn-lg mb-4 mx-2'
-                  onClick={deleteSkills}
-                >
-                  Confirm
-                </button> 
-                <p className="text-danger fw-bold">This will delete all your skills??</p>
-              </div> ) : (
-              <div className={`${fadeButton ? 'fade-out' : 'fade-in'}`}>
-                <button
-                  className='btn btn-warning btn-lg mb-4 mx-2'
-                  onClick={updateSkills}
-                >
-                  Add Skills
-                </button>
-                <button
-                  type='button'
-                  className='btn btn-danger btn-lg mb-4 mx-2'
-                  onClick={confirmDelete}
+          {currentUser ? (<div>
+            {foundUser.email === currentUser.data.email && (
+              <div className="text-center hand-writing">
+                {/* Conditionally render different buttons as confirmation of DELETE action */}
+                {confirmation ? ( 
+                <div className={`${fadeButton ? 'fade-in' : 'fade-out'}`}>
+                  <button
+                    className='btn btn-warning btn-lg mb-4 mx-2'
+                    onClick={cancelDelete}
                   >
-                  Delete Skills
-                </button>
-              </div> ) }
-            </div>
-          )}
+                    Cancel
+                  </button>
+                  <button
+                    type='button'
+                    className='btn btn-danger btn-lg mb-4 mx-2'
+                    onClick={deleteSkills}
+                  >
+                    Confirm
+                  </button> 
+                  <p className="text-danger fw-bold">This will delete all your skills??</p>
+                </div> ) : (
+                <div className={`${fadeButton ? 'fade-out' : 'fade-in'}`}>
+                  <button
+                    className='btn btn-warning btn-lg mb-4 mx-2'
+                    onClick={updateSkills}
+                  >
+                    Add Skills
+                  </button>
+                  <button
+                    type='button'
+                    className='btn btn-danger btn-lg mb-4 mx-2'
+                    onClick={confirmDelete}
+                    >
+                    Delete Skills
+                  </button>
+                </div> ) }
+              </div>
+            )}</div>) : (null) } 
+            
+            
+          {/* Conditionally render buttons if the user is the owner of the profile */}
+          
         </div>
 
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
