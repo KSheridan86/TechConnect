@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
 import axios from 'axios';
+import { useAnimation } from '../components/AnimationContext';
 
 // Create an Axios instance with a base URL and credentials
 const api = axios.create({
@@ -21,10 +22,20 @@ const Profile = () => {
   const [foundUser, setFoundUser] = useState({}); 
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
+  const { shouldAnimate, setShouldAnimate } = useAnimation();
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
+
+  useEffect(() => {
+    if (shouldAnimate) {
+        setShouldSlideOut(true);
+        setTimeout(() => {
+            setShouldSlideOut(false);
+        }, 1000);
+    }
+}, [shouldAnimate, setShouldAnimate, navigate]);
 
   // Fetch user profile data when the component mounts
   useEffect(() => {

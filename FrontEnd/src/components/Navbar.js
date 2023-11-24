@@ -1,23 +1,13 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Link, Routes, Navigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
-import Home from '../views/Home';
-import Developers from '../views/Developers';
-import Profile from '../views/Profile';
-import SignUp from '../views/SignUp';
-import DeleteUser from '../views/DeleteUser';
-import Login from '../views/Login';
-import Logout from '../views/Logout';
-import ConfirmDelete from '../views/ConfirmDelete';
-import EditProfile from '../views/EditProfile';
-import CreateProfile from '../views/CreateProfile';
-import AddSkills from '../views/AddSkills';
-import AddProjects from '../views/AddProjects';
-import ProjectDetail from '../views/ProjectDetail';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
 
-const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
+const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
+  const navigate = useNavigate();
+  const { setShouldAnimate } = useAnimation();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
 
@@ -29,81 +19,70 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout, userData }) => {
     setIsNavOpen(false);
   };
 
+  const handleNavLinkClick = (link) => {
+    setShouldAnimate(true);
+    closeNav();
+    setTimeout(() => {
+      setShouldAnimate(false);
+      navigate(link);
+    }, 1000);
+  };
+
   return (
-    <Router>
-      <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
-        <div className="container">
-          <Link className="navbar-brand nasa text-uppercase" to="/">
-            <FontAwesomeIcon icon={faCodeFork} /> TechConnect
-          </Link>
-          <button
-            className="navbar-toggler"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navbarNav"
-            aria-controls="navbarNav"
-            aria-expanded={isNavOpen ? 'true' : 'false'}
-            aria-label="Toggle navigation"
-            onClick={toggleNav}
-          >
-            <span className="navbar-toggler-icon"><FontAwesomeIcon icon={faStream} /></span>
-          </button>
-          <div
-            className={`collapse navbar-collapse${isNavOpen ? ' show' : ''}`}
-            id="navbarNav"
-          >
-            <ul className="navbar-nav text-center">
+    <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
+      <div className="container">
+        <span className="navbar-brand nasa text-uppercase" to="" onClick={() => handleNavLinkClick('/')} >
+          <FontAwesomeIcon icon={faCodeFork} /> TechConnect
+        </span>
+        <button
+          className="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded={isNavOpen ? 'true' : 'false'}
+          aria-label="Toggle navigation"
+          onClick={toggleNav}
+        >
+          <span className="navbar-toggler-icon"><FontAwesomeIcon icon={faStream} /></span>
+        </button>
+        <div
+          className={`collapse navbar-collapse${isNavOpen ? ' show' : ''}`}
+          id="navbarNav"
+        >
+          <ul className="navbar-nav text-center">
+            <li className="nav-item">
+              <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/')}>
+                Home
+              </span>
+            </li>
+            <li className="nav-item">
+              <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/developers')}>
+                Developers
+              </span>
+            </li>
+            {isLoggedIn && currentUser.data.account_type === "Developer" && (
               <li className="nav-item">
-                <Link className="nav-link nasa" to="/" onClick={closeNav}>
-                  Home
-                </Link>
+                <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/profile')}>
+                  Profile
+                </span>
               </li>
+            )}
+            {isLoggedIn ? 
               <li className="nav-item">
-                <Link className="nav-link nasa" to="/developers" onClick={closeNav}>
-                  Developers
-                </Link>
-              </li>
-              {isLoggedIn && currentUser.data.account_type === "Developer" && (
-                <li className="nav-item">
-                  <Link className="nav-link nasa" to="/profile" onClick={closeNav}>
-                    Profile
-                  </Link>
-                </li>
-              )}
-              { isLoggedIn ? 
-                <li className="nav-item">
-                  <Link className="nav-link nasa" to="/logout" onClick={closeNav}>
-                    Logout
-                  </Link>
-                </li> : 
-                <li className="nav-item">
-                  <Link className="nav-link nasa" to="/login" onClick={closeNav}>
-                    Login
-                  </Link>
-                </li>}
-            </ul>
-          </div>
+                <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/logout')}>
+                  Logout
+                </span>
+              </li> : 
+              <li className="nav-item">
+                <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/login')}>
+                  Login
+                </span>
+              </li>}
+          </ul>
         </div>
-      </nav>
-      <Routes>
-        <Route path="/" element={<Home loggedIn={isLoggedIn} />} />
-        <Route path="/developers" element={<Developers />} />
-        {/* <Route path="/profile" element={
-            isLoggedIn && currentUser.data.account_type === 'Developer' ? (
-              <Profile /> ) : ( <Navigate to="/" /> )} /> */}
-        <Route path="/profile" element={<Profile />} />
-        <Route path="/signup" element={<SignUp onLogin={onLogin} />} />
-        <Route path="/delete-user" element={<DeleteUser onLogout={onLogout} />} />
-        <Route path="/login" element={<Login onLogin={onLogin} />} /> 
-        <Route path="/logout" element={<Logout onLogout={onLogout} />} />
-        <Route path="/confirm-delete/:id" element={<ConfirmDelete />} />
-        <Route path="/edit-profile" element={<EditProfile />} />
-        <Route path="/create-profile" element={<CreateProfile />} />
-        <Route path="/add-skills" element={<AddSkills />} />
-        <Route path="/add-projects" element={<AddProjects />} />
-        <Route path="/project/:projectId" element={<ProjectDetail />} />
-      </Routes>
-    </Router>
+      </div>
+    </nav>
   );
 };
 

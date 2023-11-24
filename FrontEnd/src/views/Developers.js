@@ -1,13 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { useAnimation } from '../components/AnimationContext';
 
 const Developers = () => {
     const [users, setUsers] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
     const [filteredUsers, setFilteredUsers] = useState([]);
+    const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
+    const { shouldAnimate, setShouldAnimate } = useAnimation();
     const navigate = useNavigate();
+
+    useEffect(() => {
+      if (shouldAnimate) {
+        setShouldSlideOut(true);
+        setTimeout(() => {
+          setShouldSlideOut(false);
+      }, 1000);
+      }
+    }, [shouldAnimate, setShouldAnimate, navigate]);
 
     const api = axios.create({
         baseURL: 'http://127.0.0.1:8000/api/',
@@ -45,6 +57,7 @@ const Developers = () => {
 
     const handleUserClick = (userId) => {
         // Use navigate to go to the profile page and pass user.id as state
+        setShouldSlideOut(true);
         navigate(`/profile`, { state: { userId } });
     };
 
@@ -52,7 +65,7 @@ const Developers = () => {
         <div className="container mt-1">
           <div className="row justify-content-center">
       
-            <div className="col-10 col-md-5 glass-box p-2 mt-3 text-center max animate-slide-left">
+            <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
               <h1 className="fw-bold p-2 text-center nasa text-uppercase">Discover Talented Developers!</h1>
               <p className="p-2">
                 Looking for the right developer for your project?
@@ -87,7 +100,7 @@ const Developers = () => {
            
             </div>
       
-            <div className="col-12 col-md-6 max mb-5 animate-slide-right">
+            <div className={`col-12 col-md-6 max mb-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
               <div className="glass-box m-3 p-2 text-center">
       
                 <p>

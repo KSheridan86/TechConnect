@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { useAnimation } from '../components/AnimationContext';
 
 
 const api = axios.create({
@@ -20,17 +21,16 @@ const Login = ({ onLogin }) => {
   const [successMessage, setSuccessMessage] = useState(false);
   const [transition, setTransition] = useState(false);
   const navigate = useNavigate();
+  const { shouldAnimate, setShouldAnimate } = useAnimation();
 
-  // useEffect(() => {
-  //   const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
-  //   if (storedShouldSlideOut) {
-  //     setTimeout(() => {
-  //       localStorage.removeItem('shouldSlideOut');
-  //     }, 1000);
-  //     const check = JSON.parse(localStorage.getItem('shouldSlideOut'));
-  //     console.log('storedShouldSlideOut:', check);
-  //   }
-  // }, []);
+  useEffect(() => {
+    if (shouldAnimate) {
+      setShouldSlideOut(true);
+      setTimeout(() => {
+        setShouldSlideOut(false);
+    }, 1000);
+    }
+  }, [shouldAnimate, setShouldAnimate, navigate]);
 
   const validateLoginDetails = () => {
     let isValid = true;

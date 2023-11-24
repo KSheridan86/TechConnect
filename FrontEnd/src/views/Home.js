@@ -1,70 +1,21 @@
-import React, {useState } from 'react';
-// import axios from 'axios';
-// import { useLocation } from 'react-router-dom';
+import React, {useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useAnimation } from '../components/AnimationContext';
 import logo from "../images/logo.png";
 
-// const api = axios.create({
-//     baseURL: 'http://127.0.0.1:8000/api/',
-//     withCredentials: true,
-// });
-
-const Home = ({loggedIn}) => {
-    // const [UserData, setUserData] = useState(null);
-    // const [profileData, setProfileData] = useState(null);
-    // const location = useLocation();
+const Home = () => {
     const navigate = useNavigate();
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
-    // const dataFromLogin = location.state?.data;
+    const { shouldAnimate, setShouldAnimate } = useAnimation();
 
-    // useEffect(() => {
-    //     console.log('Home useEffect triggered');
-    //     const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
-    //     console.log('storedShouldSlideOut:', storedShouldSlideOut);
-    //     if (storedShouldSlideOut === true) {
-    //         setShouldSlideOut(true);
-    //         console.log('shouldSlideOut set to true');
-    //         // localStorage.removeItem('shouldSlideOut');
-    //     }
-    // }, [shouldSlideOut]);
-    
-    // useEffect(() => {
-    //     // Check if UserData & profileData exists in local storage
-    //     const storedProfileData = JSON.parse(localStorage.getItem('profileData'));
-    //     const storedUserData = JSON.parse(localStorage.getItem('UserData'));
-    //     if (storedProfileData) {
-    //         setProfileData(storedProfileData);
-    //     }
-    //     if (storedUserData) {
-    //         setUserData(storedUserData);
-    //     }
-    //     // Capture the initial value of 'shouldSlideOut'
-    //     const storedShouldSlideOut = JSON.parse(localStorage.getItem('shouldSlideOut'));
-    //     setShouldSlideOut(storedShouldSlideOut); // Update the state variable
-
-    //     if (dataFromLogin !== undefined || loggedIn) {
-    //         fetchProfileData(dataFromLogin);
-    //     } else if (location.state?.userId) {
-    //         fetchProfileData(location.state.userId);
-    //     }
-    
-    // }, [dataFromLogin, loggedIn, location.state?.userId]);
-
-    // const fetchProfileData = async (userId) => {
-    //     try {
-    //         const response = await api.get(`users/${userId}`);
-    //         setUserData(response.data);
-    //         // Store the profileData in local storage
-    //         localStorage.setItem('UserData', JSON.stringify(response.data));
-
-    //         setProfileData(response.data.profile);
-    //         // Store the profileData in local storage
-    //         localStorage.setItem('profileData', JSON.stringify(response.data.profile));
-
-    //     } catch (error) {
-    //         // console.error('Failed to fetch profile data:', error);
-    //     }
-    // };
+    useEffect(() => {
+        if (shouldAnimate) {
+            setShouldSlideOut(true);
+            setTimeout(() => {
+                setShouldSlideOut(false);
+            }, 1000);
+        }
+    }, [shouldAnimate, setShouldAnimate, navigate]);
 
     const handleSignUp = (accountType) => {
         setShouldSlideOut(true);
