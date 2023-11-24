@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -63,9 +63,15 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
             </li>
             {isLoggedIn && currentUser.data.account_type === "Developer" && (
               <li className="nav-item">
-                <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/profile')}>
-                  Profile
-                </span>
+                {currentUser ? (
+                  <Link to="/profile" className="nav-link nasa">
+                    Profile
+                  </Link>
+                ) : (
+                  <span className="nav-link nasa" onClick={() => handleNavLinkClick('/profile')}>
+                    Profile
+                  </span>
+                )}
               </li>
             )}
             {isLoggedIn ? 

@@ -58,7 +58,9 @@ const Developers = () => {
     const handleUserClick = (userId) => {
         // Use navigate to go to the profile page and pass user.id as state
         setShouldSlideOut(true);
-        navigate(`/profile`, { state: { userId } });
+        setTimeout(() => {
+          navigate(`/profile`, { state: { userId } });
+      }, 1000);
     };
 
     return (
@@ -97,30 +99,37 @@ const Developers = () => {
                   </button>
                 </div>
               </div>
-           
             </div>
       
             <div className={`col-12 col-md-6 max mb-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
-              <div className="glass-box m-3 p-2 text-center">
+              <div className="glass-box m-3 text-center">
       
-                <p>
+                <div className="p-3">
                   <p className="fs-3 mb-2 nasa text-uppercase">Searching made easy!</p>
-                  <p className="fs-5 mt-2 mb-1 nasa">Name</p>
-                  Have a specific developer in mind?
-                  Search their name to quickly find their profile and portfolio.
+                  <div className="fs-5 mt-2 mb-1 nasa">Name</div>
+                  <p>
+                    Have a specific developer in mind?
+                    Search their name to quickly find their profile and portfolio.
+                  </p>
                   <hr />
-                  <p className="fs-5 mt-3 mb-1 nasa">Tech Stack</p>
-                  Use our technology stack filter to discover developers who specialize in
-                  what you need.
+                  <div className="fs-5 mt-3 mb-1 nasa">Tech Stack</div>
+                  <p>
+                    Use our technology stack filter to discover developers who specialize in
+                    what you need.
+                  </p>
                   <hr />
-                  <p className="fs-5 mt-3 mb-1 nasa">Experience</p>
-                  Find developers with the right level of experience for your project,
-                  whether you're looking for seasoned veterans or fresh talent.
+                  <div className="fs-5 mt-3 mb-1 nasa">Experience</div>
+                  <p>
+                    Find developers with the right level of experience for your project,
+                    whether you're looking for seasoned veterans or fresh talent.
+                  </p>
                   <hr />
-                  <p className="fs-5 mt-3 mb-1 nasa">Location</p>
-                  Prefer to work with developers in your area or time zone?
-                  Our location filter helps you narrow down your search.
-                </p>
+                  <div className="fs-5 mt-3 mb-1 nasa">Location</div>
+                  <p>
+                    Prefer to work with developers in your area or time zone?
+                    Our location filter helps you narrow down your search.
+                  </p>
+                </div>
               </div>
             </div>
           </div>
@@ -135,7 +144,7 @@ const Developers = () => {
             filteredUsers.map((user) => (
               <div
                 key={user.id}
-                className="col-12 col-md-4 mb-3"
+                className={`col-12 col-md-4 mb-3 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
                 onClick={() => handleUserClick(user.id)}
               >
                 <div className="result-box glass-box p-2">

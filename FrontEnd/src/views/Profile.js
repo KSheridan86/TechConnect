@@ -25,6 +25,7 @@ const Profile = () => {
   const { shouldAnimate, setShouldAnimate } = useAnimation();
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
+  const [searchedProfile, setSearchedProfile] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -39,9 +40,10 @@ const Profile = () => {
 
   // Fetch user profile data when the component mounts
   useEffect(() => {
+    setSearchedProfile(location.state?.userId);
     const fetchProfileData = async () => {
       try {
-        const searchedProfile = location.state?.userId;
+        console.log(searchedProfile)
         // Configuration for the API request, including authorization header
         const config = {
           headers: {
@@ -52,6 +54,7 @@ const Profile = () => {
         if (searchedProfile) {
           const response = await api.get(`users/profile/${searchedProfile}`, config);
           await setFoundUser(response.data);
+          console.log(response.data)
           await setProjects(response.data.projects)
         } else if (currentUser?.data?.id) {
           const response = await api.get(`users/profile/${currentUser.data.id}`, config);
@@ -64,10 +67,14 @@ const Profile = () => {
         // Handle the error if needed
       }
     };
-    fetchProfileData();
+    setTimeout(() => {
+      fetchProfileData();
+      setSearchedProfile('');
+    }, 1500);
+    
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [searchedProfile]);
   
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
@@ -160,48 +167,74 @@ const Profile = () => {
 
       {currentUser ? ( // Conditionally render content only if currentUser exists
           <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-            Hello {currentUser.data.username}, Welcome back!
+            {foundUser.email === currentUser.data.email && (
+            <p className="nasa">
+              Hello {currentUser.data.username}, Welcome back!
+            </p>
+            
+            )}
           </h2>
         ) : null}
 
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
-          <div className="row">
-            <div className="col-6">
-                <img
-                  src={foundUser && foundUser.avatar ? `${baseAvatarUrl}${foundUser.avatar}` : defaultAvatar}
-                  alt='User Avatar'
-                  className='user-avatar mt-2 rounded'
-                />
-            </div>
-            
-            <div className="col-6 mt-3">
-            {currentUser ? (
-              <div>
-                <p className='nasa-black text-center text-uppercase'>{currentUser.data.username}</p>
-                <p className='nasa-black text-center text-uppercase'>{currentUser.data.email}</p>
+        <div className="row">
+          <div className="col-md-12">
+            <div className="row">
+              <div className="col-7">
+                {foundUser && foundUser.avatar && (
+                  <img
+                    src={`${baseAvatarUrl}${foundUser.avatar}`}
+                    alt='User Avatar'
+                    className='user-avatar mt-2 rounded'
+                  />
+                )}
               </div>
-              
-            ) : (null)}
-              
-              <p className='nasa-black text-center text-uppercase'>{foundUser.github}</p>
-              <p className='nasa-black text-center text-uppercase'>{foundUser.linkedin}</p>
-              <p className='nasa-black text-center text-uppercase'>{foundUser.location}</p>
-              {foundUser.available === true ? (
-                <p className='nasa-black text-center text-uppercase'>Available for work on <br />{foundUser.date_available}</p>
-                
-              ) : (
-                <p className='nasa-black text-center text-uppercase'>Not Available</p>
-              )}
+              <div className="col-5 mt-3">
+                {foundUser && (
+                  <div>
+                    <p className='nasa-black text-center text-uppercase'>{`${foundUser.firstname} ${foundUser.lastname}`}</p>
+                    <p className='nasa-black text-center text-uppercase'>{`Location: ${foundUser.location || 'Not specified'}`}</p>
+                    <p className='nasa-black text-center text-uppercase'>{`Y.O.E: ${foundUser.years_of_experience || 'Not specified'}`}</p>
+                    <p className='nasa-black text-center text-uppercase'>
+                      <a href={foundUser.github} className="profile-link" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+                    </p>
+                    <p className='nasa-black text-center text-uppercase'>
+                      <a href={foundUser.linkedin} className="profile-link" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+                    </p>
+                    <p className='nasa-black text-center text-uppercase'>
+                      <a href={foundUser.portfolio_url} className="profile-link" target="_blank" rel="noopener noreferrer">Portfolio</a>
+                    </p>
+                    {foundUser.available && (
+                      <p className='nasa-black text-center text-uppercase'>{`Available from: ${foundUser.date_available || 'Not specified'}`}</p>
+                    )}
+                    {!foundUser.available && (
+                      <p className='nasa-black text-center text-uppercase'>Not Available</p>
+                    )}
+                  </div>
+                )}
+              </div>
             </div>
-
           </div>
 
-          <h2 className='nasa-black text-center text-uppercase mt-3'>Skills</h2>
+          <div className="col-md-12 mt-3">
+            {foundUser && (
+              <div>
+                <p className='nasa-black text-center text-uppercase'>
+                  <a href={`mailto:${foundUser.email}`} className="email-link">{foundUser.email}</a>
+                </p>
+                <p className='nasa-black text-center text-uppercase p-3'>Introduction: <br />{` ${foundUser.intro_text || 'Not provided'}`}</p>
+                <p className='nasa-black text-center text-uppercase p-3'>Biography: <br />{` ${foundUser.biography_text || 'Not provided'}`}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+          <h2 className='nasa-black text-center text-uppercase mt-1'>Skills</h2>
           {isSkillsDefinedAndNotEmpty ? (<div>
 
             {foundUser.skills_level_1 && (
               <div>
-                <h5 className='nasa-black text-center text-uppercase mt-3'>Your level 1 Skills:</h5>
+                <h5 className='nasa-black text-center text-uppercase mt-3'>Level 1 Skills:</h5>
                 <p className='nasa-black text-center mt-3'>
                   {Array.isArray(foundUser.skills_level_1)
                     ? foundUser.skills_level_1
@@ -214,7 +247,7 @@ const Profile = () => {
               </div>
             )}
 
-            <h5 className='nasa-black text-center text-uppercase mt-3'>Your level 2 Skills:</h5>
+            <h5 className='nasa-black text-center text-uppercase mt-3'>Level 2 Skills:</h5>
             {foundUser.skills_level_2 && (
               <p className='nasa-black text-center mt-3'>
                 {Array.isArray(foundUser.skills_level_2)
@@ -231,7 +264,8 @@ const Profile = () => {
               You have no saved skills, add some below to show off how great you are!
             </div>}
           
-          {currentUser ? (<div>
+          {currentUser ? (
+          <div>
             {foundUser.email === currentUser.data.email && (
               <div className="text-center hand-writing">
                 {/* Conditionally render different buttons as confirmation of DELETE action */}
@@ -298,24 +332,29 @@ const Profile = () => {
               </div>
             )}
           </div>
+          {currentUser ? (
           <div className='text-center mt-5 mb-5 hand-writing'>
+            {foundUser.email === currentUser.data.email && (
             <button
               className='btn btn-warning btn-lg mx-2'
               onClick={addProjects}
             >
               Add Projects
-            </button>
-          </div>
+            </button> )}
+          </div> ) : (null) }
         </div>
-
+        {currentUser ? (
         <div className='text-center mt-2 mb-1 hand-writing'>
+          {foundUser.email === currentUser.data.email && (
           <button
             className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
             onClick={updateProfile}
           >
             Edit Profile
           </button>
+          )}
         </div>
+        ) : (null) }
         <div style={{ height: '8rem' }}></div>
       </div>
     </div>
