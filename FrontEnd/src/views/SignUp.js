@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -10,6 +10,7 @@ const api = axios.create({
 });
 
 const SignUp = ({ onLogin }) => {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const location = useLocation();
   const accountType = location.state?.accountType;
   const [errors, setErrors] = useState({});
@@ -33,6 +34,29 @@ const SignUp = ({ onLogin }) => {
     // Clear error message for the current field when user starts typing
     setErrors((prevErrors) => ({ ...prevErrors, [name]: '' }));
   };
+
+    // Check if user is already logged in
+    const checkLoginStatus = async () => {
+      try {
+        const config = {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        };
+        // Make a GET request to your Django backend endpoint for login check
+        const response = await api.post('users/login-check/', {currentUser}, config);
+        if (response.data.received.currentUser.data.id !== null) {
+          // User is logged in, redirect to the home page
+          navigate('/');
+        }
+      } catch (error) {
+        // This request will always fail if user is not logged in, that's the point!
+        // To redirect based on the status of the user in the backend.
+      }
+    };
+    useEffect(() => {
+      checkLoginStatus();
+    }, []);
 
   const validateForm = () => {
     let isValid = true;

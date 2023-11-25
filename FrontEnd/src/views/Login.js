@@ -12,6 +12,7 @@ const api = axios.create({
 });
 
 const Login = ({ onLogin }) => {
+  const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
@@ -31,6 +32,29 @@ const Login = ({ onLogin }) => {
     }, 1000);
     }
   }, [shouldAnimate, setShouldAnimate, navigate]);
+
+  // Check if user is already logged in
+  const checkLoginStatus = async () => {
+    try {
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      };
+      // Make a GET request to your Django backend endpoint for login check
+      const response = await api.post('users/login-check/', {currentUser}, config);
+      if (response.data.received.currentUser.data.id !== null) {
+        // User is logged in, redirect to the home page
+        navigate('/');
+      }
+    } catch (error) {
+      // This request will always fail if user is not logged in, that's the point!
+      // To redirect based on the status of the user in the backend.
+    }
+  };
+  useEffect(() => {
+    checkLoginStatus();
+  }, []);
 
   const validateLoginDetails = () => {
     let isValid = true;

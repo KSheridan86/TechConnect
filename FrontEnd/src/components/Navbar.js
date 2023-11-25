@@ -70,7 +70,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                 Developers
               </span>
             </li>
-            {isLoggedIn && currentUser.data.account_type === "Developer" && (
+            {currentUser && currentUser.data.account_type === "Developer" && (
               <li className="nav-item">
                 {currentUser ? (
                   <span className="nav-link nasa" onClick={() => userProfileClick()}>
@@ -83,7 +83,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                 )}
               </li>
             )}
-            {isLoggedIn ? 
+            {currentUser ? 
               <li className="nav-item">
                 <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/logout')}>
                   Logout
