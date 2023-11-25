@@ -136,7 +136,7 @@ p {
 }
 
 .fill-screen {
-  min-height: 95vh;
+  min-height: 90vh;
 }
 
 /* Back to top btn styles & animation */
@@ -335,7 +335,7 @@ div > a {
 
 /* not sure?? */
 .max {
-  max-height: 75vh;
+  max-height: 67vh;
 }
 
 .project-image {

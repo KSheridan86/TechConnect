@@ -36,6 +36,7 @@ const Developers = () => {
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); 
+
     const handleSearch = () => {
         // Filter users based on the search term
         const filteredUsers = users.filter((user) =>
@@ -48,6 +49,16 @@ const Developers = () => {
         // Update the state with the filtered users
         setFilteredUsers(filteredUsers);
         setSearchButtonClicked(true);
+
+        setTimeout(() => {
+          // Scroll to the container with search results
+        const resultsContainer = document.getElementById('resultsContainer');
+
+        if (resultsContainer) {
+            resultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+        }, 750);
+        
     };
 
     const handleInputChange = (e) => {
@@ -135,7 +146,7 @@ const Developers = () => {
           </div>
       
              {/* New container for the filtered user list */}
-    <div className="row justify-content-center mt-3">
+    <div id="resultsContainer" className="row justify-content-center mt-3">
       <div className="col-10 text-center max animate-slide-left">
         <div className="row">
           {searchButtonClicked && searchTerm && filteredUsers.length === 0 ? (

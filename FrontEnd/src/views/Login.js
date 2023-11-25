@@ -122,7 +122,7 @@ const Login = ({ onLogin }) => {
   };
 
   return (
-    <div className="container login fill-screen main-content">
+    <div className="container login mt-4 fill-screen main-content">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
       {!successMessage ? (
         <div className='row'>
