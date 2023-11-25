@@ -25,7 +25,6 @@ const Profile = () => {
   const { shouldAnimate, setShouldAnimate } = useAnimation();
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
-  const [searchedProfile, setSearchedProfile] = useState('');
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -56,7 +55,6 @@ const Profile = () => {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
           setProjects(response.data.projects);
-          console.log(response.data);
         }
         
       } catch (error) {
@@ -67,7 +65,7 @@ const Profile = () => {
     fetchProfileData();
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state?.userId, currentUser]);
+  }, [location.state?.userId]);
   
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {

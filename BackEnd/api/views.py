@@ -118,12 +118,10 @@ def user_profile(request, user_id=None):
     # pylint: disable=E1101
     if user_id:
         user = get_object_or_404(User, id=user_id)
-        print("ID:", user_id)
     else:
         user = request.user
     profile = DeveloperProfile.objects.get(user=user)
     projects = Project.objects.filter(developer=profile)
-    print("Projects:", projects)
 
     serializer = DeveloperProfileSerializer(
         profile, context={'projects': projects})
