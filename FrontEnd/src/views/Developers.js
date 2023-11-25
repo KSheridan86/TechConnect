@@ -64,7 +64,7 @@ const Developers = () => {
     };
 
     return (
-        <div className="container mt-1">
+        <div className="container mt-4 fill-screen">
           <div className="row justify-content-center">
       
             <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>

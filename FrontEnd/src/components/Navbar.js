@@ -28,6 +28,15 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
     }, 1000);
   };
 
+  const userProfileClick = () => {
+    setShouldAnimate(true);
+    closeNav();
+    setTimeout(() => {
+      setShouldAnimate(false);
+      navigate('/profile');
+    }, 1000);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
       <div className="container">
@@ -64,9 +73,9 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
             {isLoggedIn && currentUser.data.account_type === "Developer" && (
               <li className="nav-item">
                 {currentUser ? (
-                  <Link to="/profile" className="nav-link nasa">
-                    Profile
-                  </Link>
+                  <span className="nav-link nasa" onClick={() => userProfileClick()}>
+                  Profile
+                </span>
                 ) : (
                   <span className="nav-link nasa" onClick={() => handleNavLinkClick('/profile')}>
                     Profile

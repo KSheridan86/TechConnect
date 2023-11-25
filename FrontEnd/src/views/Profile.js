@@ -40,10 +40,9 @@ const Profile = () => {
 
   // Fetch user profile data when the component mounts
   useEffect(() => {
-    setSearchedProfile(location.state?.userId);
+    
     const fetchProfileData = async () => {
       try {
-        console.log(searchedProfile)
         // Configuration for the API request, including authorization header
         const config = {
           headers: {
@@ -51,15 +50,13 @@ const Profile = () => {
           },
         };
         // Make a GET request to retrieve the user profile and set variables
-        if (searchedProfile) {
-          const response = await api.get(`users/profile/${searchedProfile}`, config);
-          await setFoundUser(response.data);
-          console.log(response.data)
-          await setProjects(response.data.projects)
-        } else if (currentUser?.data?.id) {
-          const response = await api.get(`users/profile/${currentUser.data.id}`, config);
-          await setFoundUser(response.data);
-          await setProjects(response.data.projects)
+        const profileId = location.state?.userId || currentUser?.data.id;
+
+        if (profileId) {
+          const response = await api.get(`users/profile/${profileId}`, config);
+          setFoundUser(response.data);
+          setProjects(response.data.projects);
+          console.log(response.data);
         }
         
       } catch (error) {
@@ -67,14 +64,10 @@ const Profile = () => {
         // Handle the error if needed
       }
     };
-    setTimeout(() => {
-      fetchProfileData();
-      setSearchedProfile('');
-    }, 1500);
-    
+    fetchProfileData();
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchedProfile]);
+  }, [location.state?.userId, currentUser]);
   
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
@@ -190,29 +183,41 @@ const Profile = () => {
                 )}
               </div>
               <div className="col-5 mt-3">
-                {foundUser && (
-                  <div>
-                    <p className='nasa-black text-center text-uppercase'>{`${foundUser.firstname} ${foundUser.lastname}`}</p>
-                    <p className='nasa-black text-center text-uppercase'>{`Location: ${foundUser.location || 'Not specified'}`}</p>
-                    <p className='nasa-black text-center text-uppercase'>{`Y.O.E: ${foundUser.years_of_experience || 'Not specified'}`}</p>
-                    <p className='nasa-black text-center text-uppercase'>
-                      <a href={foundUser.github} className="profile-link" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
-                    </p>
-                    <p className='nasa-black text-center text-uppercase'>
-                      <a href={foundUser.linkedin} className="profile-link" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
-                    </p>
-                    <p className='nasa-black text-center text-uppercase'>
-                      <a href={foundUser.portfolio_url} className="profile-link" target="_blank" rel="noopener noreferrer">Portfolio</a>
-                    </p>
-                    {foundUser.available && (
-                      <p className='nasa-black text-center text-uppercase'>{`Available from: ${foundUser.date_available || 'Not specified'}`}</p>
-                    )}
-                    {!foundUser.available && (
-                      <p className='nasa-black text-center text-uppercase'>Not Available</p>
-                    )}
-                  </div>
-                )}
-              </div>
+  {foundUser && (
+    <div>
+      {foundUser.firstname && (
+        <p className='nasa-black text-center text-uppercase'>{`${foundUser.firstname} ${foundUser.lastname}`}</p>
+      )}
+      {foundUser.location && (
+        <p className='nasa-black text-center text-uppercase'>{`Location: ${foundUser.location}`}</p>
+      )}
+      {foundUser.years_of_experience && (
+        <p className='nasa-black text-center text-uppercase'>{`Y.O.E: ${foundUser.years_of_experience}`}</p>
+      )}
+      {foundUser.github && (
+        <p className='nasa-black text-center text-uppercase'>
+          <a href={foundUser.github} className="profile-link" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
+        </p>
+      )}
+      {foundUser.linkedin && (
+        <p className='nasa-black text-center text-uppercase'>
+          <a href={foundUser.linkedin} className="profile-link" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
+        </p>
+      )}
+      {foundUser.portfolio_url && (
+        <p className='nasa-black text-center text-uppercase'>
+          <a href={foundUser.portfolio_url} className="profile-link" target="_blank" rel="noopener noreferrer">Portfolio</a>
+        </p>
+      )}
+      {foundUser.available && foundUser.date_available && (
+        <p className='nasa-black text-center text-uppercase'>{`Available from: ${foundUser.date_available}`}</p>
+      )}
+      {!foundUser.available && (
+        <p className='nasa-black text-center text-uppercase'>Not Available</p>
+      )}
+    </div>
+  )}
+</div>
             </div>
           </div>
 
