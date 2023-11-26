@@ -5,7 +5,6 @@ The views to control the API.
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
 from django.db import IntegrityError
-from django.http import JsonResponse
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
 from rest_framework.permissions import IsAuthenticated, AllowAny
@@ -60,15 +59,6 @@ class MyTokenObtainPairView(TokenObtainPairView):
     View for the token.
     """
     serializer_class = MyTokenObtainPairSerializer
-
-
-@api_view(['POST'])
-def login_check(request):
-    """
-    Check if the user is authenticated
-    """
-    received = request.data
-    return JsonResponse({'received': received})
 
 
 @api_view(['POST'])

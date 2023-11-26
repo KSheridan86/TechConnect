@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 const api = axios.create({
   baseURL: 'http://127.0.0.1:8000/api/',
@@ -15,10 +15,10 @@ const SignUp = ({ onLogin }) => {
   const accountType = location.state?.accountType;
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
-  // const [message, setMessage] = useState('');
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
   const [transition, setTransition] = useState(false);
+  const [notAllowed, setNotAllowed] = useState(false);
   const initialUserData = {
     username: '',
     email: '',
@@ -36,27 +36,23 @@ const SignUp = ({ onLogin }) => {
   };
 
     // Check if user is already logged in
-    const checkLoginStatus = async () => {
-      try {
-        const config = {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-        };
-        // Make a GET request to your Django backend endpoint for login check
-        const response = await api.post('users/login-check/', {currentUser}, config);
-        if (response.data.received.currentUser.data.id !== null) {
-          // User is logged in, redirect to the home page
+  const checkLoginStatus = async () => {
+    let alreadyLoggedIn = currentUser;
+    if (alreadyLoggedIn !== null) {
+      setNotAllowed(true);
+    }
+  };
+  useEffect(() => {
+    checkLoginStatus();
+    if (notAllowed) {
+      setTimeout(() => {
+        setTransition(true);
+        setTimeout(() => {
           navigate('/');
-        }
-      } catch (error) {
-        // This request will always fail if user is not logged in, that's the point!
-        // To redirect based on the status of the user in the backend.
-      }
-    };
-    useEffect(() => {
-      checkLoginStatus();
-    }, []);
+        }, 1500);
+      }, 1500);
+    }
+  }, [notAllowed]);
 
   const validateForm = () => {
     let isValid = true;
@@ -168,6 +164,8 @@ const SignUp = ({ onLogin }) => {
     }
   };
 
+  if (!notAllowed) {
+
   return (
     <div className="container login fill-screen mt-4">
 
@@ -249,20 +247,35 @@ const SignUp = ({ onLogin }) => {
           </div>
         </div>
       </div>
-) :
-<div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
-  <div className="col-5 mt-5 glass-box">
-      <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-        Account Created!
-        <br />
-        <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
-      </h2>
-  </div>
-</div>
-  }
+      ) :
+      <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+        <div className="col-5 mt-5 glass-box">
+            <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+              Account Created!
+              <br />
+              <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+            </h2>
+        </div>
+      </div>
+        }
 
     </div>
-  );
+  ); } else {
+    return (
+      <div className="container login mt-4 fill-screen main-content">
+              <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
+              <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+                <div className="col-5 mt-5 glass-box">
+                    <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                      Already Registered and logged in!
+                      <br />
+                      <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
+                    </h2>
+                </div>
+              </div>
+            </div>
+    )
+  }
 };
 
 export default SignUp;

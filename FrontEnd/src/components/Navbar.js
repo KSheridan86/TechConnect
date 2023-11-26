@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
