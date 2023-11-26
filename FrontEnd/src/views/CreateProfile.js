@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 // Create an Axios instance with a base URL and credentials
 const api = axios.create({
@@ -10,17 +12,33 @@ const api = axios.create({
 
 // Component for creating a user profile
 const CreateProfile = () => {
-  // Retrieve current user information from local storage
+    // Retrieve current user & profile information from local storage
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-    const navigate = useNavigate();
-    const [shouldSlideOut, setShouldSlideOut] = useState(false);
-    const [profile, setProfile] = useState({});
     const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
+    const [shouldSlideOut, setShouldSlideOut] = useState(false);
+    const [transition, setTransition] = useState(false);
+    const [profile, setProfile] = useState({});
+    const [notAllowed, setNotAllowed] = useState(false);
+    const navigate = useNavigate();
 
+    const checkUser = () => {
+        if (!retrievedProfile && !currentUser) {
+            setNotAllowed(true);
+        }
+    };
     useEffect(() => {
-        
-        console.log(retrievedProfile);
-    
+        checkUser();
+        if (notAllowed) {
+            setTimeout(() => {
+                setTransition(true);
+                setTimeout(() => {
+                navigate('/');
+                }, 1500);
+            }, 1500);
+        }
+    }, [notAllowed]);
+
+    useEffect(() => {    
         if (retrievedProfile) {
             setProfile({
                 firstname: retrievedProfile.firstname,
@@ -41,7 +59,7 @@ const CreateProfile = () => {
             const initialProfileState = {
                 firstname: '',
                 lastname: '',
-                email: currentUser.data.email,
+                email: currentUser?.data?.email,
                 github: '',
                 linkedin: '',
                 portfolio_url: '',
@@ -181,6 +199,7 @@ const handleInputChange = (event) => {
             const response = await api.post('users/update_profile/', formData, config);
 
             console.log('Profile updated:', response.data);
+            localStorage.setItem('newProfile', JSON.stringify(response.data));
             if (retrievedProfile) {
                 setShouldSlideOut(true);
                 setTimeout(() => {
@@ -200,6 +219,7 @@ const handleInputChange = (event) => {
         }
     };
 
+    if (!notAllowed) {
     return (
       <div className='container fill-screen'>
         <div className='row justify-content-center login'>
@@ -391,7 +411,23 @@ const handleInputChange = (event) => {
             <div style={{ height: '9rem' }}></div>
         </div>
         </div>
-    );
+    ); 
+    } else {
+        return (
+            <div className="container login mt-4 fill-screen main-content">
+                <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
+                <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+                    <div className="col-5 mt-5 glass-box">
+                        <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                        Not Authorized!
+                        <br />
+                        <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 };
 
 export default CreateProfile;

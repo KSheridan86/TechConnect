@@ -69,6 +69,7 @@ const Profile = () => {
   
    // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
+    localStorage.setItem('userProfile', JSON.stringify(foundUser));
     setShouldSlideOut(true);
     setTimeout(() => {
       navigate('/add-skills', { state: { returnUrl: '/profile' } });

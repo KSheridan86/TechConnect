@@ -151,14 +151,9 @@ def update_profile(request):
     serializer = DeveloperProfileSerializer(
         profile, data=request.data, partial=True)
 
-    print("Request Data:", request.data)  # Add this line
-
-    print(serializer.initial_data)
     if serializer.is_valid():
-        print("Serializer is valid")
         serializer.save()
         updated_data = DeveloperProfileSerializer(serializer.instance).data
-        print("Data after update:", updated_data)
         return Response(updated_data)
     else:
         print("Serializer errors:", serializer.errors)

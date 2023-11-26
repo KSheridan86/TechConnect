@@ -263,17 +263,17 @@ const SignUp = ({ onLogin }) => {
   ); } else {
     return (
       <div className="container login mt-4 fill-screen main-content">
-              <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-              <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
-                <div className="col-5 mt-5 glass-box">
-                    <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-                      Already Registered and logged in!
-                      <br />
-                      <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
-                    </h2>
-                </div>
-              </div>
-            </div>
+        <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
+        <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+          <div className="col-5 mt-5 glass-box">
+            <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+              Already Registered and logged in!
+              <br />
+              <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
+            </h2>
+          </div>
+        </div>
+      </div>
     )
   }
 };

@@ -12,6 +12,7 @@ const api = axios.create({
 
 // Component for adding skills to the user's profile
 const AddSkills = () => {
+    const profile = JSON.parse(localStorage.getItem('userProfile'));
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
@@ -37,13 +38,13 @@ const AddSkills = () => {
             newErrors.secondarySkills = 'Please enter at least one skill in any class of skills';
             isValid = false;
         }
-    
         setErrors(newErrors);
         return isValid;
     };
 
     // Fetch current skills when the component mounts
     useEffect(() => {
+        if (profile) {
         const fetchSkills = async () => {
             const currentUser = JSON.parse(localStorage.getItem('currentUser'));
             try {
@@ -53,7 +54,7 @@ const AddSkills = () => {
                         Authorization: `Bearer ${currentUser.data.token}`,
                     },};
                 
-                const response = await api.get('users/profile/', config);
+                const response = await api.get(`users/profile/${currentUser.data.id}`, config);
                 setCurrentSkills1(response.data.skills_level_1);
                 setCurrentSkills2(response.data.skills_level_2);
             } catch (error) {
@@ -61,8 +62,8 @@ const AddSkills = () => {
                 setErrors({ general: "Whoops, we couldn't find your current skills, you have skills don't you??" });
             }
         };
-
         fetchSkills();
+    }
     }, []);
 
     // Handle the process of adding skills to the user's profile
@@ -97,27 +98,24 @@ const AddSkills = () => {
             // Make a POST request to update the user profile with the new skills
             const response = await api.post('users/update_profile/', formData, config);
 
-
             const displayMessage = () => {
                 // setMessage('');
                 if (response && returnUrl) {
-                  setTimeout(() => {
-                    setTransition(true)
                     setTimeout(() => {
-                        navigate('/profile');
-                    }, 1000);
-                  }, 1750);
-              } else {
-                  setTimeout(() => {
-                    setTransition(true)
+                        setTransition(true)
+                        setTimeout(() => {
+                            navigate('/profile');
+                        }, 1000);
+                    }, 1750);
+                } else {
                     setTimeout(() => {
-                      navigate('/add-projects');
-                    }, 1000);
-                  }, 1750);
-              }
+                        setTransition(true)
+                        setTimeout(() => {
+                            navigate('/add-projects');
+                        }, 1000);
+                    }, 1750);
+                }
             }
-
-
             // Redirect to the appropriate page based on returnUrl or default to '/add-projects'
             if (response) {
                 setShouldSlideOut(true);
@@ -126,13 +124,13 @@ const AddSkills = () => {
                     displayMessage();
                   }, 1000);
             }
-
-
-
         } catch (error) {
             console.error('Error updating profile with skills:', error);
             console.log('Error response from server:', error.response);
             setErrors({ general: "Whoops, we couldn't save your skills. Please try again later." });
+            setTimeout(() => {
+                navigate('/');
+            }, 2000);
         }
     };
 
