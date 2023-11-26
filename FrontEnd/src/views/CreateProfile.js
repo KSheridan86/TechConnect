@@ -36,6 +36,7 @@ const CreateProfile = () => {
                 }, 1500);
             }, 1500);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [notAllowed]);
 
     useEffect(() => {    
@@ -77,6 +78,7 @@ const CreateProfile = () => {
             // Set the initial profile state
             setProfile(initialProfileState);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); 
 
     // State to manage form errors

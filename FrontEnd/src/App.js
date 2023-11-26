@@ -13,7 +13,6 @@ import DeleteUser from './views/DeleteUser';
 import Login from './views/Login';
 import Logout from './views/Logout';
 import ConfirmDelete from './views/ConfirmDelete';
-import EditProfile from './views/EditProfile';
 import CreateProfile from './views/CreateProfile';
 import AddSkills from './views/AddSkills';
 import AddProjects from './views/AddProjects';
@@ -53,7 +52,6 @@ function App() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
           <Route path="/confirm-delete/:id" element={<ConfirmDelete />} />
-          <Route path="/edit-profile" element={<EditProfile />} />
           <Route path="/create-profile" element={<CreateProfile />} />
           <Route path="/add-skills" element={<AddSkills />} />
           <Route path="/add-projects" element={<AddProjects />} />

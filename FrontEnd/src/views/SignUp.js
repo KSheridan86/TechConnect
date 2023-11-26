@@ -52,6 +52,7 @@ const SignUp = ({ onLogin }) => {
         }, 1500);
       }, 1500);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notAllowed]);
 
   const validateForm = () => {

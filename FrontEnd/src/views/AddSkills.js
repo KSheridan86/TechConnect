@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faTimes } from '@fortawesome/free-solid-svg-icons';
 
 // Create an Axios instance with a base URL and credentials
 const api = axios.create({
@@ -13,6 +13,7 @@ const api = axios.create({
 // Component for adding skills to the user's profile
 const AddSkills = () => {
     const profile = JSON.parse(localStorage.getItem('userProfile'));
+    const newUser = JSON.parse(localStorage.getItem('newProfile'));
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
@@ -20,6 +21,9 @@ const AddSkills = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [successMessage, setSuccessMessage] = useState(false);
     const [transition, setTransition] = useState(false);
+    const [returningUser, setReturningUser] = useState(false);
+    const [firstTimeUser, setFirstTimeUser] = useState(false);
+    const [notAllowed, setNotAllowed] = useState(false);
 
     // State variables to manage user input for primary and secondary skills
     const [primarySkills, setPrimarySkills] = useState('');
@@ -28,6 +32,60 @@ const AddSkills = () => {
     // State variables to store the user's current primary and secondary skills
     const [currentSkills1, setCurrentSkills1] = useState([]);
     const [currentSkills2, setCurrentSkills2] = useState([]);
+
+    
+
+    // useEffect(() => {
+    //     const checkReturningUser = () => {
+    //         if (profile) {
+    //             setReturningUser(true);
+    //             console.log('Returning user:', returningUser)
+    //         }
+    //     }
+    
+    //     const checkNewUser = () => {
+    //         if (newUser) {
+    //             setFirstTimeUser(true);
+    //             console.log('First time user:', firstTimeUser)
+    //         }
+    //     }
+    //     checkReturningUser();
+    //     checkNewUser();
+
+    //     if (!profile & !newUser) {
+    //         setNotAllowed(true);
+    //     }
+    // }, [newUser, profile, returningUser, firstTimeUser]);
+
+
+    const checkReturningUser = () => {
+        if (profile) {
+            setReturningUser(true);
+            console.log('Returning user:', returningUser)
+            }
+        }
+        
+        const checkNewUser = () => {
+            if (newUser) {
+                setFirstTimeUser(true);
+                console.log('First time user:', firstTimeUser)
+            }
+        }
+
+        useEffect(() => {
+            checkReturningUser();
+            checkNewUser();
+            if (!profile & !newUser) {
+                setNotAllowed(true);
+                setTimeout(() => {
+                    setTransition(true);
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1500);
+                }, 1500);
+            }
+            // eslint-disable-next-line react-hooks/exhaustive-deps
+        }, [newUser, profile]);
 
     const validateSkills = () => {
         let isValid = true;
@@ -63,7 +121,7 @@ const AddSkills = () => {
             }
         };
         fetchSkills();
-    }
+    } // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     // Handle the process of adding skills to the user's profile
@@ -133,6 +191,8 @@ const AddSkills = () => {
             }, 2000);
         }
     };
+
+    if (!notAllowed) {
 
     return (
         <div className='container mt-2 fill-screen'>
@@ -226,6 +286,22 @@ const AddSkills = () => {
               }
         </div>
     );
+} else {
+    return (
+        <div className="container login mt-4 fill-screen main-content">
+            <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
+            <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+                <div className="col-5 mt-5 glass-box">
+                    <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                    Not Authorized!
+                    <br />
+                    <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
+                    </h2>
+                </div>
+            </div>
+        </div>
+    )
+}
 };
 
 export default AddSkills;

@@ -67,9 +67,10 @@ def logout(request):
     View to logout a user.
     """
     # pylint: disable=W0718
+    print(request.session)
     try:
-        # Optionally, you can perform additional logout logic here
         request.session.flush()  # Clear the session data
+        print(request.user)
         return Response({'success': 'Logout successful'})
     except Exception as e:
         print(str(e))
