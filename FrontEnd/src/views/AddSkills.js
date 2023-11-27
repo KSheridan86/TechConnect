@@ -195,7 +195,7 @@ const AddSkills = () => {
     if (!notAllowed) {
 
     return (
-        <div className='container mt-2 fill-screen'>
+        <div className='container mt-5 fill-screen'>
 
         {!successMessage ? (
             <div className='row justify-content-center login'>

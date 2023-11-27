@@ -30,8 +30,10 @@ const Developers = () => {
         async function fetchUsers(){
             const { data } = await api.get('users/');
             setUsers(data);
+            console.log(data);
         }
         fetchUsers();
+        
 
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps

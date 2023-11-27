@@ -67,10 +67,8 @@ def logout(request):
     View to logout a user.
     """
     # pylint: disable=W0718
-    print(request.session)
     try:
         request.session.flush()  # Clear the session data
-        print(request.user)
         return Response({'success': 'Logout successful'})
     except Exception as e:
         print(str(e))
@@ -79,7 +77,6 @@ def logout(request):
 
 # pylint: disable=W0613
 @api_view(['GET'])
-# @permission_classes([IsAdminUser])
 def get_users(request):
     """
     Return all users.

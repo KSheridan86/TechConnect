@@ -13,6 +13,7 @@ const api = axios.create({
 // Component for creating a user profile
 const CreateProfile = () => {
     // Retrieve current user & profile information from local storage
+    const [errors, setErrors] = useState({});
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
@@ -80,9 +81,6 @@ const CreateProfile = () => {
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []); 
-
-    // State to manage form errors
-    const [errors, setErrors] = useState({});
 
     // Update local storage whenever profile changes
     useEffect(() => {

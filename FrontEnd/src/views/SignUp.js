@@ -11,6 +11,7 @@ const api = axios.create({
 
 const SignUp = ({ onLogin }) => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const [users, setUsers] = useState([]);
   const location = useLocation();
   const accountType = location.state?.accountType;
   const [errors, setErrors] = useState({});
@@ -25,8 +26,27 @@ const SignUp = ({ onLogin }) => {
     password: '',
     account_type: accountType,
   };
-
   const [userData, setUserData] = useState(initialUserData);
+
+  useEffect(() => {
+    async function fetchUsers(){
+        const { data } = await api.get('users/');
+        setUsers(data);
+    }
+    fetchUsers();
+// empty array left here to prevent the api call from being made repeatedly
+// eslint-disable-next-line react-hooks/exhaustive-deps
+}, []); 
+
+useEffect(() => {
+  if (errors.general) {
+    const timeoutId = setTimeout(() => {
+      setErrors({});
+    }, 2500);
+
+    return () => clearTimeout(timeoutId); // Clear the timeout if component unmounts
+  }
+}, [errors.general]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -81,7 +101,7 @@ const SignUp = ({ onLogin }) => {
     setErrors(newErrors);
     return isValid;
   };
-
+  console.log(users);
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -89,6 +109,22 @@ const SignUp = ({ onLogin }) => {
     if (!validateForm()) {
       return;
     }
+
+    // Check if the username or email is already taken
+  const isUsernameTaken = users.some(user => user.username.toLowerCase() === userData.username.toLowerCase());
+  const isEmailTaken = users.some(user => user.email.toLowerCase() === userData.email.toLowerCase());
+
+  if (isUsernameTaken) {
+    setErrors({ general: "Username is already taken. Please choose a different one." });
+    return;
+  }
+
+  if (isEmailTaken) {
+    setErrors({ general: "Email is already taken. Please choose a different one." });
+    return;
+  }
+
+  
 
     try {
       const config = {
@@ -110,6 +146,8 @@ const SignUp = ({ onLogin }) => {
       console.error('Failed to register user:', error);
     }
   };
+
+  
 
   const loginAfterSignup = async () => {
     try {
@@ -135,7 +173,7 @@ const SignUp = ({ onLogin }) => {
           setTimeout(() => {
             setTransition(true)
             setTimeout(() => {
-                navigate('/create-profile');
+                navigate('/update-profile');
             }, 1000);
           }, 1750);
         } else {

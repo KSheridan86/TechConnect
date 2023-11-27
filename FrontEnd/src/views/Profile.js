@@ -135,7 +135,7 @@ const Profile = () => {
     console.log(retrievedProfile)
     setShouldSlideOut(true);
           setTimeout(() => {
-            navigate('/create-profile');
+            navigate('/update-profile');
           }, 1000); 
   };
 
@@ -173,9 +173,15 @@ const Profile = () => {
           <div className="col-md-12">
             <div className="row">
               <div className="col-7">
-                {foundUser && foundUser.avatar && (
+                {foundUser && foundUser.avatar ? (
                   <img
                     src={`${baseAvatarUrl}${foundUser.avatar}`}
+                    alt='User Avatar'
+                    className='user-avatar mt-2 rounded'
+                  />
+                ) : (
+                  <img
+                    src={defaultAvatar}
                     alt='User Avatar'
                     className='user-avatar mt-2 rounded'
                   />
