@@ -87,6 +87,17 @@ def get_users(request):
     return Response(serializer.data)
 
 
+# pylint: disable=W0613
+@api_view(['GET'])
+def get_all_users(request):
+    """
+    Return all users.
+    """
+    all_users = User.objects.all()
+    serializer = UserSerializer(all_users, many=True)
+    return Response(serializer.data)
+
+
 @api_view(['POST'])
 def register_user(request):
     """

@@ -32,14 +32,13 @@ const Profile = () => {
     if (shouldAnimate) {
         setShouldSlideOut(true);
         setTimeout(() => {
-            setShouldSlideOut(false);
+          setShouldSlideOut(false);
         }, 1000);
     }
-}, [shouldAnimate, setShouldAnimate, navigate]);
+  }, [shouldAnimate, setShouldAnimate, navigate]);
 
   // Fetch user profile data when the component mounts
   useEffect(() => {
-    
     const fetchProfileData = async () => {
       try {
         // Configuration for the API request, including authorization header
@@ -56,7 +55,6 @@ const Profile = () => {
           setFoundUser(response.data);
           setProjects(response.data.projects);
         }
-        
       } catch (error) {
         console.error('Error fetching profile data:', error);
         // Handle the error if needed
@@ -67,7 +65,7 @@ const Profile = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [location.state?.userId]);
   
-   // Functions to navigate to the 'Add Skills' and 'Add Projects pages
+  // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
     localStorage.setItem('userProfile', JSON.stringify(foundUser));
     setShouldSlideOut(true);
@@ -134,9 +132,9 @@ const Profile = () => {
     const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
     console.log(retrievedProfile)
     setShouldSlideOut(true);
-          setTimeout(() => {
-            navigate('/update-profile');
-          }, 1000); 
+      setTimeout(() => {
+        navigate('/update-profile');
+      }, 1000); 
   };
 
   const handleProjectLinkClick = (project) => {
@@ -156,23 +154,20 @@ const Profile = () => {
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
-
       {currentUser ? ( // Conditionally render content only if currentUser exists
-          <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-            {foundUser.email === currentUser.data.email && (
-            <p className="nasa">
-              Hello {currentUser.data.username}, Welcome back!
-            </p>
-            
-            )}
-          </h2>
-        ) : null}
-
+        <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+          {foundUser.email === currentUser.data.email && (
+          <p className="nasa">
+            Hello {currentUser.data.username}, Welcome back!
+          </p>      
+          )}
+        </h2>
+      ) : null}
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
-        <div className="row">
-          <div className="col-md-12">
-            <div className="row">
-              <div className="col-7">
+          <div className="row">
+            <div className="col-md-12">
+              <div className="row">
+                <div className="col-7">
                 {foundUser && foundUser.avatar ? (
                   <img
                     src={`${baseAvatarUrl}${foundUser.avatar}`}
@@ -186,96 +181,124 @@ const Profile = () => {
                     className='user-avatar mt-2 rounded'
                   />
                 )}
+                </div>
+                <div className="col-5 mt-3">
+                {foundUser && (
+                <div>
+                  {foundUser.firstname && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    {`${foundUser.firstname} ${foundUser.lastname}`}
+                  </p>
+                  )}
+                  {foundUser.location && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    {`Location: ${foundUser.location}`}
+                  </p>
+                  )}
+                  {foundUser.years_of_experience && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    {`Y.O.E: ${foundUser.years_of_experience}`}
+                  </p>
+                  )}
+                  {foundUser.github && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    <a href={foundUser.github} 
+                      className="profile-link" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      GitHub Profile
+                    </a>
+                  </p>
+                  )}
+                  {foundUser.linkedin && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    <a href={foundUser.linkedin} 
+                      className="profile-link"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      LinkedIn Profile
+                    </a>
+                  </p>
+                  )}
+                  {foundUser.portfolio_url && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    <a href={foundUser.portfolio_url} 
+                      className="profile-link" 
+                      target="_blank" 
+                      rel="noopener noreferrer"
+                    >
+                      Portfolio
+                    </a>
+                  </p>
+                  )}
+                  {foundUser.available && foundUser.date_available && (
+                  <p className='nasa-black text-center text-uppercase'>
+                    {`Available from: ${foundUser.date_available}`}
+                  </p>
+                  )}
+                  {!foundUser.available && (
+                  <p className='nasa-black text-center text-uppercase'>Not Available</p>
+                  )}
+                </div>
+                )}
+                </div>
               </div>
-              <div className="col-5 mt-3">
-  {foundUser && (
-    <div>
-      {foundUser.firstname && (
-        <p className='nasa-black text-center text-uppercase'>{`${foundUser.firstname} ${foundUser.lastname}`}</p>
-      )}
-      {foundUser.location && (
-        <p className='nasa-black text-center text-uppercase'>{`Location: ${foundUser.location}`}</p>
-      )}
-      {foundUser.years_of_experience && (
-        <p className='nasa-black text-center text-uppercase'>{`Y.O.E: ${foundUser.years_of_experience}`}</p>
-      )}
-      {foundUser.github && (
-        <p className='nasa-black text-center text-uppercase'>
-          <a href={foundUser.github} className="profile-link" target="_blank" rel="noopener noreferrer">GitHub Profile</a>
-        </p>
-      )}
-      {foundUser.linkedin && (
-        <p className='nasa-black text-center text-uppercase'>
-          <a href={foundUser.linkedin} className="profile-link" target="_blank" rel="noopener noreferrer">LinkedIn Profile</a>
-        </p>
-      )}
-      {foundUser.portfolio_url && (
-        <p className='nasa-black text-center text-uppercase'>
-          <a href={foundUser.portfolio_url} className="profile-link" target="_blank" rel="noopener noreferrer">Portfolio</a>
-        </p>
-      )}
-      {foundUser.available && foundUser.date_available && (
-        <p className='nasa-black text-center text-uppercase'>{`Available from: ${foundUser.date_available}`}</p>
-      )}
-      {!foundUser.available && (
-        <p className='nasa-black text-center text-uppercase'>Not Available</p>
-      )}
-    </div>
-  )}
-</div>
             </div>
-          </div>
 
-          <div className="col-md-12 mt-3">
+            <div className="col-md-12 mt-3">
             {foundUser && (
               <div>
                 <p className='nasa-black text-center text-uppercase'>
                   <a href={`mailto:${foundUser.email}`} className="email-link">{foundUser.email}</a>
                 </p>
-                <p className='nasa-black text-center text-uppercase p-3'>Introduction: <br />{` ${foundUser.intro_text || 'Not provided'}`}</p>
-                <p className='nasa-black text-center text-uppercase p-3'>Biography: <br />{` ${foundUser.biography_text || 'Not provided'}`}</p>
-              </div>
-            )}
-          </div>
-        </div>
-
-          <h2 className='nasa-black text-center text-uppercase mt-1'>Skills</h2>
-          {isSkillsDefinedAndNotEmpty ? (<div>
-
-            {foundUser.skills_level_1 && (
-              <div>
-                <h5 className='nasa-black text-center text-uppercase mt-3'>Level 1 Skills:</h5>
-                <p className='nasa-black text-center mt-3'>
-                  {Array.isArray(foundUser.skills_level_1)
-                    ? foundUser.skills_level_1
-                      .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-                      .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-                      .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                    : foundUser.skills_level_1
-                  }
+                <p className='nasa-black text-center text-uppercase p-3'>
+                  Introduction: <br />{` ${foundUser.intro_text || 'Not provided'}`}
+                </p>
+                <p className='nasa-black text-center text-uppercase p-3'>
+                  Biography: <br />{` ${foundUser.biography_text || 'Not provided'}`}
                 </p>
               </div>
             )}
+            </div>
+          </div>
 
-            <h5 className='nasa-black text-center text-uppercase mt-3'>Level 2 Skills:</h5>
-            {foundUser.skills_level_2 && (
+          <h2 className='nasa-black text-center text-uppercase mt-1'>Skills</h2>
+          {isSkillsDefinedAndNotEmpty ? (
+          <div>
+          {foundUser.skills_level_1 && (
+            <div>
+              <h5 className='nasa-black text-center text-uppercase mt-3'>Level 1 Skills:</h5>
               <p className='nasa-black text-center mt-3'>
-                {Array.isArray(foundUser.skills_level_2)
-                  ? foundUser.skills_level_2
+                {Array.isArray(foundUser.skills_level_1)
+                  ? foundUser.skills_level_1
                     .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
                     .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
                     .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                  : foundUser.skills_level_2
+                  : foundUser.skills_level_1
                 }
               </p>
+            </div>
+          )}
+            <h5 className='nasa-black text-center text-uppercase mt-3'>Level 2 Skills:</h5>
+            {foundUser.skills_level_2 && (
+            <p className='nasa-black text-center mt-3'>
+              {Array.isArray(foundUser.skills_level_2)
+                ? foundUser.skills_level_2
+                  .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                  .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                  .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
+                : foundUser.skills_level_2
+              }
+            </p>
             )}
             </div>) : 
             <div className='nasa-black text-center text-uppercase mt-3 mb-3'>
               You have no saved skills, add some below to show off how great you are!
             </div>}
-          
-          {currentUser ? (
-          <div>
+            {currentUser ? (
+            <div>
             {foundUser.email === currentUser.data.email && (
               <div className="text-center hand-writing">
                 {/* Conditionally render different buttons as confirmation of DELETE action */}
@@ -312,7 +335,7 @@ const Profile = () => {
                   </button>
                 </div> ) }
               </div>
-            )}</div>) : (null) } 
+          )}</div>) : (null) } 
         </div>
 
         <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
@@ -323,17 +346,17 @@ const Profile = () => {
                 {projects.map((project, index) => (
                   <div className="project-box glass-box w-75 m-auto mb-3" key={index}>
                     <Link to="#" 
-                          key={index} 
-                          className="project-link"
-                          onClick={() => handleProjectLinkClick(project)}
-                          >
+                      key={index} 
+                      className="project-link"
+                      onClick={() => handleProjectLinkClick(project)}
+                    >
                     {project.image && (
-                      <img
-                        src={`${baseAvatarUrl}${project.image}`}
-                        alt={`Project ${project.name}`}
-                        className='project-image rounded m-auto'
-                        style={{ display: 'block' }} 
-                      />
+                    <img
+                      src={`${baseAvatarUrl}${project.image}`}
+                      alt={`Project ${project.name}`}
+                      className='project-image rounded m-auto'
+                      style={{ display: 'block' }} 
+                    />
                     )}
                     <p className='nasa-black text-center text-uppercase mt-1'>{project.name}</p>
                     </Link>

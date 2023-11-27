@@ -16,7 +16,6 @@ const Login = ({ onLogin }) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const [data, setData] = useState(null);
   const [message, setMessage] = useState('');
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
@@ -41,6 +40,7 @@ const Login = ({ onLogin }) => {
       setNotAllowed(true);
     }
   };
+
   useEffect(() => {
     checkLoginStatus();
     if (notAllowed) {
@@ -49,10 +49,9 @@ const Login = ({ onLogin }) => {
         setTimeout(() => {
           navigate('/');
         }, 1500);
-        
       }, 1500);
-      
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [notAllowed]);
 
   const validateLoginDetails = () => {
@@ -75,7 +74,6 @@ const Login = ({ onLogin }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
-
     // Validate login details
     if (!validateLoginDetails()) {
       return;
@@ -91,20 +89,10 @@ const Login = ({ onLogin }) => {
         'username': username.toLowerCase(),
         'password': password,
       }, config);
-
-      // Handle the response as needed
-      setData(response.data);
       const currentUser = response;
-      // setSuccessMessage(`Welcome back, ${currentUser.data.username}!`);
-
       // Store user details in local storage
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       onLogin();
-
-      if (data !== null) {
-        onLogin();
-      }
-
       setShouldSlideOut(true);
 
       const displayMessage = () => {
@@ -132,7 +120,6 @@ const Login = ({ onLogin }) => {
       }, 1000);
     } catch (error) {
       setMessage('');
-      console.error('Error while making the API call:', error);
       setErrors({ general: "Whoops, looks like there's an issue with your login details. Please try again." });
     }
     setTimeout(() => {
@@ -149,8 +136,7 @@ const Login = ({ onLogin }) => {
     <div className="container login mt-4 fill-screen main-content">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
       {!successMessage ? (
-        <div className='row'>
-
+      <div className='row'>
         <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           {errors.general && (
             <div className='notification-overlay fs-3'>
@@ -217,7 +203,6 @@ const Login = ({ onLogin }) => {
             <button
               className="btn btn-warning border-dark border-2 mt-1 col-6 mb-4"
               onClick={() => handleSignUp('Developer')}>
-
               New Dev Account
             </button>
             <p>If you're looking to hire the perfect talent for your latest project <br /> Sign up here!</p>
@@ -226,41 +211,37 @@ const Login = ({ onLogin }) => {
               onClick={() => handleSignUp('Client')}>New Client Account
             </button>
           </div>
-
         </div>
       </div>
-        ) :
-       
-        <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
-          <div className="col-5 mt-5 glass-box">
+      ) :
+      <div 
+        className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+        <div className="col-5 mt-5 glass-box">
+          <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+            Login Successful!
+            <br />
+            <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+          </h2>
+        </div>
+      </div>
+      }
+    </div>
+  ); 
+  } else {
+      return (
+        <div className="container login mt-4 fill-screen main-content">
+          <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
+          <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+            <div className="col-5 mt-5 glass-box">
               <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-              Login Successful!
+                Already Logged in!
                 <br />
-                <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+                <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
               </h2>
+            </div>
           </div>
         </div>
-        
-          }
-      
-    </div>
-  );
-        } else {
-          return (
-            <div className="container login mt-4 fill-screen main-content">
-              <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-              <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
-                <div className="col-5 mt-5 glass-box">
-                    <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-                      Already Logged in!
-                      <br />
-                      <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
-                    </h2>
-                </div>
-              </div>
-            </div>
-          )
-        }
+        )}
 };
 
 export default Login;

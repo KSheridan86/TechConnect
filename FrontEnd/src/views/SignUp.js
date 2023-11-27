@@ -30,23 +30,22 @@ const SignUp = ({ onLogin }) => {
 
   useEffect(() => {
     async function fetchUsers(){
-        const { data } = await api.get('users/');
+        const { data } = await api.get('users/all-users/');
         setUsers(data);
     }
     fetchUsers();
-// empty array left here to prevent the api call from being made repeatedly
-// eslint-disable-next-line react-hooks/exhaustive-deps
-}, []); 
+  // empty array left here to prevent the api call from being made repeatedly
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); 
 
-useEffect(() => {
-  if (errors.general) {
-    const timeoutId = setTimeout(() => {
-      setErrors({});
-    }, 2500);
-
-    return () => clearTimeout(timeoutId); // Clear the timeout if component unmounts
-  }
-}, [errors.general]);
+  useEffect(() => {
+    if (errors.general) {
+      const timeoutId = setTimeout(() => {
+        setErrors({});
+      }, 2500);
+      return () => clearTimeout(timeoutId); // Clear the timeout if component unmounts
+    }
+  }, [errors.general]);
 
   const handleInputChange = (event) => {
     const { name, value } = event.target;
@@ -101,7 +100,7 @@ useEffect(() => {
     setErrors(newErrors);
     return isValid;
   };
-  console.log(users);
+
   const handleSubmit = async (event) => {
     event.preventDefault();
 
@@ -124,30 +123,26 @@ useEffect(() => {
     return;
   }
 
-  
-
-    try {
-      const config = {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      };
-      const response = await api.post('users/register/', {
-        account_type: userData.account_type,
-        username: userData.username.toLowerCase(),
-        email: userData.email,
-        password: userData.password,
-      }, config);
-      if (response) {
-        await loginAfterSignup();
-      }
-    } catch (error) {
-      setErrors({ general: "Whoops, looks like there's an issue with your details. Please try again." });
-      console.error('Failed to register user:', error);
+  try {
+    const config = {
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    };
+    const response = await api.post('users/register/', {
+      account_type: userData.account_type,
+      username: userData.username.toLowerCase(),
+      email: userData.email,
+      password: userData.password,
+    }, config);
+    if (response) {
+      await loginAfterSignup();
     }
+  } catch (error) {
+    setErrors({ general: "Whoops, looks like there's an issue with your details. Please try again." });
+    console.error('Failed to register user:', error);
+  }
   };
-
-  
 
   const loginAfterSignup = async () => {
     try {
@@ -163,7 +158,6 @@ useEffect(() => {
       const currentUser = response;
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
       onLogin();
-
       setShouldSlideOut(true);
 
       //  Redirect and start animation after 1.75 seconds
@@ -185,12 +179,11 @@ useEffect(() => {
             }, 1750);
         }
       }
-    // Display success message, Call function to  and redirect after 1 second
+    // Display success message and call function to redirect after 1 second
       setTimeout(() => {
         setSuccessMessage(true)
         displayMessage();
       }, 1000);
-  
     } catch (error) {
       console.error('Error logging in after signup:', error);
       setErrors({ general: "Whoops, we couldn't log you in. Please try again." });
@@ -204,12 +197,9 @@ useEffect(() => {
   };
 
   if (!notAllowed) {
-
   return (
     <div className="container login fill-screen mt-4">
-
-      {!successMessage ? (
-
+    {!successMessage ? (
       <div className="row mt-3 justify-content-center">
         <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
           {errors.general && (
@@ -286,7 +276,7 @@ useEffect(() => {
           </div>
         </div>
       </div>
-      ) :
+    ) :
       <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
         <div className="col-5 mt-5 glass-box">
             <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
@@ -297,9 +287,9 @@ useEffect(() => {
         </div>
       </div>
         }
-
     </div>
-  ); } else {
+  ); 
+  } else {
     return (
       <div className="container login mt-4 fill-screen main-content">
         <div style={{ height: "70px" }} className="d-none d-lg-block"></div>

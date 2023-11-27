@@ -80,23 +80,21 @@ const ProjectDetails = () => {
           </div>
         </div>
         <div className='text-center mt-2 mb-1 hand-writing'>
-        <button
-              className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
-              onClick={() => {
-                setShouldSlideOut(true);
-                setTimeout(() => {
-                  navigate('/profile');
+          <button
+            className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
+            onClick={() => {
+              setShouldSlideOut(true);
+              setTimeout(() => {
+                navigate('/profile');
                 }, 1000);
               }}
-            >
-              Profile
-            </button>
+          >
+            Profile
+          </button>
         </div>
-        
       </div>
     </div>
   );
 };
 
 export default ProjectDetails;
-

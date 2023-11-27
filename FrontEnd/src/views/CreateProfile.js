@@ -88,9 +88,8 @@ const CreateProfile = () => {
     }, [profile]);
 
     // Handle input changes for form fields
-const handleInputChange = (event) => {
-    const { name, value, type, checked } = event.target;
-
+    const handleInputChange = (event) => {
+        const { name, value, type, checked } = event.target;
         // Add a validation or modification for URL fields
         if (['github', 'linkedin', 'portfolio_url'].includes(name)) {
         const formattedValue = formatUrl(value);
@@ -105,7 +104,7 @@ const handleInputChange = (event) => {
         }));
         }
     };
-    
+
     // Function to format URLs
     const formatUrl = (url) => {
         // Check if the URL starts with http://www or https://www, if not, add it
@@ -125,12 +124,10 @@ const handleInputChange = (event) => {
     const handleAvatarChange = (event) => {
         // Get the selected file from the input element
         const file = event.target.files[0];
-
         // Check if a file is selected
         if (file) {
             // Create a new FileReader object
             const reader = new FileReader();
-
             // Set up an event handler for when the FileReader has loaded the file
             reader.onload = (e) => {
                 // Update the state using the setProfile function
@@ -221,21 +218,19 @@ const handleInputChange = (event) => {
 
     if (!notAllowed) {
     return (
-      <div className='container fill-screen'>
-        <div className='row justify-content-center login'>
-        {errors.general && (
-            <div className='notification-overlay fs-3'>
-              <div className='alert alert-success' role='alert'>
-                {errors.general}
-              </div>
-            </div>
-          )}
-            <div className='col-12'>
-                
+        <div className='container fill-screen'>
+            <div className='row justify-content-center login'>
+            {errors.general && (
+                <div className='notification-overlay fs-3'>
+                    <div className='alert alert-success' role='alert'>
+                    {errors.general}
+                    </div>
+                </div>
+            )}
+            <div className='col-12'>   
                 <h2 className='nasa-black text-center text-uppercase mt-3'>
                     Create your Profile
                 </h2>
-
             {/* Profile creation form */}
                 <form encType="multipart/form-data">
                     {/* Personal Information section */}

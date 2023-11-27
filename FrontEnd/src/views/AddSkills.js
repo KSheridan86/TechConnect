@@ -33,31 +33,6 @@ const AddSkills = () => {
     const [currentSkills1, setCurrentSkills1] = useState([]);
     const [currentSkills2, setCurrentSkills2] = useState([]);
 
-    
-
-    // useEffect(() => {
-    //     const checkReturningUser = () => {
-    //         if (profile) {
-    //             setReturningUser(true);
-    //             console.log('Returning user:', returningUser)
-    //         }
-    //     }
-    
-    //     const checkNewUser = () => {
-    //         if (newUser) {
-    //             setFirstTimeUser(true);
-    //             console.log('First time user:', firstTimeUser)
-    //         }
-    //     }
-    //     checkReturningUser();
-    //     checkNewUser();
-
-    //     if (!profile & !newUser) {
-    //         setNotAllowed(true);
-    //     }
-    // }, [newUser, profile, returningUser, firstTimeUser]);
-
-
     const checkReturningUser = () => {
         if (profile) {
             setReturningUser(true);
@@ -65,27 +40,27 @@ const AddSkills = () => {
             }
         }
         
-        const checkNewUser = () => {
-            if (newUser) {
-                setFirstTimeUser(true);
-                console.log('First time user:', firstTimeUser)
-            }
+    const checkNewUser = () => {
+        if (newUser) {
+            setFirstTimeUser(true);
+            console.log('First time user:', firstTimeUser)
         }
+    }
 
-        useEffect(() => {
-            checkReturningUser();
-            checkNewUser();
-            if (!profile & !newUser) {
-                setNotAllowed(true);
+    useEffect(() => {
+        checkReturningUser();
+        checkNewUser();
+        if (!profile & !newUser) {
+            setNotAllowed(true);
+            setTimeout(() => {
+                setTransition(true);
                 setTimeout(() => {
-                    setTransition(true);
-                    setTimeout(() => {
-                        navigate('/');
-                    }, 1500);
+                    navigate('/');
                 }, 1500);
-            }
-            // eslint-disable-next-line react-hooks/exhaustive-deps
-        }, [newUser, profile]);
+            }, 1500);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [newUser, profile]);
 
     const validateSkills = () => {
         let isValid = true;
@@ -157,7 +132,6 @@ const AddSkills = () => {
             const response = await api.post('users/update_profile/', formData, config);
 
             const displayMessage = () => {
-                // setMessage('');
                 if (response && returnUrl) {
                     setTimeout(() => {
                         setTransition(true)
@@ -180,7 +154,7 @@ const AddSkills = () => {
                 setTimeout(() => {
                     setSuccessMessage(true)
                     displayMessage();
-                  }, 1000);
+                }, 1000);
             }
         } catch (error) {
             console.error('Error updating profile with skills:', error);
@@ -208,100 +182,103 @@ const AddSkills = () => {
                     </div>
                 )}
                     
-                    {/* Skills input form */}
-                    <form>
-                        
-                        <div className='row justify-content-evenly text-center'>
-                            <div className={`col-md-8 mb-0 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
-                                
+                {/* Skills input form */}
+                <form>
+                    <div className='row justify-content-evenly text-center'>
+                        <div className={`col-md-8 mb-0 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                             <div className='glass-box border-dark m-3 p-4'>
                                 <h2 className='nasa-black text-center text-uppercase mt-2'>
                                     Add Skills to your Profile
                                 </h2>
                                 <div className='mb-3'>
-                                <h4 className="fw-bold">Use this space to inform clients of your abilities, ie "React", "Python" etc...</h4>
-                                <br />
-                                <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>Lets start with your primary skills, the ones you're most proficient and comfortable with.</label>
-                                <textarea style={{maxWidth: '75%'}}
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
-                                    name='skills_level_1'
-                                    placeholder='Add your PRIMARY skills here separated by commas'
-                                    onChange={(e) => setPrimarySkills(e.target.value)}
-                                    rows={1}
-                                />
-                                {errors.primarySkills && (
-                                    <div className="text-danger">{errors.primarySkills}</div>
-                                )}
-                                <br />
-                                <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>Now add your secondary skills, skills you're familiar with but not a pro in.</label>
-                                <textarea style={{maxWidth: '75%'}}
-                                    className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
-                                    name='skills_level_2'
-                                    placeholder='Add your SECONDARY skills here separated by commas'
-                                    onChange={(e) => setSecondarySkills(e.target.value)}
-                                    rows={1}
-                                />
-                                {errors.secondarySkills && (
-                                    <div className="text-danger">{errors.secondarySkills}</div>
-                                )}
+                                    <h4 className="fw-bold">
+                                        Use this space to inform clients of your abilities, ie "React", "Python" etc...
+                                    </h4>
+                                    <br />
+                                    <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>
+                                        Lets start with your primary skills, the ones you're most proficient and comfortable with.
+                                    </label>
+                                    <textarea style={{maxWidth: '75%'}}
+                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
+                                        name='skills_level_1'
+                                        placeholder='Add your PRIMARY skills here separated by commas'
+                                        onChange={(e) => setPrimarySkills(e.target.value)}
+                                        rows={1}
+                                    />
+                                    {errors.primarySkills && (
+                                        <div className="text-danger">{errors.primarySkills}</div>
+                                    )}
+                                    <br />
+                                    <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>
+                                        Now add your secondary skills, skills you're familiar with but not a pro in.
+                                    </label>
+                                    <textarea style={{maxWidth: '75%'}}
+                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
+                                        name='skills_level_2'
+                                        placeholder='Add your SECONDARY skills here separated by commas'
+                                        onChange={(e) => setSecondarySkills(e.target.value)}
+                                        rows={1}
+                                    />
+                                    {errors.secondarySkills && (
+                                        <div className="text-danger">{errors.secondarySkills}</div>
+                                    )}
                                 </div>
                             </div>
-                            </div>
                         </div>
-                        {/* Button to submit the form */}
-                        <div className='text-center hand-writing mb-5'>
-                            <button
-                                type='button'
-                                className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
-                                onClick={addSkills}>
-                                Add Skills
-                            </button>
-                            {returnUrl && (
-                                <button
-                                type='button'
-                                className={`btn btn-warning btn-lg m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
-                                onClick={() => {
-                                    setShouldSlideOut(true);
-                                    setTimeout(() => {
-                                        navigate("/profile");
-                                    }, 1000);}}>
-                                Back
-                            </button>
-                            )}
-                            
-                        </div>
-                    </form>
+                    </div>
+                    {/* Button to submit the form */}
+                    <div className='text-center hand-writing mb-5'>
+                        <button
+                            type='button'
+                            className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                            onClick={addSkills}>
+                            Add Skills
+                        </button>
+                    {returnUrl && (
+                        <button
+                            type='button'
+                            className={`btn btn-warning btn-lg m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                            onClick={() => {
+                                setShouldSlideOut(true);
+                                setTimeout(() => {
+                                    navigate("/profile");
+                                }, 1000);}}>
+                            Back
+                        </button>
+                    )}
+                    </div>
+                </form>
                 </div>
             </div>
             ) :
             <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
-              <div className="col-5 mt-5 glass-box">
-                  <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-                    Skills Updated!
-                    <br />
-                    <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
-                  </h2>
-              </div>
-            </div>
-              }
-        </div>
-    );
-} else {
-    return (
-        <div className="container login mt-4 fill-screen main-content">
-            <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-            <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
                 <div className="col-5 mt-5 glass-box">
                     <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
-                    Not Authorized!
-                    <br />
-                    <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
+                        Skills Updated!
+                        <br />
+                        <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
                     </h2>
                 </div>
             </div>
+            }
         </div>
-    )
-}
+    );
+    } else {
+        return (
+            <div className="container login mt-4 fill-screen main-content">
+                <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
+                <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+                    <div className="col-5 mt-5 glass-box">
+                        <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                            Not Authorized!
+                            <br />
+                            <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
+                        </h2>
+                    </div>
+                </div>
+            </div>
+        )
+    }
 };
 
 export default AddSkills;
