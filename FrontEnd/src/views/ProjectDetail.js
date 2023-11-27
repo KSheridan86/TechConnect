@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
+import defaultProject from '../images/win95.png';
 
 const ProjectDetails = () => {
   const [project, setProject] = useState(null);
@@ -31,9 +32,16 @@ const ProjectDetails = () => {
         <div className="col-10 glass-box">
           <div className="row">
             <div className="col-md-6 col-12">
-              {project.image && (
+              {project.image ? (
                 <img
                   src={`${baseAvatarUrl}${project.image}`} 
+                  alt={`Project ${project.name}`}
+                  className="project-image-large rounded"
+                  style={{ display: 'block' }}
+                />
+              ) : (
+                <img
+                  src={defaultProject}
                   alt={`Project ${project.name}`}
                   className="project-image-large rounded"
                   style={{ display: 'block' }}

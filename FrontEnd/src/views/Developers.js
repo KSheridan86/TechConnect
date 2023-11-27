@@ -3,6 +3,20 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 
+// Create a context for all images in the 'images' directory
+const imageContext = require.context('../images/randomAvatars', false, /\.png$/);
+
+// Get an array of all image file names
+const imageFileNames = imageContext.keys();
+
+const getRandomImage = () => {
+  const randomImageFileName = imageFileNames[Math.floor(Math.random() * imageFileNames.length)];
+  return imageContext(randomImageFileName);
+};
+
+// Now you can use 'randomImage' as the source for your image element
+
+
 const Developers = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
@@ -172,6 +186,7 @@ const Developers = () => {
               >
                 <div className="result-box glass-box p-2">
                   <p>
+                  <img className="randomAvatar" src={getRandomImage()} alt="Random Avatar 1" />
                     {user.username}<br />
                     {user.email}<br />
                     {user.account_type}<br />

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import defaultAvatar from '../images/default-avatar.png';
+import defaultProject from '../images/win95.png';
 import axios from 'axios';
 import { useAnimation } from '../components/AnimationContext';
 
@@ -370,9 +371,16 @@ const Profile = () => {
                       className="project-link"
                       onClick={() => handleProjectLinkClick(project)}
                     >
-                    {project.image && (
+                    {project.image ? (
                     <img
                       src={`${baseAvatarUrl}${project.image}`}
+                      alt={`Project ${project.name}`}
+                      className='project-image rounded m-auto'
+                      style={{ display: 'block' }} 
+                    />
+                    ) : (
+                      <img
+                      src={defaultProject}
                       alt={`Project ${project.name}`}
                       className='project-image rounded m-auto'
                       style={{ display: 'block' }} 
