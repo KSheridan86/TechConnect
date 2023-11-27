@@ -213,6 +213,9 @@ const CreateProfile = () => {
             console.error('Error updating profile:', error);
             console.log('Error response from server:', error.response);
             setErrors({ general: "Whoops, looks like there's an issue with your details. Please try again later." });
+            setTimeout(() => {
+                navigate('/profile');
+            }, 3000)
         }
     };
 

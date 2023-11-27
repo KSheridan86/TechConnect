@@ -36,14 +36,12 @@ const AddSkills = () => {
     const checkReturningUser = () => {
         if (profile) {
             setReturningUser(true);
-            console.log('Returning user:', returningUser)
             }
         }
         
     const checkNewUser = () => {
         if (newUser) {
             setFirstTimeUser(true);
-            console.log('First time user:', firstTimeUser)
         }
     }
 
@@ -93,6 +91,16 @@ const AddSkills = () => {
             } catch (error) {
                 console.error('Error fetching current skills:', error);
                 setErrors({ general: "Whoops, we couldn't find your current skills, you have skills don't you??" });
+                setTimeout(() => {
+                    setErrors('');
+                    navigate('/profile');
+                }, 3000);
+            }
+            if (errors.general){
+                setTimeout(() => {
+                    setErrors('');
+                    navigate('/profile');
+                }, 3000);
             }
         };
         fetchSkills();
@@ -161,8 +169,8 @@ const AddSkills = () => {
             console.log('Error response from server:', error.response);
             setErrors({ general: "Whoops, we couldn't save your skills. Please try again later." });
             setTimeout(() => {
-                navigate('/');
-            }, 2000);
+                navigate('/profile');
+            }, 3000);
         }
     };
 

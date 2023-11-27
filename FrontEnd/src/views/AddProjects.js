@@ -103,9 +103,6 @@ const AddProjects = () => {
 
             const formData = new FormData();
             // Append avatar file to the form data if available
-            // if (project.avatar) {
-            //     formData.append('avatar', project.avatar, 'avatar.jpg');
-            // }
             if (project.image) {
                 formData.append('image', project.image, 'project_image.jpg');
             }
@@ -147,6 +144,12 @@ const AddProjects = () => {
         } catch (error) {
             console.error('Error adding project:', error);
             console.log('Error response from server:', error.response);
+            setErrors({ 
+                general: 
+                "Whoops, looks like there's a problem adding your project. Please try again later." });
+            setTimeout(() => {
+                navigate('/profile');
+            }, 3000);
         }
     };
 
@@ -160,6 +163,13 @@ const AddProjects = () => {
     return (
         <div className='container fill-screen'>
             <div className={`row justify-content-center login ${isSubmitted ? 'fade-out' : 'fade-in'}`}>
+            {errors.general && (
+            <div className='notification-overlay fs-3'>
+                <div className='alert alert-danger' role='alert'>
+                    {errors.general}
+                </div>
+            </div>
+            )}
                 <div className={`col-10 col-lg-8 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
 
                     <form encType="multipart/form-data">

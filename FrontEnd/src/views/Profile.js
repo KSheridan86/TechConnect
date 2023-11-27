@@ -20,6 +20,7 @@ const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [projects, setProjects] = useState([]);
   const [foundUser, setFoundUser] = useState({}); 
+  const [errors, setErrors] = useState({});
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const { shouldAnimate, setShouldAnimate } = useAnimation();
@@ -57,7 +58,15 @@ const Profile = () => {
         }
       } catch (error) {
         console.error('Error fetching profile data:', error);
-        // Handle the error if needed
+        setErrors({ 
+          general: 
+          "Whoops, looks like there's a problem gathering your profile details. Please try again later." });
+        if (errors){
+          setTimeout(() => {
+            setErrors('');
+            navigate('/');
+          }, 3000);
+        }
       }
     };
     fetchProfileData();
@@ -123,6 +132,7 @@ const Profile = () => {
     } catch (error) {
       console.error('Error deleting skills:', error);
       // Handle the error if needed
+      setErrors({ general: "Whoops, looks like there's an issue with your details. Please try again later." });
     }
   };
 
@@ -154,6 +164,16 @@ const Profile = () => {
   return (
     <div className='container mt-4 fill-screen mb-2'>
       <div className='row justify-content-evenly'>
+        <div>
+        {errors.general && (
+                <div className='notification-overlay fs-3'>
+                    <div className='alert alert-success' role='alert'>
+                    {errors.general}
+                    </div>
+                </div>
+            )}
+        </div>
+      
       {currentUser ? ( // Conditionally render content only if currentUser exists
         <h2 className={`nasa-black text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
           {foundUser.email === currentUser.data.email && (

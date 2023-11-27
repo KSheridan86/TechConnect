@@ -7,6 +7,7 @@ const Developers = () => {
   const [users, setUsers] = useState([]);
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const [errors, setErrors] = useState({});
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
   const { shouldAnimate, setShouldAnimate } = useAnimation();
@@ -26,15 +27,27 @@ const Developers = () => {
     withCredentials: true,
   });
 
-  useEffect(() => {
-    async function fetchUsers(){
+  const fetchUsers = async () => {
+    try {
       const { data } = await api.get('users/');
         setUsers(data);
-    }
+    } catch (error) {
+      setErrors({
+        general: 
+        "Whoops, looks like there's a problem accessing user details. Please try again later." });
+        setTimeout(() => {
+          setErrors({});
+          navigate('/');
+        }, 5000);
+      }
+    
+  };
+
+  useEffect(() => {
     fetchUsers();
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []); 
+  }, []);
 
   const handleSearch = () => {
     // Filter users based on the search term
@@ -72,6 +85,13 @@ const Developers = () => {
   return (
     <div className="container mt-4 fill-screen">
       <div className="row justify-content-center">
+      {errors.general && (
+      <div className='notification-overlay fs-3'>
+        <div className='alert alert-danger' role='alert'>
+          {errors.general}
+        </div>
+      </div>
+      )}
         <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           <h1 className="fw-bold p-2 text-center nasa text-uppercase">Discover Talented Developers!</h1>
           <p className="p-2">
