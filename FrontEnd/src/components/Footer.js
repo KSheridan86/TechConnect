@@ -16,6 +16,7 @@ const Footer = ({onLogout}) => {
     const [transition, setTransition] = useState(false);
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
+
     const confirmDelete = () => {
         setFadeButton(true);
         setTimeout(() => {
@@ -39,18 +40,18 @@ const Footer = ({onLogout}) => {
                 },
             };
         
-            const response = await api.delete(`users/delete-account/${currentUser.data.id}/`, config);
-            // Handle the response, e.g., show a success message, navigate to a different page, etc.
-            console.log(response);
-            onLogout()
-
+            await api.delete(`users/delete-account/${currentUser.data.id}/`, config);
             
             const displayMessage = () => {
+                setSuccessMessage(true)
                 setTimeout(() => {
-                    setSuccessMessage(true)
                     setTransition(true);
+                    onLogout()
                     setTimeout(() => {
+                        setTransition(false);
+                        setConfirmation(false);
                         setSuccessMessage(false);
+                        setFadeButton(false);
                         navigate('/');
                     }, 2000);
                 }, 1000);
@@ -58,7 +59,6 @@ const Footer = ({onLogout}) => {
             displayMessage();
     
             } catch (error) {
-                console.error('Error deleting user account:', error);
                 setErrors({ 
                     general: 
                     "Whoops, Somebody wants you to stick around!." });
@@ -70,8 +70,8 @@ const Footer = ({onLogout}) => {
 
     return (
     <footer className="footer text-white text-center py-3 fixed-bottom">
-        {!successMessage ? (
-        <div className="container">
+        {!transition ? (
+        <div className={`container ${successMessage ? 'fade-out': 'fade-in'}`}>
         {errors.general && (
             <div className='notification-overlay fs-3'>
                 <div className='alert alert-danger' role='alert'>
@@ -104,6 +104,7 @@ const Footer = ({onLogout}) => {
                         </button>
                     </div>
                 ) : (
+                    
                     <div className={`${fadeButton ? 'fade-out' : 'fade-in'}`}>
                         <button 
                         className={`btn btn-danger btn-block`}
@@ -111,16 +112,19 @@ const Footer = ({onLogout}) => {
                             Delete Account
                         </button>
                     </div>
+                    
                 )}
                 </div>
                 ) : (null)}
             </div>
         </div>
         ) : (
-            <div className="container">
+            <div className="container footer">
+        <div className={`container ${transition ? 'fade-in': 'fade-out'}`}>
             <div className="small common-font">
-                Profile Deleted Successfully!
+                Profile Deleted... <br/> Goodbye!
             </div>
+        </div>
         </div>
         )} 
     </footer>
