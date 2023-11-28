@@ -5,17 +5,12 @@ import { useAnimation } from '../components/AnimationContext';
 
 // Create a context for all images in the 'images' directory
 const imageContext = require.context('../images/randomAvatars', false, /\.png$/);
-
-// Get an array of all image file names
 const imageFileNames = imageContext.keys();
 
 const getRandomImage = () => {
   const randomImageFileName = imageFileNames[Math.floor(Math.random() * imageFileNames.length)];
   return imageContext(randomImageFileName);
 };
-
-// Now you can use 'randomImage' as the source for your image element
-
 
 const Developers = () => {
   const [users, setUsers] = useState([]);
@@ -25,6 +20,7 @@ const Developers = () => {
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
   const { shouldAnimate, setShouldAnimate } = useAnimation();
+  const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -54,7 +50,6 @@ const Developers = () => {
           navigate('/');
         }, 5000);
       }
-    
   };
 
   useEffect(() => {
@@ -67,12 +62,20 @@ const Developers = () => {
     // Filter users based on the search term
     const filteredUsers = users.filter((user) =>
       Object.values(user).some(
-        (value) => typeof value === 'string' && value.toLowerCase().includes(searchTerm.toLowerCase())
-      )
-    )
+        (value) => typeof value === 'string' && 
+        value.toLowerCase().includes(searchTerm.toLowerCase())
+      ) || ['firstname', 'lastname', 'location', 'skills_level_1', 'skills_level_2'].some(
+        (field) =>
+          typeof user.profile !== 'undefined' &&
+          typeof user.profile[field] === 'string' &&
+          user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
+      ) 
+    );
+
     // Update the state with the filtered users
     setFilteredUsers(filteredUsers);
     setSearchButtonClicked(true);
+    console.log(filteredUsers)
     setTimeout(() => {
     // Scroll to the container with search results
       const resultsContainer = document.getElementById('resultsContainer');
@@ -94,7 +97,7 @@ const Developers = () => {
         navigate(`/profile`, { state: { userId } });
       }, 1000);
   };
-
+  // console.log(users)
   return (
     <div className="container mt-4 fill-screen">
       <div className="row justify-content-center">
@@ -180,16 +183,23 @@ const Developers = () => {
             filteredUsers.map((user) => (
               <div
                 key={user.id}
-                className={`col-12 col-md-4 mb-3 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
-                onClick={() => handleUserClick(user.id)}
+                className={`col-12 col-md-3 mb-3 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
+                onClick={() => handleUserClick(user.user)}
               >
-                <div className="result-box glass-box p-2">
-                  <p>
-                  <img className="randomAvatar" src={getRandomImage()} alt="Random Avatar 1" />
-                    {user.username}<br />
-                    {user.email}<br />
-                    {user.account_type}<br />
-                  </p>
+                <div className="glass-box p-1">
+                  {/* <img className="randomAvatar mt-2 mb-2" src={getRandomImage()} alt="Random Avatar 1" /> */}
+                  {user.avatar ? (
+                    <img className="randomAvatar rounded mt-2 mb-2" src={`${baseAvatarUrl}${user.avatar}`}  alt={user.avatar} />
+                    ) : (
+                    <img className="randomAvatar mt-2 mb-2" src={getRandomImage()} alt="Random Avatar 1" />
+                  )}
+                    <br />
+                    <span className="header-font">{user.firstname}</span>
+                    <span className="header-font"> {user.lastname}</span><br />
+                    <span className="common-font">{user.location}</span>
+                    <hr />
+                    <span>Available: </span> <br />
+                    <span className="header-font">{user.date_available}</span>
                 </div>
               </div>
             ))

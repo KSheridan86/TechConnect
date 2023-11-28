@@ -101,9 +101,11 @@ def get_users(request):
     """
     Return all users.
     """
+    # pylint: disable=E1101
     all_users = User.objects.all()
     developers = all_users.filter(first_name__iexact='Developer')
-    serializer = UserSerializer(developers, many=True)
+    developer_profiles = DeveloperProfile.objects.filter(user__in=developers)
+    serializer = DeveloperProfileSerializer(developer_profiles, many=True)
     return Response(serializer.data)
 
 
