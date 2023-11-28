@@ -226,3 +226,26 @@ def delete_project(request, project_id):
 
     project.delete()
     return Response({'detail': 'Project deleted successfully.'})
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_account(request, user_id):
+    """
+    View to delete a user.
+    """
+    # pylint: disable=W0718
+    # Check if the user making the request is the one being deleted
+    if request.user.id != user_id:
+        return Response({"error": "Unauthorized"}, status=401)
+
+    # Get the user object or return a 404 if not found
+    user = get_object_or_404(User, id=user_id)
+
+    try:
+        user.delete()
+        return Response({"message": "User account deleted successfully"})
+
+    except Exception as e:
+        # Log the error or handle it accordingly
+        return Response({"error": str(e)}, status=500)

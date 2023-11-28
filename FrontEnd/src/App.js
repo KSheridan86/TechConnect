@@ -58,7 +58,7 @@ function App() {
           <Route path="/project/:projectId" element={<ProjectDetail />} />
         </Routes>
         <BackToTop />
-        <Footer />
+        <Footer onLogout={handleLogout} />
       </Router>
     </AnimationProvider>
   );
