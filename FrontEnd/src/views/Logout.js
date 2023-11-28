@@ -29,8 +29,7 @@ const Logout = ({ onLogout }) => {
 
   const handleLogout = async () => {
     try {
-      const response = await api.post('users/logout/');
-      console.log(response.data);  // Handle the success message
+      await api.post('users/logout/');
       setShouldSlideOut(true);
       const displayMessage = () => {
             setTimeout(() => {
@@ -56,7 +55,7 @@ const Logout = ({ onLogout }) => {
       <div className="row justify-content-center logout mt-5">
         <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
           <h1 className="glass-box fw-bold p-4 m-5 text-center">
-            <strong className="nasa">Are you sure you want to Logout?</strong>
+            <strong className="header-font">Are you sure you want to Logout?</strong>
           </h1>
           <div className="col-12 text-center hand-writing">
             <button 
@@ -67,9 +66,9 @@ const Logout = ({ onLogout }) => {
           </div>
         </div>
       </div>) : (
-      <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+      <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
         <div className="col-5 mt-5 glass-box">
-          <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+          <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
             Logout Successful!
             <br />
             <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />

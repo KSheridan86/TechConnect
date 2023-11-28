@@ -7,21 +7,29 @@ body {
   overflow-x: hidden;
 }
 
-/* custom nasa font & text effects*/
+/* custom font & text effects*/
 @font-face {
-  font-family: 'NasaFont';
+  font-family: 'myHeaderFont';
   src: url('./fonts/baveuse.woff') format('woff');
 }
-.nasa {
-  font-family: 'NasaFont', sans-serif;
+
+@font-face {
+  font-family: 'myRegularFont';
+  src: url(./fonts/MafinestIta0.woff) format('woff');
+}
+.header-font {
+  font-family: 'myHeaderFont', sans-serif;
   color: #f1916d;
 }
-.nasa-black {
-  font-family: 'NasaFont', sans-serif;
+.header-font {
+  font-family: 'myHeaderFont', sans-serif;
   color: #f1916d;
 }
 .hand-writing {
   font-family: 'Edu SA Beginner', cursive;
+}
+.common-font {
+  font-family: 'myRegularFont', sans-serif;
 }
 
 /* Main background image */
@@ -113,7 +121,7 @@ h1 {
   text-shadow: 5px 5px 13px #1b335b;
 }
 p {
-  font-family: 'Noto Sans JP', sans-serif;
+  font-family: 'myRegularFont', sans-serif;
 }
 .nutrition-box {
   background-color: white;

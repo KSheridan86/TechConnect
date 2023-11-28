@@ -17,5 +17,9 @@ urlpatterns = [
           views.user_profile, name="users-profile"),
      path('users/update_profile/', views.update_profile,
           name="update_profile"),
+     path('users/delete-profile/<int:profile_id>/',
+          views.delete_profile, name="delete_profile"),
      path('users/add_project/', views.add_project, name="add_project"),
+     path('users/delete-project/<int:project_id>/',
+          views.delete_project, name="delete_project"),
 ]

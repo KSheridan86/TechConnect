@@ -40,7 +40,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
       <div className="container">
-        <span className="navbar-brand nasa text-uppercase" to="" onClick={() => handleNavLinkClick('/')} >
+        <span className="navbar-brand header-font text-uppercase" to="" onClick={() => handleNavLinkClick('/')} >
           <FontAwesomeIcon icon={faCodeFork} /> TechConnect
         </span>
         <button
@@ -61,23 +61,23 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
         >
           <ul className="navbar-nav text-center">
             <li className="nav-item">
-              <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/')}>
+              <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/')}>
                 Home
               </span>
             </li>
             <li className="nav-item">
-              <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/developers')}>
+              <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/developers')}>
                 Developers
               </span>
             </li>
             {currentUser && currentUser.data.account_type === "Developer" && (
               <li className="nav-item">
                 {currentUser ? (
-                  <span className="nav-link nasa" onClick={() => userProfileClick()}>
+                  <span className="nav-link header-font" onClick={() => userProfileClick()}>
                   Profile
                 </span>
                 ) : (
-                  <span className="nav-link nasa" onClick={() => handleNavLinkClick('/profile')}>
+                  <span className="nav-link header-font" onClick={() => handleNavLinkClick('/profile')}>
                     Profile
                   </span>
                 )}
@@ -85,12 +85,12 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
             )}
             {currentUser ? 
               <li className="nav-item">
-                <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/logout')}>
+                <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/logout')}>
                   Logout
                 </span>
               </li> : 
               <li className="nav-item">
-                <span className="nav-link nasa" to="" onClick={() => handleNavLinkClick('/login')}>
+                <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/login')}>
                   Login
                 </span>
               </li>}

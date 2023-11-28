@@ -210,7 +210,7 @@ const SignUp = ({ onLogin }) => {
             </div>
           )}
           <div className="glass-box border-dark m-3">
-            <h2 className="nasa-black text-center text-uppercase mt-3">
+            <h2 className="header-font text-center text-uppercase mt-3">
               {accountType === "Developer" ? "Developer Sign Up" : "Client Sign up"}
             </h2>
             <form onSubmit={handleSubmit}>
@@ -277,9 +277,9 @@ const SignUp = ({ onLogin }) => {
         </div>
       </div>
     ) :
-      <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+      <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
         <div className="col-5 mt-5 glass-box">
-            <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+            <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
               Account Created!
               <br />
               <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
@@ -293,9 +293,9 @@ const SignUp = ({ onLogin }) => {
     return (
       <div className="container login mt-4 fill-screen main-content">
         <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-        <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+        <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
           <div className="col-5 mt-5 glass-box">
-            <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+            <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
               Already Registered and logged in!
               <br />
               <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />

@@ -72,7 +72,6 @@ const Developers = () => {
     )
     // Update the state with the filtered users
     setFilteredUsers(filteredUsers);
-    console.log(filteredUsers);
     setSearchButtonClicked(true);
     setTimeout(() => {
     // Scroll to the container with search results
@@ -107,7 +106,7 @@ const Developers = () => {
       </div>
       )}
         <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
-          <h1 className="fw-bold p-2 text-center nasa text-uppercase">Discover Talented Developers!</h1>
+          <h1 className="fw-bold p-2 text-center header-font text-uppercase">Discover Talented Developers!</h1>
           <p className="p-2">
             Looking for the right developer for your project?
             <br />
@@ -142,26 +141,26 @@ const Developers = () => {
         <div className={`col-12 col-md-6 max mb-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
           <div className="glass-box m-3 text-center">
             <div className="p-3">
-              <p className="fs-3 mb-2 nasa text-uppercase">Searching made easy!</p>
-              <div className="fs-5 mt-2 mb-1 nasa">Name</div>
+              <p className="fs-3 mb-2 header-font text-uppercase">Searching made easy!</p>
+              <div className="fs-5 mt-2 mb-1 header-font">Name</div>
               <p>
                 Have a specific developer in mind?
                 Search their name to quickly find their profile and portfolio.
               </p>
               <hr />
-              <div className="fs-5 mt-3 mb-1 nasa">Tech Stack</div>
+              <div className="fs-5 mt-3 mb-1 header-font">Tech Stack</div>
               <p>
                 Use our technology stack filter to discover developers who specialize in
                 what you need.
               </p>
               <hr />
-              <div className="fs-5 mt-3 mb-1 nasa">Experience</div>
+              <div className="fs-5 mt-3 mb-1 header-font">Experience</div>
               <p>
                 Find developers with the right level of experience for your project,
                 whether you're looking for seasoned veterans or fresh talent.
               </p>
               <hr />
-              <div className="fs-5 mt-3 mb-1 nasa">Location</div>
+              <div className="fs-5 mt-3 mb-1 header-font">Location</div>
               <p>
                 Prefer to work with developers in your area or time zone?
                 Our location filter helps you narrow down your search.

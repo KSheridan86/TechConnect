@@ -62,6 +62,26 @@ class MyTokenObtainPairView(TokenObtainPairView):
 
 
 @api_view(['POST'])
+def register_user(request):
+    """
+    Register a new user.
+    """
+    data = request.data
+    try:
+        user = User.objects.create(
+            first_name=data['account_type'],
+            username=data['username'],
+            email=data['email'],
+            password=make_password(data['password'])
+        )
+        serializer = UserSerializerWithToken(user, many=False)
+        return Response(serializer.data)
+    except IntegrityError:
+        return Response(
+            "Whoops! That Username is unavailable.")
+
+
+@api_view(['POST'])
 def logout(request):
     """
     View to logout a user.
@@ -96,26 +116,6 @@ def get_all_users(request):
     all_users = User.objects.all()
     serializer = UserSerializer(all_users, many=True)
     return Response(serializer.data)
-
-
-@api_view(['POST'])
-def register_user(request):
-    """
-    Register a new user.
-    """
-    data = request.data
-    try:
-        user = User.objects.create(
-            first_name=data['account_type'],
-            username=data['username'],
-            email=data['email'],
-            password=make_password(data['password'])
-        )
-        serializer = UserSerializerWithToken(user, many=False)
-        return Response(serializer.data)
-    except IntegrityError:
-        return Response(
-            "Whoops! That Username is unavailable.")
 
 
 @api_view(['GET'])
@@ -169,6 +169,24 @@ def update_profile(request):
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_profile(request, profile_id):
+    """
+    Delete profile.
+    """
+    profile = get_object_or_404(DeveloperProfile, id=profile_id)
+
+    # Check if the user making the request is the owner of the profile
+    if profile.user != request.user:
+        return Response({'detail':
+                        'You do not have permission to delete this profile.'
+                         }, status=403)
+
+    profile.delete()
+    return Response({'detail': 'Profile deleted successfully.'})
+
+
 @api_view(['GET', 'POST', 'PUT',])
 @permission_classes([IsAuthenticated])
 def add_project(request):
@@ -190,3 +208,21 @@ def add_project(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_project(request, project_id):
+    """
+    View to add a project.
+    """
+    project = get_object_or_404(Project, id=project_id)
+
+    # Check if the user making the request is the owner of the project
+    if project.developer.user != request.user:
+        return Response({'detail':
+                         'You do not have permission to delete this project.'
+                         }, status=403)
+
+    project.delete()
+    return Response({'detail': 'Project deleted successfully.'})

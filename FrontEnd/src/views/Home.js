@@ -28,7 +28,7 @@ const Home = () => {
         <div className="container mt-4 fill-screen">
             <div className="row justify-content-center mt-5">
                 <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
-                    <div className="glass-box border-dark m-3 nasa p-4 text-center">
+                    <div className="glass-box border-dark m-3 header-font p-4 text-center">
                         <div className="circle-image m-auto mb-3">
                             <img src={logo} alt="Circle" />
                         </div>
@@ -54,7 +54,7 @@ const Home = () => {
                 </div>
                 <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
                     <div className="p-3 text-center glass-box m-3 border-dark">
-                        <h1 className='nasa mb-3'>Developers!</h1>
+                        <h1 className='header-font mb-3'>Developers!</h1>
                         <p>
                         Create free accounts and build professional portfolio
                         pages. Showcase your work, highlight your skills, and let potential clients discover
@@ -71,7 +71,7 @@ const Home = () => {
                         Communicate securely within the TechConnect platform.
                         </p>
                         <hr />
-                        <h1 className='nasa text-uppercase'>Clients!</h1>
+                        <h1 className='header-font text-uppercase'>Clients!</h1>
                         <p>
                         Create an account to explore developer profiles, unlock contact details,
                         and send private messages to your perfect developer.

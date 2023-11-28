@@ -140,7 +140,7 @@ const CreateProfile = () => {
 
             // Read the file as a data URL (base64-encoded string)
             reader.readAsDataURL(file);
-        }
+        } 
     };
 
     // Handle availability checkbox change
@@ -195,7 +195,6 @@ const CreateProfile = () => {
             // Make a POST request to update the user profile
             const response = await api.post('users/update_profile/', formData, config);
 
-            console.log('Profile updated:', response.data);
             localStorage.setItem('newProfile', JSON.stringify(response.data));
             if (retrievedProfile) {
                 setShouldSlideOut(true);
@@ -231,7 +230,7 @@ const CreateProfile = () => {
                 </div>
             )}
             <div className='col-12'>   
-                <h2 className='nasa-black text-center text-uppercase mt-3'>
+                <h2 className='header-font text-center text-uppercase mt-3'>
                     Create your Profile
                 </h2>
             {/* Profile creation form */}
@@ -240,7 +239,7 @@ const CreateProfile = () => {
                     <div className='row justify-content-evenly text-center'>
                     <div className={`col-md-5 mb-3 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
                         <div className='glass-box border-dark m-3 p-3'>
-                        <h4 className="nasa text-uppercase">Personal Information</h4>
+                        <h4 className="header-font text-uppercase">Personal Information</h4>
                         <div className='mb-3'>
                             <label className='fw-bold fs-5'>First Name:</label>
                             <input
@@ -305,7 +304,7 @@ const CreateProfile = () => {
                     {/* Professional Information section */}
                     <div className={`col-md-5 mb-3 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
                         <div className='glass-box border-dark m-3 p-3'>
-                        <h4 className='nasa text-uppercase'>Professional Information</h4>
+                        <h4 className='header-font text-uppercase'>Professional Information</h4>
                         <div className='mb-3'>
                         <label className='fw-bold fs-5'>GitHub URL:</label>
                             <input
@@ -414,9 +413,9 @@ const CreateProfile = () => {
         return (
             <div className="container login mt-4 fill-screen main-content">
                 <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-                <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+                <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
                     <div className="col-5 mt-5 glass-box">
-                        <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                        <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
                         Not Authorized!
                         <br />
                         <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />

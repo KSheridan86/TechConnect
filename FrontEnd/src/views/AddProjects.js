@@ -11,6 +11,7 @@ const api = axios.create({
 const AddProjects = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
+    const [projectSaved, setProjectSaved] = useState(false);
     const [buttonTxt, setButtonTxt] = useState(true);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const [errors, setErrors] = useState({});
@@ -122,8 +123,7 @@ const AddProjects = () => {
             };
 
             // Make a POST request to add the project
-            const response = await api.post('users/add_project/', formData, config);
-            console.log('Project added:', response.data);
+            await api.post('users/add_project/', formData, config);
 
             // Clear the input fields and initiate animations on the form
             setIsSubmitted(true);
@@ -136,11 +136,11 @@ const AddProjects = () => {
                     tech_stack: '',
                     image: null,
                 });
+                setProjectSaved(true);
                 clearImageField();
                 setButtonTxt(false);
                 setIsSubmitted(false);
             }, 1000);
-
         } catch (error) {
             console.error('Error adding project:', error);
             console.log('Error response from server:', error.response);
@@ -174,7 +174,7 @@ const AddProjects = () => {
 
                     <form encType="multipart/form-data">
                         <div className='glass-box border-dark m-3 p-3'>
-                            <h4 className="nasa text-uppercase text-center">Add a Project</h4>
+                            <h4 className="header-font text-uppercase text-center">Add a Project</h4>
                             <div className='row'>
                                 <div className='col-md-6'>
                                     <label className='fw-bold fs-5'>Name:</label>
@@ -278,12 +278,22 @@ const AddProjects = () => {
                     </form>
 
                     <div className='text-center hand-writing mt-5 animate-slide-bottom'>
-                        <button
-                            type='button'
-                            className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
-                            onClick={returnToProfile}>
-                            {returnUrl ? 'Back' : 'Skip'}
-                        </button>
+                        {!projectSaved ? (
+                            <button
+                                type='button'
+                                className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                                onClick={returnToProfile}>
+                                {returnUrl ? 'Back' : 'Skip'}
+                            </button>
+                        ) : (
+                            <button
+                                type='button'
+                                className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                                onClick={returnToProfile}>
+                                Profile
+                            </button>
+                        )}
+                        
                     </div>
                 </div>
             </div>

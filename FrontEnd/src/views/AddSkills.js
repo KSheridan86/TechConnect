@@ -195,7 +195,7 @@ const AddSkills = () => {
                     <div className='row justify-content-evenly text-center'>
                         <div className={`col-md-8 mb-0 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                             <div className='glass-box border-dark m-3 p-4'>
-                                <h2 className='nasa-black text-center text-uppercase mt-2'>
+                                <h2 className='header-font text-center text-uppercase mt-2'>
                                     Add Skills to your Profile
                                 </h2>
                                 <div className='mb-3'>
@@ -259,9 +259,9 @@ const AddSkills = () => {
                 </div>
             </div>
             ) :
-            <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+            <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
                 <div className="col-5 mt-5 glass-box">
-                    <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                    <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
                         Skills Updated!
                         <br />
                         <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
@@ -275,9 +275,9 @@ const AddSkills = () => {
         return (
             <div className="container login mt-4 fill-screen main-content">
                 <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
-                <div className={`row justify-content-center mt-5 nasa-black ${ transition ? 'fade-out' : 'fade-in'}`}> 
+                <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
                     <div className="col-5 mt-5 glass-box">
-                        <h2 className={`nasa mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
+                        <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
                             Not Authorized!
                             <br />
                             <FontAwesomeIcon icon={faTimes} style={{ color: 'red' }} className='fs-1' />
