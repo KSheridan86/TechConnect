@@ -20,6 +20,7 @@ const Developers = () => {
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
   const [showAvailableDevs, setShowAvailableDevs] = useState(false);
+  const [searchType, setSearchType] = useState('regular');
   const { shouldAnimate, setShouldAnimate } = useAnimation();
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
@@ -38,59 +39,153 @@ const Developers = () => {
     withCredentials: true,
   });
 
+  // const fetchUsers = async () => {
+  //   try {
+  //     const { data } = await api.get('users/');
+  //       setUsers(data);
+  //   } catch (error) {
+  //     setErrors({
+  //       general: 
+  //       "Whoops, looks like there's a problem accessing user details. Please try again later." });
+  //       setTimeout(() => {
+  //         setErrors({});
+  //         navigate('/');
+  //       }, 5000);
+  //     }
+  // };
   const fetchUsers = async () => {
     try {
       const { data } = await api.get('users/');
-        setUsers(data);
+      const usersWithSkills = await Promise.all(
+        data.map(async (user) => {
+          // Assuming user.skills_1 and user.skills_2 are arrays of skill IDs
+          const skillsDetails1 = await Promise.all(
+            user.skills_1.map(async (skillId) => {
+              try {
+                const skillResponse = await api.get(`users/skills/${skillId}/`);
+                return skillResponse.data.name;
+              } catch (error) {
+                console.error('Error fetching skill details:', error);
+                return null;
+              }
+            })
+          );
+  
+          const skillsDetails2 = await Promise.all(
+            user.skills_2.map(async (skillId) => {
+              try {
+                const skillResponse = await api.get(`users/skills/${skillId}/`);
+                return skillResponse.data.name;
+              } catch (error) {
+                console.error('Error fetching skill details:', error);
+                return null;
+              }
+            })
+          );
+  
+          return {
+            ...user,
+            currentSkills1: skillsDetails1.join(', '),
+            currentSkills2: skillsDetails2.join(', '),
+          };
+        })
+      );
+  
+      setUsers(usersWithSkills);
     } catch (error) {
       setErrors({
-        general: 
-        "Whoops, looks like there's a problem accessing user details. Please try again later." });
-        setTimeout(() => {
-          setErrors({});
-          navigate('/');
-        }, 5000);
-      }
+        general:
+          "Whoops, looks like there's a problem accessing user details. Please try again later.",
+      });
+      setTimeout(() => {
+        setErrors({});
+        navigate('/');
+      }, 5000);
+    }
   };
-
   useEffect(() => {
     fetchUsers();
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+    console.log(users)
+  // const handleSearch = () => {
+  //   // Filter users based on the search term
+
+  //   const filteredUsers = users.filter((user) => {
+    
+  //   return (
+  //     (searchType === 'regular' &&
+  //       (Object.values(user).some(
+  //         (value) =>
+  //           typeof value === 'string' &&
+  //           value.toLowerCase().includes(searchTerm.toLowerCase())
+  //       ) ||
+  //       ['firstname', 'lastname', 'location'].some(
+  //         (field) =>
+  //           typeof user.profile !== 'undefined' &&
+  //           typeof user.profile[field] === 'string' &&
+  //           user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
+  //       ))) ||
+  //     (searchType === 'skills' &&
+  //       user.skills.some((skill) =>
+  //         skill.toLowerCase().includes(searchTerm.toLowerCase())
+  //       ))
+  //   ) && (!showAvailableDevs || (user.available && user.date_available));
+  // });
+
+  //   // Update the state with the filtered users
+  //   setFilteredUsers(filteredUsers);
+  //   console.log(filteredUsers)
+  //   setSearchButtonClicked(true);
+  //   console.log(filteredUsers)
+  //   setTimeout(() => {
+  //   // Scroll to the container with search results
+  //     const resultsContainer = document.getElementById('resultsContainer');
+  //       if (resultsContainer) {
+  //           resultsContainer.scrollIntoView({ behavior: 'smooth' });
+  //       }
+  //   }, 750);
+  // };
 
   const handleSearch = () => {
-    // Filter users based on the search term
+    // Filter users based on the search term and search type
     const filteredUsers = users.filter((user) => {
-      
-      // For other search terms, use the existing logic
-      return (
-        Object.values(user).some(
-          (value) =>
-            typeof value === 'string' &&
-            value.toLowerCase().includes(searchTerm.toLowerCase())
-        ) ||
-        ['firstname', 'lastname', 'location'].some(
-          (field) =>
-            typeof user.profile !== 'undefined' &&
-            typeof user.profile[field] === 'string' &&
-            user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
-        )
-      ) && (!showAvailableDevs || (user.available && user.date_available));
+      if (searchType === 'regular') {
+        // For regular search, use existing logic
+        return (
+          Object.values(user).some(
+            (value) =>
+              typeof value === 'string' &&
+              value.toLowerCase().includes(searchTerm.toLowerCase())
+          ) ||
+          ['firstname', 'lastname', 'location'].some(
+            (field) =>
+              typeof user.profile !== 'undefined' &&
+              typeof user.profile[field] === 'string' &&
+              user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
+          )
+        ) && (!showAvailableDevs || (user.available && user.date_available));
+      } else if (searchType === 'skills') {
+        // For skill search, check against currentSkills1 and currentSkills2
+        return (
+          user.currentSkills1.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.currentSkills2.toLowerCase().includes(searchTerm.toLowerCase())
+        ) && (!showAvailableDevs || (user.available && user.date_available));
+      }
+      return false;
     });
   
-
     // Update the state with the filtered users
     setFilteredUsers(filteredUsers);
-    console.log(filteredUsers)
     setSearchButtonClicked(true);
-    console.log(filteredUsers)
-    setTimeout(() => {
+  
     // Scroll to the container with search results
+    setTimeout(() => {
       const resultsContainer = document.getElementById('resultsContainer');
-        if (resultsContainer) {
-            resultsContainer.scrollIntoView({ behavior: 'smooth' });
-        }
+      if (resultsContainer) {
+        resultsContainer.scrollIntoView({ behavior: 'smooth' });
+      }
     }, 750);
   };
 
@@ -177,7 +272,7 @@ const Developers = () => {
             <div className="col-8 text-center hand-writing">
               <select
                 className="form-select mb-3"
-                // onChange={(e) => setSearchType(e.target.value)}
+                onChange={(e) => setSearchType(e.target.value)}
               >
                 <option value="regular">Search by Name/Location</option>
                 <option value="skills">Search by Tech Stack</option>
