@@ -24,6 +24,7 @@ const SignUp = ({ onLogin }) => {
     username: '',
     email: '',
     password: '',
+    confirm_password: '',
     account_type: accountType,
   };
   const [userData, setUserData] = useState(initialUserData);
@@ -95,7 +96,19 @@ const SignUp = ({ onLogin }) => {
     if (!userData.password.trim()) {
       newErrors.password = "Please enter a password";
       isValid = false;
+    } else if (userData.password.trim().length < 8) {
+      newErrors.password = "Password must be at least 8 characters";
+      isValid = false;
     }
+
+    // Validate confirm password
+  if (!userData.confirm_password?.trim()) {
+    newErrors.confirm_password = "Please confirm your password";
+    isValid = false;
+  } else if (userData.confirm_password !== userData.password) {
+    newErrors.confirm_password = "Passwords do not match";
+    isValid = false;
+  }
 
     setErrors(newErrors);
     return isValid;
@@ -249,6 +262,17 @@ const SignUp = ({ onLogin }) => {
                     />
                     {errors.password && (
                       <div className="text-danger">{errors.password}</div>
+                    )}
+                    <label className="fw-bold fs-5">Confirm Password:</label>
+                    <input
+                      className="text-center border border-dark border-2 p-2 form-control mb-2 hand-writing"
+                      type="password"
+                      name="confirm_password"
+                      placeholder="Confirm password"
+                      onChange={handleInputChange}
+                    />
+                    {errors.confirm_password && (
+                      <div className="text-danger">{errors.confirm_password}</div>
                     )}
                     <br />
                   </div>
