@@ -19,6 +19,7 @@ const Developers = () => {
   const [errors, setErrors] = useState({});
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
   const [searchButtonClicked, setSearchButtonClicked] = useState(false); 
+  const [showAvailableDevs, setShowAvailableDevs] = useState(false);
   const { shouldAnimate, setShouldAnimate } = useAnimation();
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
@@ -75,7 +76,7 @@ const Developers = () => {
             typeof user.profile[field] === 'string' &&
             user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
         )
-      );
+      ) && (!showAvailableDevs || (user.available && user.date_available));
     });
   
 
@@ -116,7 +117,7 @@ const Developers = () => {
         </div>
       </div>
       )}
-        <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
+        {/* <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           <h1 className="fw-bold p-2 text-center header-font text-uppercase">Discover Talented Developers!</h1>
           <p className="p-2">
             Looking for the right developer for your project?
@@ -145,6 +146,63 @@ const Developers = () => {
                 className="btn btn-warning border-dark border-2 mt-3 col-6"
                 onClick={handleSearch}>
                   Search
+              </button>
+            </div>
+          </div>
+        </div> */}
+        <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
+          <h1 className="fw-bold p-2 text-center header-font text-uppercase">Discover Talented Developers!</h1>
+          <p className="p-2">
+            Looking for the right developer for your project?
+            <br />
+            You're in the right place!
+            <br />
+            Explore a diverse pool of talented
+            individuals with expertise in various technologies and experience levels.
+          </p>
+          <hr />
+          <p className="hand-writing fs-4 text-center mb-3">
+            Simply input your particular criteria below and we'll do the rest!
+          </p>
+          <div className="row justify-content-center text-center">
+            <div className="col-8">
+              <input
+                className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
+                type="text"
+                placeholder="Who or What are you looking for?"
+                value={searchTerm}
+                onChange={handleInputChange}
+              />
+            </div>
+            <div className="col-8 text-center hand-writing">
+              <select
+                className="form-select mb-3"
+                // onChange={(e) => setSearchType(e.target.value)}
+              >
+                <option value="regular">Search by Name/Location</option>
+                <option value="skills">Search by Tech Stack</option>
+              </select>
+            </div>
+            <div className="col-8 text-center hand-writing">
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="showAvailableDevs"
+                  checked={showAvailableDevs}
+                  onChange={() => setShowAvailableDevs(!showAvailableDevs)}
+                />
+                <label className="form-check-label" htmlFor="showAvailableDevs">
+                  Only show available devs
+                </label>
+              </div>
+            </div>
+            <div className="col-8 text-center hand-writing">
+              <button
+                className="btn btn-warning border-dark border-2 mt-3 col-6"
+                onClick={handleSearch}
+              >
+                Search
               </button>
             </div>
           </div>
