@@ -60,20 +60,28 @@ const Developers = () => {
 
   const handleSearch = () => {
     // Filter users based on the search term
-    const filteredUsers = users.filter((user) =>
-      Object.values(user).some(
-        (value) => typeof value === 'string' && 
-        value.toLowerCase().includes(searchTerm.toLowerCase())
-      ) || ['firstname', 'lastname', 'location', 'skills_level_1', 'skills_level_2'].some(
-        (field) =>
-          typeof user.profile !== 'undefined' &&
-          typeof user.profile[field] === 'string' &&
-          user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
-      ) 
-    );
+    const filteredUsers = users.filter((user) => {
+      
+      // For other search terms, use the existing logic
+      return (
+        Object.values(user).some(
+          (value) =>
+            typeof value === 'string' &&
+            value.toLowerCase().includes(searchTerm.toLowerCase())
+        ) ||
+        ['firstname', 'lastname', 'location'].some(
+          (field) =>
+            typeof user.profile !== 'undefined' &&
+            typeof user.profile[field] === 'string' &&
+            user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      );
+    });
+  
 
     // Update the state with the filtered users
     setFilteredUsers(filteredUsers);
+    console.log(filteredUsers)
     setSearchButtonClicked(true);
     console.log(filteredUsers)
     setTimeout(() => {
@@ -198,8 +206,18 @@ const Developers = () => {
                     <span className="header-font"> {user.lastname}</span><br />
                     <span className="common-font">{user.location}</span>
                     <hr />
-                    <span>Available: </span> <br />
-                    <span className="header-font">{user.date_available}</span>
+                    {user.available ? (
+                      <div>
+                        <span>I'm Available on: </span> <br />
+                      <span className="header-font">{user.date_available}</span>
+                      </div>
+                    ) : (
+                      <div>
+                        <span>Unavailable: </span> <br />
+                      <span className="header-font">Sorry</span>
+                      </div>
+                    )}<br />
+                    
                 </div>
               </div>
             ))

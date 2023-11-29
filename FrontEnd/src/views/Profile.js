@@ -33,6 +33,8 @@ const Profile = () => {
   const [fadeButton, setFadeButton] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
   const [transition, setTransition] = useState(false);
+  const [skillsLevel1, setSkillsLevel1] = useState([]);
+  const [skillsLevel2, setSkillsLevel2] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -62,7 +64,35 @@ const Profile = () => {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
           setProjects(response.data.projects);
+          const skillIds_1 = response.data.skills_1;
+          const skillIds_2 = response.data.skills_2;
+          const skillsDetails_1 = await Promise.all(
+              skillIds_1.map(async (id) => {
+                  try {
+                      const skillResponse = await api.get(`users/skills/${id}/`);
+                      return skillResponse.data.name;
+                  } catch (error) {
+                      console.error('Error fetching skill details:', error);
+                      return null;
+                  }
+              })
+          );
+          setSkillsLevel1(skillsDetails_1);
+          const skillsDetails_2 = await Promise.all(
+            skillIds_2.map(async (id) => {
+                try {
+                    const skillResponse = await api.get(`users/skills/${id}/`);
+                    return skillResponse.data.name;
+                } catch (error) {
+                    console.error('Error fetching skill details:', error);
+                    return null;
+                }
+            })
+        );
+          setSkillsLevel2(skillsDetails_2);
         }
+        
+        
       } catch (error) {
         console.error('Error fetching profile data:', error);
         setErrors({ 
@@ -140,15 +170,8 @@ const Profile = () => {
         setConfirmation(false);
         // Make a request to the API endpoint to delete skills
         api.post('users/update_profile/', { delete_skills: true }, config)
-          .then(() => {
-          // Update the state to reflect the changes (set skills to an empty array)
-            setFoundUser((prevUser) => ({
-              ...prevUser,
-              skills_level_1: [],
-              skills_level_2: [],
-            }
-          ));
-        })
+          setSkillsLevel1([]);
+          setSkillsLevel2([]);
       }, 1000);
     } catch (error) {
       console.error('Error deleting skills:', error);
@@ -340,33 +363,33 @@ const Profile = () => {
               <h2 className='header-font text-center text-uppercase mt-1'>Skills</h2>
               {isSkillsDefinedAndNotEmpty ? (
               <div>
-              {foundUser.skills_level_1 && (
+              {skillsLevel1 && (
                 <div>
                   <h5 className='header-font text-center text-uppercase mt-3'>Level 1 Skills:</h5>
                   <p className='header-font text-center mt-3'>
-                    {Array.isArray(foundUser.skills_level_1)
-                      ? foundUser.skills_level_1
-                        .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
-                        .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-                        .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                      : foundUser.skills_level_1
+                    {skillsLevel1
+                      .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
+                      .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
+                      .map(skill => capitalizeFirstLetter(skill.trim()))
+                      .join(', ')
                     }
                   </p>
                 </div>
               )}
-                <h5 className='header-font text-center text-uppercase mt-3'>Level 2 Skills:</h5>
-                {foundUser.skills_level_2 && (
-                <p className='header-font text-center mt-3'>
-                  {Array.isArray(foundUser.skills_level_2)
-                    ? foundUser.skills_level_2
+              {skillsLevel2 && (
+                <div>
+                  <h5 className='header-font text-center text-uppercase mt-3'>Level 2 Skills:</h5>
+                  <p className='header-font text-center mt-3'>
+                    {skillsLevel2
                       .filter(skill => typeof skill === 'string' && /[a-zA-Z]/.test(skill)) // Check if the element contains letters
                       .filter(skill => !/\(\)|^\s*$/.test(skill)) // Check if the element is not '()' or contains only whitespaces
-                      .map(skill => capitalizeFirstLetter(skill.trim())).join(', ')
-                    : foundUser.skills_level_2
-                  }
-                </p>
-                )}
-                </div>) : 
+                      .map(skill => capitalizeFirstLetter(skill.trim()))
+                      .join(', ')
+                    }
+                  </p>
+                </div>
+              )}
+              </div>) : 
                 <div className='header-font text-center text-uppercase mt-3 mb-3'>
                   You have no saved skills, add some below to show off how great you are!
                 </div>}

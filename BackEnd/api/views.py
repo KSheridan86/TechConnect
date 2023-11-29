@@ -4,6 +4,7 @@ The views to control the API.
 
 from django.shortcuts import get_object_or_404
 from django.contrib.auth.hashers import make_password
+from django.http import JsonResponse
 from django.db import IntegrityError
 from rest_framework import status
 from rest_framework.decorators import api_view, permission_classes
@@ -13,7 +14,7 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 # pylint: disable=W0611
-from .models import (User, DeveloperProfile, Project)
+from .models import (User, DeveloperProfile, Project, Skill)
 # from .models import (DeveloperReview, ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, UserSerializerWithToken,
                           DeveloperProfileSerializer, ProjectSerializer,)
@@ -151,13 +152,39 @@ def update_profile(request):
 
     if request.data.get('delete_skills'):
         # Clear the skills fields
-        profile.skills_level_1 = "",
-        profile.skills_level_2 = "",
+        # profile.skills_level_1 = "",
+        # profile.skills_level_2 = "",
+        profile.skills_1.clear()
+        profile.skills_2.clear()
 
         # Save the profile to persist the changes
         profile.save()
 
         return Response({'message': 'Skills deleted successfully'})
+    print(request.data)
+
+    print(profile.skills_1.all())
+    # Extract primary_skills and secondary_skills from request data
+    primary_skills = request.data.getlist('skills_1[]', [])
+    secondary_skills = request.data.getlist('skills_2[]', [])
+    print('primary_skills:', primary_skills)
+    print('secondary_skills:', secondary_skills)
+
+    # Clear existing skills
+    # profile.skills_1.clear()
+    # profile.skills_2.clear()
+
+    # Add new skills
+    
+    # Create and add new skills
+    for skill_name in primary_skills:
+        skill, created = Skill.objects.get_or_create(name=skill_name.strip())
+        profile.skills_1.add(skill)
+
+    for skill_name in secondary_skills:
+        skill, created = Skill.objects.get_or_create(name=skill_name.strip())
+        profile.skills_2.add(skill)
+    profile.save()
 
     serializer = DeveloperProfileSerializer(
         profile, data=request.data, partial=True)
@@ -251,3 +278,16 @@ def delete_account(request, user_id):
     except Exception as e:
         # Log the error or handle it accordingly
         return Response({"error": str(e)}, status=500)
+
+
+def view_skills(request, skill_id):
+    """
+    Retrieve skills.
+    """
+    try:
+        # pylint: disable=E1101
+        skill = Skill.objects.get(pk=skill_id)
+        skill_details = {'id': skill.id, 'name': skill.name}
+        return JsonResponse(skill_details)
+    except Skill.DoesNotExist:
+        return JsonResponse({'error': 'Skill not found'}, status=404)

@@ -86,8 +86,22 @@ const AddSkills = () => {
                     },};
                 
                 const response = await api.get(`users/profile/${currentUser.data.id}`, config);
-                setCurrentSkills1(response.data.skills_level_1);
-                setCurrentSkills2(response.data.skills_level_2);
+
+                const skillIds = response.data.skills_1;
+                const skillsDetails = await Promise.all(
+                    skillIds.map(async (id) => {
+                        try {
+                            const skillResponse = await api.get(`users/skills/${id}/`);
+                            return skillResponse.data.name;
+                        } catch (error) {
+                            console.error('Error fetching skill details:', error);
+                            return null;
+                        }
+                    })
+                );
+                console.log('Current skills:', skillsDetails);
+                // setCurrentSkills1(response.data.skills_level_1);
+                // setCurrentSkills2(response.data.skills_level_2);
             } catch (error) {
                 console.error('Error fetching current skills:', error);
                 setErrors({ general: "Whoops, we couldn't find your current skills, you have skills don't you??" });
@@ -115,18 +129,18 @@ const AddSkills = () => {
             return;
         }
         const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-        const formData = new FormData();
+        // const formData = new FormData();
 
         // Function to join skills with commas
-        const joinSkills = (skills) => (skills.length > 0 ? skills.join(', ') : '');
+        // const joinSkills = (skills) => (skills.length > 0 ? skills.join(', ') : '');
 
-        // Create new arrays by adding the entered skills to the current skills
-        const newSkills1 = [...currentSkills1, primarySkills];
-        const newSkills2 = [...currentSkills2, secondarySkills];
+        // // Create new arrays by adding the entered skills to the current skills
+        // const newSkills1 = [...currentSkills1, primarySkills];
+        // const newSkills2 = [...currentSkills2, secondarySkills];
 
-        // Append skills to form data
-        formData.append('skills_level_1', joinSkills(newSkills1));
-        formData.append('skills_level_2', joinSkills(newSkills2));
+        // // Append skills to form data
+        // formData.append('skills_1', joinSkills(newSkills1));
+        // formData.append('skills_2', joinSkills(newSkills2));
 
         try {
             const config = {
@@ -135,9 +149,14 @@ const AddSkills = () => {
                     Authorization: `Bearer ${currentUser.data.token}`,
                 },
             };
+            // Create the payload to send to the backend
+            const payload = {
+            skills_1: primarySkills.split(',').map((skill) => skill.trim()),
+            skills_2: secondarySkills.split(',').map((skill) => skill.trim()),
+        };
 
             // Make a POST request to update the user profile with the new skills
-            const response = await api.post('users/update_profile/', formData, config);
+            const response = await api.post('users/update_profile/', payload, config);
 
             const displayMessage = () => {
                 if (response && returnUrl) {
@@ -208,7 +227,7 @@ const AddSkills = () => {
                                     </label>
                                     <textarea style={{maxWidth: '75%'}}
                                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
-                                        name='skills_level_1'
+                                        name='skills_1'
                                         placeholder='Add your PRIMARY skills here separated by commas'
                                         onChange={(e) => setPrimarySkills(e.target.value)}
                                         rows={1}
@@ -222,7 +241,7 @@ const AddSkills = () => {
                                     </label>
                                     <textarea style={{maxWidth: '75%'}}
                                         className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
-                                        name='skills_level_2'
+                                        name='skills_2'
                                         placeholder='Add your SECONDARY skills here separated by commas'
                                         onChange={(e) => setSecondarySkills(e.target.value)}
                                         rows={1}

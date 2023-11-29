@@ -14,6 +14,13 @@ from django.contrib.auth.models import User
 from django.utils import timezone
 
 
+class Skill(models.Model):
+    name = models.CharField(max_length=255)
+
+    def __str__(self):
+        return f"{self.name}"
+
+
 # Developer Profile Model
 class DeveloperProfile(models.Model):
     """
@@ -38,6 +45,10 @@ class DeveloperProfile(models.Model):
                                       null=True, blank=True)
     skills_level_1 = models.CharField(max_length=255, blank=True)
     skills_level_2 = models.CharField(max_length=255, blank=True)
+    skills_1 = models.ManyToManyField(
+        Skill, related_name='skills_1', blank=True)
+    skills_2 = models.ManyToManyField(
+        Skill, related_name='skills_2', blank=True)
 
     def __str__(self):
         return f"{self.user}"
