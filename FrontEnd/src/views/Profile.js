@@ -193,7 +193,7 @@ const Profile = () => {
   const handleProjectLinkClick = (project) => {
     setShouldSlideOut(true);
     setTimeout(() => {
-      navigate(`/project/${project.id}`, { state: { project } });
+      navigate(`/project/${project.id}`, { state: { projectId: project.id } });
     }, 1000);
   };
 

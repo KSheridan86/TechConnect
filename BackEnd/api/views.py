@@ -152,8 +152,6 @@ def update_profile(request):
 
     if request.data.get('delete_skills'):
         # Clear the skills fields
-        # profile.skills_level_1 = "",
-        # profile.skills_level_2 = "",
         profile.skills_1.clear()
         profile.skills_2.clear()
 
@@ -235,6 +233,49 @@ def add_project(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+# @permission_classes([IsAuthenticated])
+def projects(request, project_id):
+    """
+    View to retrieve project details.
+    """
+    # Fetch the project to be displayed
+    project = get_object_or_404(Project, id=project_id)
+
+    # Check if the user has permission to view this project
+    # if request.user != project.developer.user:
+    #     return Response({'detail': 'Permission denied'}, status=403)
+
+    # Serialize the project data
+    serializer = ProjectSerializer(project)
+
+    return Response(serializer.data)
+
+
+@api_view(['PUT'])
+@permission_classes([IsAuthenticated])
+def update_project(request, project_id):
+    """
+    View to update a project.
+    """
+    # Fetch the project to be updated
+    project = get_object_or_404(Project, id=project_id)
+
+    # Check if the user has permission to update this project
+    if request.user != project.developer.user:
+        return Response({'detail': 'Permission denied'},
+                        status=status.HTTP_403_FORBIDDEN)
+
+    # Continue with project update
+    serializer = ProjectSerializer(project, data=request.data, partial=True)
+
+    if serializer.is_valid():
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
 
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

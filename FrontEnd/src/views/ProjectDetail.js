@@ -22,15 +22,29 @@ const ProjectDetails = () => {
   const [fadeButton, setFadeButton] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
+  const { projectId } = useLocation().state;
 
   useEffect(() => {
     // Retrieve project from location state
-    const projectDetails = location.state?.project;
+    const fetchProjectDetails = async () => {
+      try {
+        // Assuming your API endpoint for fetching project details is like '/api/projects/:projectId'
+        const response = await api.get(`users/projects/${projectId}`);
+        const projectDetails = response.data; // Adjust this based on your API response structure
+        setProject(projectDetails);
+      } catch (error) {
+        console.error('Error fetching project details:', error);
+      }
+    };
 
-    if (projectDetails) {
-      setProject(projectDetails);
-    }
-  }, [location.state?.project]);
+    fetchProjectDetails();
+  }, [projectId]);
+
+  // useEffect(() => {
+  //   // Update the state when location.state.project changes
+  //   setProject(location.state?.project);
+  // }, [location.state?.project]);
+
   if (!project) {
     return <p>Loading...</p>;
   }
@@ -77,6 +91,13 @@ const ProjectDetails = () => {
     } catch (error) {
         console.error('Error deleting project:', error);
     }
+  };
+
+  const editProject = () => {
+    setShouldSlideOut(true);
+      setTimeout(() => {
+        navigate('/add-projects', { state: { project } });
+      }, 1000);
   };
 
 
@@ -159,6 +180,12 @@ const ProjectDetails = () => {
                   }}
               >
                 Profile
+              </button>
+              <button
+                className={`btn btn-primary btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
+                onClick={editProject}
+              >
+                Edit
               </button>
               <button
                 className={`btn btn-danger btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}

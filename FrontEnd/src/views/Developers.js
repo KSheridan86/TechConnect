@@ -197,7 +197,7 @@ const Developers = () => {
           <div className="row justify-content-center text-center">
             <div className="col-8">
               <input
-                className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
+                className="fw-bold border border-dark border-2 p-2 form-control mb-3 hand-writing"
                 type="text"
                 placeholder="Who or What are you looking for?"
                 value={searchTerm}
@@ -227,8 +227,11 @@ const Developers = () => {
           </select>
         </div>
 
-            <div className="col-8 text-center hand-writing">
+            <div className="col-5 text-center hand-writing">
               <div className="form-check">
+              <label className="form-check-label" htmlFor="showAvailableDevs">
+                  Only show available devs?
+                </label>
                 <input
                   type="checkbox"
                   className="form-check-input"
@@ -236,9 +239,7 @@ const Developers = () => {
                   checked={showAvailableDevs}
                   onChange={() => setShowAvailableDevs(!showAvailableDevs)}
                 />
-                <label className="form-check-label" htmlFor="showAvailableDevs">
-                  Only show available devs
-                </label>
+               
               </div>
             </div>
             <div className="col-8 text-center hand-writing">

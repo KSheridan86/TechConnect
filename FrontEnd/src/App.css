@@ -208,6 +208,10 @@ div > a {
     transition: max-height 0.3s ease;
     margin-top: 0;
   }
+  .max {
+    min-height: 110vh;
+  
+  }
 }
 
 .user-avatar {

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate, useLocation } from 'react-router-dom';
 
@@ -12,12 +12,29 @@ const AddProjects = () => {
     const [shouldSlideOut, setShouldSlideOut] = useState(false);
     const [isSubmitted, setIsSubmitted] = useState(false);
     const [projectSaved, setProjectSaved] = useState(false);
+    const [updatedInfo, setUpdatedInfo] = useState({});
     const [buttonTxt, setButtonTxt] = useState(true);
     const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     const [errors, setErrors] = useState({});
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
+    const projectUrl = location.state ? location.state.project.id : null;
+
+    useEffect(() => {
+        if (location.state && location.state.project) {
+            const existingProject = location.state.project;
+            // Use existingProject to prepopulate input fields for editing
+            setProject({
+                name: existingProject.name || '',
+                description: existingProject.description || '',
+                site_url: existingProject.site_url || '',
+                repo_url: existingProject.repo_url || '',
+                tech_stack: existingProject.tech_stack || '',
+                image: null, // Handle image separately if needed
+            });
+        }
+    }, [location.state]);
 
     // Initialize the project state
     const [project, setProject] = useState({
@@ -123,7 +140,21 @@ const AddProjects = () => {
             };
 
             // Make a POST request to add the project
-            await api.post('users/add_project/', formData, config);
+            // await api.post('users/add_project/', formData, config);
+            if (location.state && location.state.project) {
+                let projectId = location.state.project.id;
+                // If project ID exists, it means we are updating an existing project
+                // Make a PUT request to update the project
+                await api.put(`users/update_project/${projectId}/`, formData, config);
+                setUpdatedInfo({ ...project, ...formData });
+                setTimeout(() => {
+                    returnToProject();
+                }, 500);
+            } else {
+                // If project ID doesn't exist, it means we are adding a new project
+                // Make a POST request to add the project
+                await api.post('users/add_project/', formData, config);
+            }
 
             // Clear the input fields and initiate animations on the form
             setIsSubmitted(true);
@@ -157,6 +188,13 @@ const AddProjects = () => {
         setShouldSlideOut(true);
         setTimeout(() => {
             navigate(returnUrl || '/profile');
+        }, 1000);
+    };
+
+    const returnToProject = () => {
+        setShouldSlideOut(true);
+        setTimeout(() => {
+            navigate(`/project/${projectUrl}`, { state: { projectId: projectUrl } });
         }, 1000);
     };
 
@@ -278,22 +316,23 @@ const AddProjects = () => {
                     </form>
 
                     <div className='text-center hand-writing mt-5 animate-slide-bottom'>
-                        {!projectSaved ? (
-                            <button
-                                type='button'
-                                className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
-                                onClick={returnToProfile}>
-                                {returnUrl ? 'Back' : 'Skip'}
-                            </button>
-                        ) : (
-                            <button
-                                type='button'
-                                className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
-                                onClick={returnToProfile}>
-                                Profile
-                            </button>
-                        )}
-                        
+                    {location.state && location.state.project ? (
+                        <button
+                        type='button'
+                        className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                        onClick={returnToProject}
+                        >
+                        Back to Project
+                        </button>
+                    ) : (
+                        <button
+                            type='button'
+                            className={`btn btn-warning btn-lg ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
+                            onClick={returnToProfile}
+                        >
+                            {returnUrl ? 'Back' : 'Skip'}
+                        </button>
+                    )}
                     </div>
                 </div>
             </div>
