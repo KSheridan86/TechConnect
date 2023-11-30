@@ -9,6 +9,7 @@ Date: [19/10/2023]
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MaxValueValidator
 # from django.db.models.signals import post_save
 # from django.dispatch import receiver
 from django.utils import timezone
@@ -43,8 +44,6 @@ class DeveloperProfile(models.Model):
     available = models.BooleanField(default=False, null=True, blank=True)
     date_available = models.DateField(default=timezone.now,
                                       null=True, blank=True)
-    skills_level_1 = models.CharField(max_length=255, blank=True)
-    skills_level_2 = models.CharField(max_length=255, blank=True)
     skills_1 = models.ManyToManyField(
         Skill, related_name='skills_1', blank=True)
     skills_2 = models.ManyToManyField(
@@ -88,8 +87,8 @@ class DeveloperReview(models.Model):
     review = models.TextField()
     date = models.DateTimeField(auto_now_add=True)
     recommended = models.BooleanField()
-    rating = models.DecimalField(max_digits=2, decimal_places=1,
-                                 null=True, blank=True)
+    rating = models.IntegerField(
+        null=True, blank=True, validators=[MaxValueValidator(5)])
 
     def __str__(self):
         return f"{self.reviewee}"

@@ -14,12 +14,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 # pylint: disable=W0611
-from .models import (User, DeveloperProfile, Project, Skill)
-# from .models import (DeveloperReview, ProjectReview, PrivateMessage)
+from .models import (User, DeveloperProfile, Project, Skill, DeveloperReview)
+# from .models import (ProjectReview, PrivateMessage)
 from .serializers import (UserSerializer, UserSerializerWithToken,
-                          DeveloperProfileSerializer, ProjectSerializer,)
-# from .serializers import ( DeveloperReviewSerializer,
-#                           ProjectReviewSerializer, PrivateMessageSerializer)
+                          DeveloperProfileSerializer, ProjectSerializer,
+                          DeveloperReviewSerializer,)
+# from .serializers import (ProjectReviewSerializer, PrivateMessageSerializer)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -134,9 +134,10 @@ def user_profile(request, user_id=None):
         user = request.user
     profile = DeveloperProfile.objects.get(user=user)
     projects = Project.objects.filter(developer=profile)
+    reviews = DeveloperReview.objects.filter(reviewee=profile)
 
     serializer = DeveloperProfileSerializer(
-        profile, context={'projects': projects})
+        profile, context={'projects': projects, 'reviews': reviews})
     return Response(serializer.data)
 
 

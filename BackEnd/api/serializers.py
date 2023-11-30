@@ -66,6 +66,18 @@ class ProjectSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 
+class DeveloperReviewSerializer(serializers.ModelSerializer):
+    """
+    Serializes the DeveloperReview model.
+    """
+    class Meta:
+        """
+        _summary_
+        """
+        model = DeveloperReview
+        fields = '__all__'
+
+
 class DeveloperProfileSerializer(serializers.ModelSerializer):
     """
     Serializes the DeveloperProfile model.
@@ -76,6 +88,7 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         validators=[UniqueValidator(queryset=DeveloperProfile.objects.all())]
     )
     projects = ProjectSerializer(many=True, read_only=True)
+    reviews = DeveloperReviewSerializer(many=True, read_only=True)
 
     class Meta:
         """
@@ -89,13 +102,14 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         data = super().to_representation(instance)
-        # Convert comma-separated skills to lists
-        data['skills_level_1'] = self.split_skills(data['skills_level_1'])
-        data['skills_level_2'] = self.split_skills(data['skills_level_2'])
 
         # Include projects
         projects = self.context.get('projects', [])
         data['projects'] = ProjectSerializer(projects, many=True).data
+
+        # Include reviews
+        reviews = self.context.get('reviews', [])
+        data['reviews'] = DeveloperReviewSerializer(reviews, many=True).data
 
         return data
 
@@ -107,18 +121,6 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         if isinstance(skills, str):
             return [s.strip() for s in skills.split(',') if s.strip()]
         return skills
-
-
-class DeveloperReviewSerializer(serializers.ModelSerializer):
-    """
-    Serializes the DeveloperReview model.
-    """
-    class Meta:
-        """
-        _summary_
-        """
-        model = DeveloperReview
-        fields = '__all__'
 
 
 class ProjectReviewSerializer(serializers.ModelSerializer):

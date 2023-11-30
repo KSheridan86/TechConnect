@@ -297,7 +297,7 @@ const Developers = () => {
                 className={`col-12 col-md-3 mb-3 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
                 onClick={() => handleUserClick(user.user)}
               >
-                <div className="glass-box p-1">
+                <div className="glass-box p-1 dev-box">
                   {/* <img className="randomAvatar mt-2 mb-2" src={getRandomImage()} alt="Random Avatar 1" /> */}
                   {user.avatar ? (
                     <img className="randomAvatar rounded mt-2 mb-2" src={`${baseAvatarUrl}${user.avatar}`}  alt={user.avatar} />

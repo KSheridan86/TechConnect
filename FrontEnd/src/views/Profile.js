@@ -22,6 +22,7 @@ const capitalizeFirstLetter = (string) => {
 const Profile = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
   const [projects, setProjects] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [foundUser, setFoundUser] = useState({}); 
   const [errors, setErrors] = useState({});
   const baseAvatarUrl = 'http://127.0.0.1:8000';
@@ -37,6 +38,7 @@ const Profile = () => {
   const [skillsLevel2, setSkillsLevel2] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
+
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -64,6 +66,11 @@ const Profile = () => {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
           setProjects(response.data.projects);
+          setReviews(response.data.reviews);
+          console.log(response.data.reviews)
+          console.log(response.data)  
+          currentUser.profile = response.data;
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
           const skillIds_1 = response.data.skills_1;
           const skillIds_2 = response.data.skills_2;
           const skillsDetails_1 = await Promise.all(
@@ -109,7 +116,7 @@ const Profile = () => {
     fetchProfileData();
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.state?.userId]);
+  }, []);
 
   // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
@@ -230,11 +237,8 @@ const Profile = () => {
   };
 
   const isSkillsDefinedAndNotEmpty =
-    foundUser.skills_level_1 &&
-    foundUser.skills_level_1.length > 0 &&
-    !(foundUser.skills_level_1.length === 2 &&
-      foundUser.skills_level_1[0] === "(''," &&
-      foundUser.skills_level_1[1] === ')');
+    foundUser.skills_1 &&
+    foundUser.skills_1.length > 0;
 
   return (
     <div className='container mt-4 fill-screen mb-2'>

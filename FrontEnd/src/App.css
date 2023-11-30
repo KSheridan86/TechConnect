@@ -61,6 +61,14 @@ nav {
 .nav-link, .navbar-brand, .navbar-toggler-icon {
   color: #f1916d !important;
 }
+.nav-link:hover, .navbar-brand:hover {
+  color: #f5d7db !important;
+  cursor: pointer;
+}
+
+.dev-box {
+  cursor: pointer;
+}
 .navbar-toggler {
   border: 2px solid #f1916d !important;
   border-color: #f1916d !important;
@@ -360,6 +368,27 @@ div > a {
   height: auto;
   width: 100%;
   object-fit: cover;
+}
+
+.image-holder {
+  max-height: 70%;
+  overflow: hidden;
+  height: auto;
+}
+
+/* Add a new class for the project image container */
+.project-image-container {
+  max-height: 500px; /* Adjust this value based on your design */
+  overflow: hidden;
+}
+
+.project-image-large {
+  /* Add these styles to control the image dimensions */
+  width: 80%;
+  height: auto;
+  max-height: 100%;
+  display: block;
+  margin: 0 auto;
 }
 
 .project-box {

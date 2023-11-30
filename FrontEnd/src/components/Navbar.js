@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setShouldAnimate } = useAnimation();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -31,9 +32,12 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const userProfileClick = () => {
     setShouldAnimate(true);
     closeNav();
+    // delete location.state.userId;
     setTimeout(() => {
       setShouldAnimate(false);
-      navigate('/profile');
+      // navigate('/profile');
+      navigate('/profile', { state: { userId: null } });
+      // navigate(`/profile`, { state: { fromNavbar: true } });
     }, 1000);
   };
 

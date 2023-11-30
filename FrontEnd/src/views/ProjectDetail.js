@@ -13,6 +13,8 @@ const api = axios.create({
 
 const ProjectDetails = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const userId = currentUser.data.id;
+  const profileComparison = currentUser.profile.user;
   const [project, setProject] = useState(null);
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
@@ -23,6 +25,8 @@ const ProjectDetails = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { projectId } = useLocation().state;
+  console.log(userId)
+  // console.log(profileComparison)
 
   useEffect(() => {
     // Retrieve project from location state
@@ -40,10 +44,7 @@ const ProjectDetails = () => {
     fetchProjectDetails();
   }, [projectId]);
 
-  // useEffect(() => {
-  //   // Update the state when location.state.project changes
-  //   setProject(location.state?.project);
-  // }, [location.state?.project]);
+  console.log(project)
 
   if (!project) {
     return <p>Loading...</p>;
@@ -112,22 +113,24 @@ const ProjectDetails = () => {
         <div className="col-10 glass-box">
           <div className="row">
             <div className="col-md-6 col-12">
-              {project.image ? (
-                <img
-                  src={`${baseAvatarUrl}${project.image}`} 
-                  alt={`Project ${project.name}`}
-                  className="project-image-large rounded"
-                  style={{ display: 'block' }}
-                />
-              ) : (
-                <img
-                  src={defaultProject}
-                  alt={`Project ${project.name}`}
-                  className="project-image-large rounded"
-                  style={{ display: 'block' }}
-                />
-              )}
-            </div>
+  <div className="project-image-container">
+    {project.image ? (
+      <img
+        src={`${baseAvatarUrl}${project.image}`} 
+        alt={`Project ${project.name}`}
+        className="project-image-large rounded"
+        style={{ display: 'block' }}
+      />
+    ) : (
+      <img
+        src={defaultProject}
+        alt={`Project ${project.name}`}
+        className="project-image-large rounded"
+        style={{ display: 'block' }}
+      />
+    )}
+  </div>
+</div>
             <div className="col-md-6 col-12">
               <p className="header-font text-uppercase mt-1">Description:</p>
               <p className="header-font mt-1">
@@ -175,13 +178,16 @@ const ProjectDetails = () => {
                 onClick={() => {
                   setShouldSlideOut(true);
                   setTimeout(() => {
-                    navigate('/profile');
+                    // navigate('/profile');
+                    navigate(`/profile`, { state: { userId: profileComparison } });
                     }, 1000);
                   }}
               >
                 Profile
               </button>
-              <button
+              {userId === profileComparison ? (
+                <span>
+                  <button
                 className={`btn btn-primary btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
                 onClick={editProject}
               >
@@ -193,6 +199,10 @@ const ProjectDetails = () => {
               >
                 Delete
               </button>
+                </span>
+              ) : (null)}
+              
+
             </div>
           ) : (
             <div className={`${fadeButton ? 'fade-in' : 'fade-out'}`}>
