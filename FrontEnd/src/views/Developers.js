@@ -24,6 +24,7 @@ const Developers = () => {
   const { shouldAnimate, setShouldAnimate } = useAnimation();
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
+  const [experienceFilter, setExperienceFilter] = useState('all');
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -39,20 +40,6 @@ const Developers = () => {
     withCredentials: true,
   });
 
-  // const fetchUsers = async () => {
-  //   try {
-  //     const { data } = await api.get('users/');
-  //       setUsers(data);
-  //   } catch (error) {
-  //     setErrors({
-  //       general: 
-  //       "Whoops, looks like there's a problem accessing user details. Please try again later." });
-  //       setTimeout(() => {
-  //         setErrors({});
-  //         navigate('/');
-  //       }, 5000);
-  //     }
-  // };
   const fetchUsers = async () => {
     try {
       const { data } = await api.get('users/');
@@ -108,50 +95,28 @@ const Developers = () => {
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-    console.log(users)
-  // const handleSearch = () => {
-  //   // Filter users based on the search term
-
-  //   const filteredUsers = users.filter((user) => {
-    
-  //   return (
-  //     (searchType === 'regular' &&
-  //       (Object.values(user).some(
-  //         (value) =>
-  //           typeof value === 'string' &&
-  //           value.toLowerCase().includes(searchTerm.toLowerCase())
-  //       ) ||
-  //       ['firstname', 'lastname', 'location'].some(
-  //         (field) =>
-  //           typeof user.profile !== 'undefined' &&
-  //           typeof user.profile[field] === 'string' &&
-  //           user.profile[field].toLowerCase().includes(searchTerm.toLowerCase())
-  //       ))) ||
-  //     (searchType === 'skills' &&
-  //       user.skills.some((skill) =>
-  //         skill.toLowerCase().includes(searchTerm.toLowerCase())
-  //       ))
-  //   ) && (!showAvailableDevs || (user.available && user.date_available));
-  // });
-
-  //   // Update the state with the filtered users
-  //   setFilteredUsers(filteredUsers);
-  //   console.log(filteredUsers)
-  //   setSearchButtonClicked(true);
-  //   console.log(filteredUsers)
-  //   setTimeout(() => {
-  //   // Scroll to the container with search results
-  //     const resultsContainer = document.getElementById('resultsContainer');
-  //       if (resultsContainer) {
-  //           resultsContainer.scrollIntoView({ behavior: 'smooth' });
-  //       }
-  //   }, 750);
-  // };
 
   const handleSearch = () => {
+    const meetsExperienceCriteria = (user) => {
+      const userExperience = user.years_of_experience;
+
+      switch (experienceFilter) {
+        case 'lessThan2':
+          return userExperience <= 2;
+        case '3to5':
+          return userExperience >= 3 && userExperience <= 5;
+        case '6to9':
+          return userExperience >= 6 && userExperience <= 9;
+        case '10andAbove':
+          return userExperience >= 10;
+        default:
+          return true; // Default case, no experience filter applied
+      }
+    };
     // Filter users based on the search term and search type
     const filteredUsers = users.filter((user) => {
       if (searchType === 'regular') {
+        console.log(user.years_of_experience)
         // For regular search, use existing logic
         return (
           Object.values(user).some(
@@ -175,9 +140,12 @@ const Developers = () => {
       }
       return false;
     });
+
+    const filteredUsersWithExperience = filteredUsers.filter((user) => meetsExperienceCriteria(user));
+
   
     // Update the state with the filtered users
-    setFilteredUsers(filteredUsers);
+    setFilteredUsers(filteredUsersWithExperience);
     setSearchButtonClicked(true);
   
     // Scroll to the container with search results
@@ -212,39 +180,6 @@ const Developers = () => {
         </div>
       </div>
       )}
-        {/* <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
-          <h1 className="fw-bold p-2 text-center header-font text-uppercase">Discover Talented Developers!</h1>
-          <p className="p-2">
-            Looking for the right developer for your project?
-            <br />
-            You're in the right place!
-            <br />
-            Explore a diverse pool of talented
-            individuals with expertise in various technologies and experience levels.
-          </p>
-          <hr />
-          <p className="hand-writing fs-4 text-center mb-3">
-            Simply input your particular criteria below and we'll do the rest!
-          </p>
-          <div className="row justify-content-center text-center">
-            <div className="col-8">
-              <input
-                className="text-center border border-dark border-2 p-2 form-control mb-3 hand-writing"
-                type="text"
-                placeholder="Who or What are you looking for?"
-                value={searchTerm}
-                onChange={handleInputChange}
-              />
-            </div>
-            <div className="col-8 text-center hand-writing">
-              <button
-                className="btn btn-warning border-dark border-2 mt-3 col-6"
-                onClick={handleSearch}>
-                  Search
-              </button>
-            </div>
-          </div>
-        </div> */}
         <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           <h1 className="fw-bold p-2 text-center header-font text-uppercase">Discover Talented Developers!</h1>
           <p className="p-2">
@@ -278,6 +213,20 @@ const Developers = () => {
                 <option value="skills">Search by Tech Stack</option>
               </select>
             </div>
+
+            <div className="col-8 text-center hand-writing">
+          <select
+            className="form-select mb-3"
+            onChange={(e) => setExperienceFilter(e.target.value)} // Updated state on change
+          >
+            <option value="all">All Experience</option>
+            <option value="lessThan2">Less than 2 years</option>
+            <option value="3to5">3 - 5 years</option>
+            <option value="6to9">6 - 9 years</option>
+            <option value="10andAbove">10+ years</option>
+          </select>
+        </div>
+
             <div className="col-8 text-center hand-writing">
               <div className="form-check">
                 <input
@@ -305,27 +254,27 @@ const Developers = () => {
         <div className={`col-12 col-md-6 max mb-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
           <div className="glass-box m-3 text-center">
             <div className="p-3">
-              <p className="fs-3 mb-2 header-font text-uppercase">Searching made easy!</p>
+              <p className="fs-1 mb-4 header-font text-uppercase">Searching made easy!</p>
               <div className="fs-5 mt-2 mb-1 header-font">Name</div>
-              <p>
+              <p className='p-2'>
                 Have a specific developer in mind?
                 Search their name to quickly find their profile and portfolio.
               </p>
               <hr />
               <div className="fs-5 mt-3 mb-1 header-font">Tech Stack</div>
-              <p>
+              <p className='p-2'>
                 Use our technology stack filter to discover developers who specialize in
                 what you need.
               </p>
               <hr />
               <div className="fs-5 mt-3 mb-1 header-font">Experience</div>
-              <p>
+              <p className='p-2'>
                 Find developers with the right level of experience for your project,
                 whether you're looking for seasoned veterans or fresh talent.
               </p>
               <hr />
               <div className="fs-5 mt-3 mb-1 header-font">Location</div>
-              <p>
+              <p className='p-2'>
                 Prefer to work with developers in your area or time zone?
                 Our location filter helps you narrow down your search.
               </p>
@@ -339,7 +288,7 @@ const Developers = () => {
         <div className="col-10 text-center max animate-slide-left">
           <div className="row">
           {searchButtonClicked && searchTerm && filteredUsers.length === 0 ? (
-            <p className="col">Sorry, that search returned no results!</p>
+            <span className="glass-box p-3 header-font">Sorry, that search returned no results!</span>
           ) : (
             filteredUsers.map((user) => (
               <div

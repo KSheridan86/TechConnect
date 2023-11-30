@@ -342,9 +342,9 @@ div > a {
 
 
 /* not sure?? */
-/* .max {
-  max-height: 67vh;
-} */
+.max {
+  max-height: 80vh;
+}
 
 .project-image {
   width: 75%;
