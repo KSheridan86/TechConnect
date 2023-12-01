@@ -22,20 +22,25 @@ const ProjectDetails = () => {
   const [transition, setTransition] = useState(false);
   const [confirmation, setConfirmation] = useState(false);
   const [fadeButton, setFadeButton] = useState(false);
-  const location = useLocation();
+  const [displayButtons, setDisplayButtons] = useState(false);
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
   const { projectId } = useLocation().state;
-  console.log(userId)
-  // console.log(profileComparison)
+
 
   useEffect(() => {
     // Retrieve project from location state
     const fetchProjectDetails = async () => {
+      
+  if (userId === profileComparison) {
+    setDisplayButtons(true);
+  }
       try {
         // Assuming your API endpoint for fetching project details is like '/api/projects/:projectId'
         const response = await api.get(`users/projects/${projectId}`);
         const projectDetails = response.data; // Adjust this based on your API response structure
         setProject(projectDetails);
+        setLoading(false); 
       } catch (error) {
         console.error('Error fetching project details:', error);
       }
@@ -44,7 +49,21 @@ const ProjectDetails = () => {
     fetchProjectDetails();
   }, [projectId]);
 
-  console.log(project)
+  if (loading) {
+    return (
+      <div className='container fill-screen'>
+        <div className="row justify-content-center logout mt-5">
+          <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
+            <h1 className="glass-box fw-bold p-4 m-5 text-center">
+              <strong className="header-font">Loading project details, One moment!</strong>
+            </h1>
+            <div className="col-12 text-center hand-writing">
+            </div>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!project) {
     return <p>Loading...</p>;
@@ -185,7 +204,7 @@ const ProjectDetails = () => {
               >
                 Profile
               </button>
-              {userId === profileComparison ? (
+              { displayButtons ? (
                 <span>
                   <button
                 className={`btn btn-primary btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}

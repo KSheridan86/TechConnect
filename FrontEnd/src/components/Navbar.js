@@ -36,8 +36,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
     setTimeout(() => {
       setShouldAnimate(false);
       // navigate('/profile');
-      navigate('/profile', { state: { userId: null } });
-      // navigate(`/profile`, { state: { fromNavbar: true } });
+      navigate('/profile', { state: { fromNavbar: true } });
     }, 1000);
   };
 

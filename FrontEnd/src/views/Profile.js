@@ -38,7 +38,7 @@ const Profile = () => {
   const [skillsLevel2, setSkillsLevel2] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-
+  const fromNavbar = location?.state?.fromNavbar  ;
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -68,7 +68,6 @@ const Profile = () => {
           setProjects(response.data.projects);
           setReviews(response.data.reviews);
           console.log(response.data.reviews)
-          console.log(response.data)  
           currentUser.profile = response.data;
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
           const skillIds_1 = response.data.skills_1;
@@ -116,7 +115,7 @@ const Profile = () => {
     fetchProfileData();
     // empty array left here to prevent the api call from being made repeatedly
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [fromNavbar]);
 
   // Functions to navigate to the 'Add Skills' and 'Add Projects pages
   const updateSkills = () => {
@@ -483,6 +482,36 @@ const Profile = () => {
                 </button> )}
               </div> ) : (null) }
             </div>
+
+             {/* REview Section */}
+             <div className="row justify-content-center mt-2">
+  <div className="glass-box col-8">
+    <h3 className="m-1 p-1 header-font text-center">Testimonials</h3>
+  </div>
+
+  <div className="col-10 col-md-8 col-lg-6 mt-2 fade-in glass-box">
+    {reviews.map((review) => (
+      <div key={review.id} className="mb-3">
+        <label htmlFor={`reviewDropdown${review.id}`} className="form-label header-font">
+          {review.reviewer}
+        </label>
+        <textarea
+          className="form-select"
+          id={`reviewDropdown${review.id}`}
+          value={review.review}
+          onChange={() => {}}
+        >
+        </textarea>
+        {/* {review.id === 1 && (
+          <div className="mt-2">
+            <p className="header-font">{review.review}</p>
+          </div>
+        )} */}
+      </div>
+    ))}
+  </div>
+</div>
+
             {currentUser ? (
             <div className='text-center mt-2 mb-1 hand-writing'>
               {foundUser.email === currentUser.data.email && (
