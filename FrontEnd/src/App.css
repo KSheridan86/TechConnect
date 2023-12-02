@@ -285,6 +285,10 @@ div > a {
   animation: fadeIn 1s ease forwards;
 }
 
+.form-in {
+  animation: fadeIn 2s ease forwards;
+}
+
 @keyframes fadeOut {
   from {
     opacity: 1;
@@ -352,6 +356,19 @@ div > a {
   }
 }
 
+.slide-down {
+  transform-origin: top;
+  animation: slideDown 0.5s ease-in-out;
+}
+
+@keyframes slideDown {
+  from {
+    transform: scaleY(0);
+  }
+  to {
+    transform: scaleY(1);
+  }
+}
 
 /* not sure?? */
 .max {
@@ -439,6 +456,21 @@ div > a {
   color: black;
 }
 
+
 .icon-container {
   margin-left: 1rem;
+}
+
+.flip {
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+  transition: transform .75s;
+}
+.flip-again {
+  transform-style: preserve-3d;
+  transform: rotateY(180deg);
+  transition: transform .75s;
+}
+.flip-back {
+  transform: rotateY(180deg);
 }

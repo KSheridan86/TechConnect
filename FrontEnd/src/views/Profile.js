@@ -38,7 +38,11 @@ const Profile = () => {
   const [skillsLevel2, setSkillsLevel2] = useState([]);
   const navigate = useNavigate();
   const location = useLocation();
-  const fromNavbar = location?.state?.fromNavbar  ;
+  const fromNavbar = location?.state?.fromNavbar;
+  const [dropdownStates, setDropdownStates] = useState({});
+  const [expandedReviewId, setExpandedReviewId] = useState(null);
+  const [showBack, setShowBack] = useState(false);
+  const [submittingReview, setSubmittingReview] = useState(false);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -238,21 +242,44 @@ const Profile = () => {
 
   const isSkillsDefinedAndNotEmpty =
     foundUser.skills_1 &&
-    foundUser.skills_1.length > 0;
-
-  const [dropdownStates, setDropdownStates] = useState({});
+    foundUser.skills_1.length > 0;  
 
   const toggleDropdown = useCallback((reviewId) => {
-    setDropdownStates((prevStates) => ({
-      ...prevStates,
-      [reviewId]: !prevStates[reviewId],
-    }));
+    setDropdownStates((prevStates) => {
+      setExpandedReviewId((prevId) => (prevId === reviewId ? null : reviewId));
+      // Close all open dropdowns
+      const updatedStates = Object.fromEntries(
+        Object.entries(prevStates).map(([id, isOpen]) => [id, false])
+      );
+  
+      // Toggle the state for the clicked review
+      updatedStates[reviewId] = !prevStates[reviewId];
+  
+      return updatedStates;
+    });
   }, []);
+
+  const handleLeaveReviewClick = () => {
+    setSubmittingReview(false);
+    setShowBack(true);
+  };
+
+  const handleFormSubmit = (e) => {
+    e.preventDefault();
+    setSubmittingReview(true);
+    setTimeout(() => {
+      setShowBack(false);
+    }, 750);
+  
+  };
 
   const renderStars = (rating) => {
     const stars = [];
+    const gradientColors = ['#FF0000', '#FF4500', '#FF8C00', '#FFEC8B', '#FFD700'];
+    const starColor = gradientColors[rating - 1];
+
     for (let i = 0; i < rating; i++) {
-      stars.push(<FontAwesomeIcon key={i} icon={faStar} style={{ color: 'gold' }} />);
+      stars.push(<FontAwesomeIcon key={i} icon={faStar} style={{ color: starColor }} />);
     }
     return stars;
   };
@@ -315,7 +342,7 @@ const Profile = () => {
                       )}
                       {foundUser.years_of_experience && (
                       <p className='header-font text-center text-uppercase'>
-                        {`Y.O.E: ${foundUser.years_of_experience}`}
+                        {`Yrs Exp: ${foundUser.years_of_experience}`}
                       </p>
                       )}
                       {foundUser.github && (
@@ -503,49 +530,104 @@ const Profile = () => {
             </div>
 
              {/* REview Section */}
-             <div className="row justify-content-center mt-2">
-  <div className="glass-box col-8">
-    <h3 className="m-1 p-1 header-font text-center">Testimonials</h3>
-  </div>
+            <div className={`row justify-content-center mt-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
+              <div className="glass-box col-8">
+                <h3 className="m-1 p-1 header-font text-center">Testimonials</h3>
+              </div>
 
-  <div className="col-10 col-md-8 col-lg-6 mt-2 fade-in glass-box">
-    {reviews.map((review) => (
-      <div key={review.id} className="mb-3 text-center review-container">
-        <div className="text-center">
-        <button 
-          className='form-label header-font btn btn-success btn-lg mt-2 w-75 d-flex justify-content-between align-items-center m-auto' 
-          onClick={() => toggleDropdown(review.id)}>
-            {review.reviewer_name}
-            <FontAwesomeIcon icon={faChevronDown} style={{ marginLeft: '5px' }} />
-        </button>
-        </div>
-        {dropdownStates[review.id] ? (
-        <div className="review-details mt-2 border-dark rounded">
-        <p>{review.review}</p>
-        <p>{renderStars(review.rating)}</p>
-        {currentUser.data.email === foundUser.email ? (
-          <p className='fs-4'>
-          <FontAwesomeIcon 
-            icon={faTimesCircle} 
-            style={{
-              color: 'red',
-              cursor: 'pointer',
-            }} 
-           // onClick={() => handleDeleteReview(review.id)}
-            />
-        </p>
-          ) : (null)}
-        
-      </div>
-        ) : (
-          <div>
-            {/* Render a single line of text when the dropdown is closed */}
-            <p>{renderStars(review.rating)}</p>
-          </div>
-        )}
-      </div>
-    ))}
-  </div>
+
+              <div className={`col-10 col-md-8 col-lg-6 mt-2 fade-in glass-box ${showBack ? 'flip' : ''}`}>
+              {showBack ? (
+                  // Back of the div with the form
+                  <div className="review-form text-center flip-back form-in">
+                  
+                  <form className={`${submittingReview ? 'fade-out' : ''}`}>
+                  <h5 className='header-font text-center text-uppercase mt-4'>Leave a Review</h5>
+                    <div className="mb-3">
+                      <label htmlFor="reviewText" className="form-label">
+                      </label>
+                      <textarea
+                        id="reviewText"
+                        className="form-control w-75 m-auto"
+                        rows="3"
+                        placeholder="Enter your review..."
+                      ></textarea>
+                    </div>
+                    <div className="mb-3">
+                    <h5 className='header-font text-center text-uppercase mt-4'>Rate between 1 & 5</h5>
+                      <label htmlFor="rating" className="form-label">
+                      </label>
+                      <input
+                        type="number"
+                        id="rating"
+                        className="form-control w-75 m-auto"
+                        min="1"
+                        max="5"
+                        placeholder="Enter rating (1-5)"
+                      />
+                    </div>
+                    <div className="mb-3 form-check">
+                      <h5 className='header-font text-uppercase mt-3'>Would you recommend this Dev?</h5>
+                      <div className="form-check d-inline-block">
+                        <label className="form-check-label" htmlFor="recommended">
+                        </label>
+                        <input type="checkbox" className="form-check-input fs-4" id="recommended" checked />
+                      </div>
+                    </div>
+                    <button
+                      type="submit"
+                      className="btn btn-primary m-auto mt-3"
+                      onClick={handleFormSubmit}
+                    >
+                      Submit Review
+                    </button>
+                  </form>
+                </div>
+                ) : (
+                reviews.map((review) => (
+                  <div key={review.id} className="mb-3 mt-3 text-center review-container fade-in">
+                    <div className="text-center">
+                    <button 
+                      className='form-label header-font btn btn-success btn-lg mt-2 w-75 d-flex justify-content-between align-items-center m-auto' 
+                      onClick={() => toggleDropdown(review.id)}>
+                        {review.reviewer_name}
+                        <FontAwesomeIcon icon={faChevronDown} style={{ marginLeft: '5px' }} />
+                    </button>
+                    </div>
+                    {dropdownStates[review.id] ? (
+                    <div className={`review-details mt-2 border-dark rounded ${
+                      expandedReviewId === review.id ? 'slide-up' : 'slide-down'
+                    }`}>
+                    <p>{review.review}</p>
+                    <p>{renderStars(review.rating)}</p>
+                    {currentUser.data.email === foundUser.email ? (
+                      <p className='fs-4'>
+                      <FontAwesomeIcon 
+                        icon={faTimesCircle} 
+                        style={{
+                          color: 'red',
+                          cursor: 'pointer',
+                        }} 
+                      // onClick={() => handleDeleteReview(review.id)}
+                        />
+                    </p>
+                      ) : (null)}
+                      
+                  </div>
+                    ) : (
+                      <div>
+                        <p>{renderStars(review.rating)}</p>
+                      </div>
+                    )}
+                  </div>
+                )))}
+                <button
+                  className={`btn btn-warning btn-lg mt-4 mb-4 w-50 d-flex justify-content-center align-items-center m-auto ${showBack ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
+                  onClick={handleLeaveReviewClick}
+                >
+                  Leave Review
+                </button>
+              </div>
 
 
   
@@ -613,3 +695,5 @@ const Profile = () => {
 };
 
 export default Profile;
+
+
