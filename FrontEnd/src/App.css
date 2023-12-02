@@ -424,3 +424,21 @@ div > a {
 .randomAvatar {
   height: 2rem;
 }
+
+
+.review-container {
+  width: 75%; /* Set your desired width */
+  margin: auto; /* Center the container */
+}
+
+.review-details {
+  background-color: whitesmoke;
+  border: 1px solid #ccc;
+  box-shadow: 5px 5px 20px rgba(242, 145, 110, 0.3); /* Add a subtle shadow */
+  padding: 10px; /* Add padding for better spacing */
+  color: black;
+}
+
+.icon-container {
+  margin-left: 1rem;
+}

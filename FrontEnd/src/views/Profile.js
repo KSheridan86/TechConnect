@@ -1,7 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { faCheck, faChevronDown, faStar, faTimesCircle } from '@fortawesome/free-solid-svg-icons';
 import defaultAvatar from '../images/default-avatar.png';
 import defaultProject from '../images/win95.png';
 import axios from 'axios';
@@ -65,6 +65,7 @@ const Profile = () => {
         if (profileId) {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
+          console.log(response.data)
           setProjects(response.data.projects);
           setReviews(response.data.reviews);
           console.log(response.data.reviews)
@@ -238,6 +239,24 @@ const Profile = () => {
   const isSkillsDefinedAndNotEmpty =
     foundUser.skills_1 &&
     foundUser.skills_1.length > 0;
+
+  const [dropdownStates, setDropdownStates] = useState({});
+
+  const toggleDropdown = useCallback((reviewId) => {
+    setDropdownStates((prevStates) => ({
+      ...prevStates,
+      [reviewId]: !prevStates[reviewId],
+    }));
+  }, []);
+
+  const renderStars = (rating) => {
+    const stars = [];
+    for (let i = 0; i < rating; i++) {
+      stars.push(<FontAwesomeIcon key={i} icon={faStar} style={{ color: 'gold' }} />);
+    }
+    return stars;
+  };
+
 
   return (
     <div className='container mt-4 fill-screen mb-2'>
@@ -491,26 +510,47 @@ const Profile = () => {
 
   <div className="col-10 col-md-8 col-lg-6 mt-2 fade-in glass-box">
     {reviews.map((review) => (
-      <div key={review.id} className="mb-3">
-        <label htmlFor={`reviewDropdown${review.id}`} className="form-label header-font">
-          {review.reviewer}
-        </label>
-        <textarea
-          className="form-select"
-          id={`reviewDropdown${review.id}`}
-          value={review.review}
-          onChange={() => {}}
-        >
-        </textarea>
-        {/* {review.id === 1 && (
-          <div className="mt-2">
-            <p className="header-font">{review.review}</p>
+      <div key={review.id} className="mb-3 text-center review-container">
+        <div className="text-center">
+        <button 
+          className='form-label header-font btn btn-success btn-lg mt-2 w-75 d-flex justify-content-between align-items-center m-auto' 
+          onClick={() => toggleDropdown(review.id)}>
+            {review.reviewer_name}
+            <FontAwesomeIcon icon={faChevronDown} style={{ marginLeft: '5px' }} />
+        </button>
+        </div>
+        {dropdownStates[review.id] ? (
+        <div className="review-details mt-2 border-dark rounded">
+        <p>{review.review}</p>
+        <p>{renderStars(review.rating)}</p>
+        {currentUser.data.email === foundUser.email ? (
+          <p className='fs-4'>
+          <FontAwesomeIcon 
+            icon={faTimesCircle} 
+            style={{
+              color: 'red',
+              cursor: 'pointer',
+            }} 
+           // onClick={() => handleDeleteReview(review.id)}
+            />
+        </p>
+          ) : (null)}
+        
+      </div>
+        ) : (
+          <div>
+            {/* Render a single line of text when the dropdown is closed */}
+            <p>{renderStars(review.rating)}</p>
           </div>
-        )} */}
+        )}
       </div>
     ))}
   </div>
+
+
+  
 </div>
+
 
             {currentUser ? (
             <div className='text-center mt-2 mb-1 hand-writing'>

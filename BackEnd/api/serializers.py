@@ -70,12 +70,18 @@ class DeveloperReviewSerializer(serializers.ModelSerializer):
     """
     Serializes the DeveloperReview model.
     """
+    
+    reviewer_name = serializers.SerializerMethodField()
+
     class Meta:
         """
         _summary_
         """
         model = DeveloperReview
         fields = '__all__'
+        
+    def get_reviewer_name(self, obj):
+        return obj.reviewer.username
 
 
 class DeveloperProfileSerializer(serializers.ModelSerializer):
