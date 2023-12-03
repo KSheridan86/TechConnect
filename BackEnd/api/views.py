@@ -169,12 +169,6 @@ def update_profile(request):
     print('primary_skills:', primary_skills)
     print('secondary_skills:', secondary_skills)
 
-    # Clear existing skills
-    # profile.skills_1.clear()
-    # profile.skills_2.clear()
-
-    # Add new skills
-    
     # Create and add new skills
     for skill_name in primary_skills:
         skill, created = Skill.objects.get_or_create(name=skill_name.strip())
@@ -333,3 +327,16 @@ def view_skills(request, skill_id):
         return JsonResponse(skill_details)
     except Skill.DoesNotExist:
         return JsonResponse({'error': 'Skill not found'}, status=404)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def submit_review(request):
+    """
+    Post a review to the database.
+    """
+    serializer = DeveloperReviewSerializer(data=request.data)
+    if serializer.is_valid():
+        serializer.save(reviewer=request.user)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

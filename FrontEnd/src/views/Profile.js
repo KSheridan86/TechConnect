@@ -43,6 +43,7 @@ const Profile = () => {
   const [expandedReviewId, setExpandedReviewId] = useState(null);
   const [showBack, setShowBack] = useState(false);
   const [submittingReview, setSubmittingReview] = useState(false);
+  const [selectedRating, setSelectedRating] = useState(0);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -69,11 +70,14 @@ const Profile = () => {
         if (profileId) {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
-          console.log(response.data)
+          console.log(response.data.id)
           setProjects(response.data.projects);
           setReviews(response.data.reviews);
           console.log(response.data.reviews)
-          currentUser.profile = response.data;
+          if (currentUser) {
+            currentUser.profile = response.data;
+          }
+          
           localStorage.setItem('currentUser', JSON.stringify(currentUser));
           const skillIds_1 = response.data.skills_1;
           const skillIds_2 = response.data.skills_2;
@@ -264,15 +268,6 @@ const Profile = () => {
     setShowBack(true);
   };
 
-  const handleFormSubmit = (e) => {
-    e.preventDefault();
-    setSubmittingReview(true);
-    setTimeout(() => {
-      setShowBack(false);
-    }, 750);
-  
-  };
-
   const renderStars = (rating) => {
     const stars = [];
     const gradientColors = ['#FF0000', '#FF4500', '#FF8C00', '#FFEC8B', '#FFD700'];
@@ -284,6 +279,87 @@ const Profile = () => {
     return stars;
   };
 
+  const handleStarClick = (starValue) => {
+    // Update the selected rating when a star is clicked
+    setSelectedRating(starValue);
+  };
+
+  const validateReviewForm = () => {
+    let isValid = true;
+    const newErrors = {};
+
+    const reviewText = document.getElementById('reviewText').value;
+    const rating = selectedRating;
+
+    if (!reviewText.trim()) {
+      newErrors.reviewText = "Please enter your review";
+      isValid = false;
+    }
+
+    if (!rating || rating === 0) {
+      newErrors.rating = "Please enter a rating";
+      isValid = false;
+    }
+
+    setErrors(newErrors);
+    return isValid;
+  };
+
+  const handleFormSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Validate review form details
+    if (!validateReviewForm()) {
+      // Handle validation errors
+      return;
+    }
+
+    // setSubmittingReview(true);
+
+    const reviewText = document.getElementById('reviewText').value;
+    // const rating = document.getElementById('rating').value;
+    const recommended = document.getElementById('recommended').checked;
+    // const recommendedCheckbox = document.getElementById('recommended');
+    // console.log('Checkbox Value:', recommendedCheckbox.checked);
+
+    try {
+      const reviewData = {
+        reviewer: currentUser.data.id,
+        reviewee: foundUser.id, // Assuming `foundUser.user` is the DeveloperProfile instance
+        review: reviewText,
+        recommended: recommended,
+        rating: parseInt(selectedRating),
+      };
+  
+      const config = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser.data.token}`,
+        },
+      };
+  
+      const response = await api.post('users/submit-review/', reviewData, config);
+  
+      // Assuming your backend returns the created review object
+      const newReview = response.data;
+  
+      // Update the reviews state to include the new review
+      setReviews((prevReviews) => [newReview, ...prevReviews]);
+    } catch (error) {
+      console.error('Error submitting review:', error);
+      setErrors({ general: "Whoops, looks like there's an issue with your review. Please try again later." });
+      setTimeout(() => {
+        setErrors({});
+      }, 3000);
+      // Handle the error if needed
+    } finally {
+      // Reset the submittingReview state
+      setSubmittingReview(true);
+      setTimeout(() => {
+        setShowBack(false);
+      }, 750);
+    }
+  };
 
   return (
     <div className='container mt-4 fill-screen mb-2'>
@@ -552,26 +628,34 @@ const Profile = () => {
                         rows="3"
                         placeholder="Enter your review..."
                       ></textarea>
+                      {errors.reviewText && (
+                        <div className="text-danger">{errors.reviewText}</div>
+                      )}
                     </div>
                     <div className="mb-3">
-                    <h5 className='header-font text-center text-uppercase mt-4'>Rate between 1 & 5</h5>
-                      <label htmlFor="rating" className="form-label">
-                      </label>
-                      <input
-                        type="number"
-                        id="rating"
-                        className="form-control w-75 m-auto"
-                        min="1"
-                        max="5"
-                        placeholder="Enter rating (1-5)"
-                      />
+                    <h5 className='header-font text-center text-uppercase mt-4'>How would you rate me?</h5>
+
+                    <div id="rating" className="star-rating">
+                      {[1, 2, 3, 4, 5].map((value) => (
+                        <FontAwesomeIcon
+                          key={value}
+                          icon={faStar}
+                          className={`star ${value <= selectedRating ? 'filled' : ''}`}
+                          onClick={() => handleStarClick(value)}
+                        />
+                      ))}
+                    </div>
+                    {errors.rating && (
+                      <div className="text-danger">{errors.rating}</div>
+                    )}
+
                     </div>
                     <div className="mb-3 form-check">
-                      <h5 className='header-font text-uppercase mt-3'>Would you recommend this Dev?</h5>
+                      <h5 className='header-font text-uppercase mt-3'>Would you recommend me?</h5>
                       <div className="form-check d-inline-block">
                         <label className="form-check-label" htmlFor="recommended">
                         </label>
-                        <input type="checkbox" className="form-check-input fs-4" id="recommended" checked />
+                        <input type="checkbox" className="form-check-input fs-4" id="recommended" />
                       </div>
                     </div>
                     <button

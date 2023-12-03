@@ -474,3 +474,13 @@ div > a {
 .flip-back {
   transform: rotateY(180deg);
 }
+
+.star {
+  /* Your regular star styles here */
+  color: #ccc; /* Set the default color of the stars */
+  cursor: pointer;
+}
+
+.star.filled {
+  color: #f8d419; /* Set the color for filled stars */
+}

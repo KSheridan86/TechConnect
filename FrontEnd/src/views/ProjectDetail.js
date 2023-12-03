@@ -13,8 +13,8 @@ const api = axios.create({
 
 const ProjectDetails = () => {
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const userId = currentUser.data.id;
-  const profileComparison = currentUser.profile.user;
+  const userId = currentUser?.data.id;
+  const profileComparison = currentUser?.profile.user;
   const [project, setProject] = useState(null);
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const [shouldSlideOut, setShouldSlideOut] = useState(false);
@@ -25,7 +25,8 @@ const ProjectDetails = () => {
   const [displayButtons, setDisplayButtons] = useState(false);
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
-  const { projectId } = useLocation().state;
+  const location = useLocation();
+  const { projectId } = location?.state;
 
 
   useEffect(() => {
@@ -33,7 +34,11 @@ const ProjectDetails = () => {
     const fetchProjectDetails = async () => {
       
   if (userId === profileComparison) {
-    setDisplayButtons(true);
+    if (userId === undefined) {
+      setDisplayButtons(false);
+    } else {
+      setDisplayButtons(true);
+    }
   }
       try {
         // Assuming your API endpoint for fetching project details is like '/api/projects/:projectId'
