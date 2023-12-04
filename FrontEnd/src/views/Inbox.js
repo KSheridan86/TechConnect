@@ -71,10 +71,15 @@ const Inbox = () => {
                                        btn btn-success btn-lg mt-2 
                                        w-75 d-flex justify-content-between 
                                        align-items-center m-auto' >
-                            <div>From: <br /><strong>{capitalizeFirstLetter(message.sender_name)}</strong></div>
+                            <div>
+                                From: <br />
+                                <strong>
+                                    {capitalizeFirstLetter(message.sender_name)}
+                                </strong>
+                            </div>
                             {message.message.length > 15 ? `
                                 ${message.message.slice(0, 15)}...` : 
-                                  message.message
+                                message.message
                             }
                             <br />
                             {message.formatted_date}

@@ -490,3 +490,15 @@ ul {
   padding: 0;
   margin: 0;
 }
+
+.unread-count {
+  position: relative;
+  top: -10px; /* Adjust the vertical position as needed */
+  left: 5px; /* Adjust the horizontal position as needed */
+  background-color: #f1916d;
+  color: black;
+  border-radius: 50%;
+  padding: 2px 6px;
+  font-size: 12px;
+  /* font-weight: bold; */
+}

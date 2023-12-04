@@ -70,10 +70,8 @@ const Profile = () => {
         if (profileId) {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
-          console.log(response.data.id)
           setProjects(response.data.projects);
           setReviews(response.data.reviews);
-          console.log(response.data.reviews)
           if (currentUser) {
             currentUser.profile = response.data;
           }

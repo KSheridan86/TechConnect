@@ -107,7 +107,7 @@ const Footer = ({onLogout}) => {
                     
                     <div className={`${fadeButton ? 'fade-out' : 'fade-in'}`}>
                         <button 
-                        className={`btn btn-danger btn-block`}
+                        className={`btn btn-danger btn-block btn-sm`}
                         onClick={confirmDelete}>
                             Delete Account
                         </button>

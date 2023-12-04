@@ -92,6 +92,15 @@ const Login = ({ onLogin }) => {
       const currentUser = response;
       // Store user details in local storage
       localStorage.setItem('currentUser', JSON.stringify(currentUser));
+      const newConfig = {
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${currentUser.data.token}`,
+        },
+      };
+      const inbox = await api.get(`users/inbox/`, newConfig);
+      const unreadMessagesCount = inbox.data.filter((message) => !message.is_read).length;
+      localStorage.setItem('unreadMessagesCount', unreadMessagesCount);
       onLogin();
       setShouldSlideOut(true);
 

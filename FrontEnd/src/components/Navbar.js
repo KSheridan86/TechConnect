@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStream, faCodeFork, faEnvelope } from '@fortawesome/free-solid-svg-icons';
+import { faStream, faCodeFork, faEnvelope, faEnvelopeOpen } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const navigate = useNavigate();
@@ -11,6 +11,8 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const { setShouldAnimate } = useAnimation();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
+  const unreadMessagesCount = JSON.parse(localStorage.getItem('unreadMessagesCount'));
+  console.log(unreadMessagesCount);
 
   const toggleNav = () => {
     setIsNavOpen(!isNavOpen);
@@ -46,7 +48,14 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
         {currentUser ? (
           <span className="navbar-brand header-font text-uppercase mx-0 mx-md-5"
           onClick={() => handleNavLinkClick('/inbox')}>
-          <FontAwesomeIcon icon={faEnvelope} />
+            {unreadMessagesCount > 0 ? (
+            <>
+              <FontAwesomeIcon icon={faEnvelopeOpen} />
+              <div className="unread-count border border-dark">{unreadMessagesCount}</div>
+            </>
+            ) : (
+            <FontAwesomeIcon icon={faEnvelope} />
+            )}
           </span>
         ) : (null)}
         <span className={`navbar-brand header-font text-uppercase ${currentUser ? '' : 'mx-5'}`} to="" onClick={() => handleNavLinkClick('/')} >
