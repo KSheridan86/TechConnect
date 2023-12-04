@@ -14,12 +14,13 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 # pylint: disable=W0611
-from .models import (User, DeveloperProfile, Project, Skill, DeveloperReview)
-# from .models import (ProjectReview, PrivateMessage)
+from .models import (User, DeveloperProfile, Project, Skill,
+                     DeveloperReview, PrivateMessage)
+# from .models import (ProjectReview)
 from .serializers import (UserSerializer, UserSerializerWithToken,
                           DeveloperProfileSerializer, ProjectSerializer,
-                          DeveloperReviewSerializer,)
-# from .serializers import (ProjectReviewSerializer, PrivateMessageSerializer)
+                          DeveloperReviewSerializer, PrivateMessageSerializer)
+# from .serializers import (ProjectReviewSerializer)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
@@ -340,3 +341,22 @@ def submit_review(request):
         serializer.save(reviewer=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def inbox(request):
+    """
+    Retrieve a users private messages.
+    """
+    # pylint: disable=E1101
+    try:
+        user = request.user
+        messages = PrivateMessage.objects.filter(recipient=user)
+        serializer = PrivateMessageSerializer(messages, many=True)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+    except Exception as e:
+        # Handle exceptions and return an appropriate response
+        return Response(
+            {'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)

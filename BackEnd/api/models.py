@@ -125,6 +125,7 @@ class PrivateMessage(models.Model):
         User, on_delete=models.CASCADE, related_name='received_messages')
     date = models.DateTimeField(auto_now_add=True)
     message = models.TextField()
+    is_read = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.sender} to {self.recipient} ({self.date})"

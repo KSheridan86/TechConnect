@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faStream, faCodeFork } from '@fortawesome/free-solid-svg-icons';
+import { faStream, faCodeFork, faEnvelope } from '@fortawesome/free-solid-svg-icons';
 
 const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const navigate = useNavigate();
@@ -42,7 +42,12 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
 
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
-      <div className="container">
+      <div className="container-fluid">
+        <span className="navbar-brand header-font text-uppercase mx-0 mx-md-5"
+        onClick={() => handleNavLinkClick('/inbox')}>
+        <FontAwesomeIcon icon={faEnvelope} />
+        </span>
+      
         <span className="navbar-brand header-font text-uppercase" to="" onClick={() => handleNavLinkClick('/')} >
           <FontAwesomeIcon icon={faCodeFork} /> TechConnect
         </span>

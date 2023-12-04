@@ -145,9 +145,21 @@ class PrivateMessageSerializer(serializers.ModelSerializer):
     """
     Serializes the PrivateMessage model.
     """
+    sender_name = serializers.SerializerMethodField()
+    formatted_date = serializers.SerializerMethodField()
+
     class Meta:
         """
         _summary_
         """
         model = PrivateMessage
         fields = '__all__'
+
+    def get_sender_name(self, obj):
+        return obj.sender.username
+
+    def get_formatted_date(self, obj):
+        # Format the date as you desire
+        formatted_time = obj.date.strftime("%H:%M")
+        formatted_date = obj.date.strftime("%d/%m/%y")
+        return f"{formatted_time}, {formatted_date}"

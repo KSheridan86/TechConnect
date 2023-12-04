@@ -30,4 +30,5 @@ urlpatterns = [
      path('users/skills/<int:skill_id>/',
           views.view_skills, name="view-skills"),
      path('users/submit-review/', views.submit_review, name="submit_review"),
+     path('users/inbox/', views.inbox, name="inbox"),
 ]
