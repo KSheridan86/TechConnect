@@ -51,18 +51,34 @@ const Inbox = () => {
         fetchMessages();
     }, []);
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
     return (
     <div className='container fill-screen'>
     {!successMessage ? (
         <div className="row justify-content-center logout mt-5">
-            <div className={`col-12 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
+            <div className={`col-10 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
             <h1 className="fw-bold p-4 text-center">
                 <strong className="header-font">Inbox</strong>
             </h1>
-            <ul>
+            <ul className="p-0">
                 {messages.map((message) => (
                     <li key={message.id}>
-                    <strong>{message.sender_name}</strong> - {message.message} - {message.formatted_date}
+                        <button 
+                            className='header-font 
+                                       btn btn-success btn-lg mt-2 
+                                       w-75 d-flex justify-content-between 
+                                       align-items-center m-auto' >
+                            <div>From: <br /><strong>{capitalizeFirstLetter(message.sender_name)}</strong></div>
+                            {message.message.length > 15 ? `
+                                ${message.message.slice(0, 15)}...` : 
+                                  message.message
+                            }
+                            <br />
+                            {message.formatted_date}
+                        </button>
                     </li>
                 ))}
             </ul>

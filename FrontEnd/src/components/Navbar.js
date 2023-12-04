@@ -43,12 +43,13 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   return (
     <nav className="navbar navbar-expand-lg navbar-light sticky-top text-uppercase">
       <div className="container-fluid">
-        <span className="navbar-brand header-font text-uppercase mx-0 mx-md-5"
-        onClick={() => handleNavLinkClick('/inbox')}>
-        <FontAwesomeIcon icon={faEnvelope} />
-        </span>
-      
-        <span className="navbar-brand header-font text-uppercase" to="" onClick={() => handleNavLinkClick('/')} >
+        {currentUser ? (
+          <span className="navbar-brand header-font text-uppercase mx-0 mx-md-5"
+          onClick={() => handleNavLinkClick('/inbox')}>
+          <FontAwesomeIcon icon={faEnvelope} />
+          </span>
+        ) : (null)}
+        <span className={`navbar-brand header-font text-uppercase ${currentUser ? '' : 'mx-5'}`} to="" onClick={() => handleNavLinkClick('/')} >
           <FontAwesomeIcon icon={faCodeFork} /> TechConnect
         </span>
         <button

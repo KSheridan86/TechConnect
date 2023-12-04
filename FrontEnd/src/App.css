@@ -484,3 +484,9 @@ div > a {
 .star.filled {
   color: #f8d419; /* Set the color for filled stars */
 }
+
+ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}

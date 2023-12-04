@@ -172,7 +172,7 @@ const Developers = () => {
   // console.log(users)
   return (
     <div className="container mt-4 fill-screen">
-      <div className="row justify-content-center">
+      <div className="row justify-content-evenly">
       {errors.general && (
       <div className='notification-overlay fs-3'>
         <div className='alert alert-danger' role='alert'>
