@@ -64,6 +64,12 @@ nav {
 .nav-link:hover, .navbar-brand:hover {
   color: #f5d7db !important;
   cursor: pointer;
+  transform: scale(1.1);
+  transition: transform 0.3s ease;
+}
+
+.navbar-light .navbar-nav .active .nav-link {
+  color: #f5d7db !important;
 }
 
 .dev-box {

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAnimation } from '../components/AnimationContext';
 import '../App.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -7,6 +7,7 @@ import { faStream, faCodeFork, faEnvelope, faEnvelopeOpen } from '@fortawesome/f
 
 const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
   const navigate = useNavigate();
+  const location = useLocation();
   const { setShouldAnimate } = useAnimation();
   const [isNavOpen, setIsNavOpen] = useState(false);
   const currentUser = JSON.parse(localStorage.getItem('currentUser'));
@@ -54,7 +55,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
             )}
           </span>
         ) : (null)}
-        <span className={`navbar-brand header-font text-uppercase ${currentUser ? '' : 'mx-5'}`} to="" onClick={() => handleNavLinkClick('/')} >
+        <span className={`navbar-brand header-font text-uppercase m-2 ${currentUser ? '' : 'mx-5'}`} to="" onClick={() => handleNavLinkClick('/')} >
           <FontAwesomeIcon icon={faCodeFork} /> TechConnect
         </span>
         <button
@@ -74,37 +75,37 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
           id="navbarNav"
         >
           <ul className="navbar-nav text-center">
-            <li className="nav-item">
-              <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/')}>
+          <li className={`nav-item ${location.pathname === '/' ? 'active' : ''}`}>
+              <span className="nav-link header-font m-2" to="" onClick={() => handleNavLinkClick('/')}>
                 Home
               </span>
             </li>
-            <li className="nav-item">
-              <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/developers')}>
+            <li className={`nav-item ${location.pathname === '/developers' ? 'active' : ''}`}>
+              <span className="nav-link header-font m-2" to="" onClick={() => handleNavLinkClick('/developers')}>
                 Developers
               </span>
             </li>
             {currentUser && currentUser.data.account_type === "Developer" && (
-              <li className="nav-item">
+              <li className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
                 {currentUser ? (
-                  <span className="nav-link header-font" onClick={() => userProfileClick()}>
+                  <span className="nav-link header-font m-2" onClick={() => userProfileClick()}>
                   Profile
                 </span>
                 ) : (
-                  <span className="nav-link header-font" onClick={() => handleNavLinkClick('/profile')}>
+                  <span className="nav-link header-font m-2" onClick={() => handleNavLinkClick('/profile')}>
                     Profile
                   </span>
                 )}
               </li>
             )}
             {currentUser ? 
-              <li className="nav-item">
-                <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/logout')}>
+              <li className={`nav-item ${location.pathname === '/logout' ? 'active' : ''}`}>
+                <span className="nav-link header-font m-2" to="" onClick={() => handleNavLinkClick('/logout')}>
                   Logout
                 </span>
               </li> : 
-              <li className="nav-item">
-                <span className="nav-link header-font" to="" onClick={() => handleNavLinkClick('/login')}>
+              <li className={`nav-item ${location.pathname === '/login' ? 'active' : ''}`}>
+                <span className="nav-link header-font m-2" to="" onClick={() => handleNavLinkClick('/login')}>
                   Login
                 </span>
               </li>}
