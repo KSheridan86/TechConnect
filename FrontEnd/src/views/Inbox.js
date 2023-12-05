@@ -20,6 +20,7 @@ const Inbox = () => {
     const [fadeOut, setFadeOut] = useState(false);
     const [fadeIn, setFadeIn] = useState(false);
     const [showMessage, setShowMessage] = useState(false);
+    const [showConfirm, setShowConfirm] = useState(false);
     const { shouldAnimate, setShouldAnimate } = useAnimation();
     const [messages, setMessages] = useState([]);
     const [selectedMessage, setSelectedMessage] = useState({});
@@ -55,12 +56,62 @@ const Inbox = () => {
         fetchMessages();
     }, []);
 
-    const handleViewMessage = (message) => {
-        console.log(unreadMessagesCount)
-        if (unreadMessagesCount > 0) {
-            let updatedMessageCount = unreadMessagesCount - 1;
-            localStorage.setItem('unreadMessagesCount', updatedMessageCount);
+    const confirmDelete = () => {
+        setFadeOut(false);
+        setTimeout(() => {
+            setShowConfirm(true);
+        }, 1000);
+    }
+
+    const cancelDelete = () => {
+        setFadeOut(true);
+        setTimeout(() => {
+            setShowConfirm(false);
+        }, 1000);
+    }
+
+
+    const handleDeleteMessage = async (messageId) => {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                Authorization: `Bearer ${currentUser.data.token}`,
+            },
+        };
+        try {
+            // Make API request to delete the message
+            const response = await api.delete(`users/delete-message/${messageId}/`, config);
+            
+            // Check if the delete operation was successful
+            if (response.status === 204) {
+                // Remove the deleted message from the state
+                setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== messageId));
+    
+                // Optionally, you can display a success message or perform any other action
+                console.log('Message deleted successfully');
+                setFadeIn(false);
+                setTimeout(() => {
+                    setShowMessage(false);
+                    setFadeOut(false);
+                    setShowConfirm(false);
+                    setSelectedMessage({});
+                }, 1000);
+            } else {
+                console.error('Error deleting message:', response.data);
+                // Handle error if the delete operation was not successful
+            }
+        } catch (error) {
+            console.error('Error deleting message:', error);
+            // Handle error if the API request fails
         }
+    };
+
+    const handleViewMessage = (message) => {
+        // console.log(unreadMessagesCount)
+        // if (unreadMessagesCount > 0) {
+        //     let updatedMessageCount = unreadMessagesCount - 1;
+        //     localStorage.setItem('unreadMessagesCount', updatedMessageCount);
+        // }
         setSelectedMessage(message);
         console.log(message)
         setFadeOut(true);
@@ -78,9 +129,9 @@ const Inbox = () => {
         }, 1000);
     };
 
-    function capitalizeFirstLetter(string) {
-        return string.charAt(0).toUpperCase() + string.slice(1);
-    }
+    // function capitalizeFirstLetter(string) {
+    //     return string.charAt(0).toUpperCase() + string.slice(1);
+    // }
 
     return (
     <div className='container fill-screen'>
@@ -111,7 +162,7 @@ const Inbox = () => {
                                     <div>
                                         From: <br />
                                         <strong>
-                                            {capitalizeFirstLetter(message.sender_name)}
+                                            {message.sender_name}
                                         </strong>
                                     </div>
                                     {message.message.length > 15 ? `
@@ -134,17 +185,46 @@ const Inbox = () => {
                     >
                         Back
                     </button>
-                    <h1 className="fw-bold text-center">
-                        {/* <strong className="header-font">{capitalizeFirstLetter(selectedMessage.sender_name)}</strong> */}
-                    </h1>
-                    <div className="mt-3">
-                        <strong>Message:</strong>
-                        <p>{selectedMessage.message}</p>
+                    <div className="fw-bold text-center">
+                        Message from: <br />
+                        <strong className="header-font fs-3">{selectedMessage.sender_name}</strong>
                     </div>
-                    <div className="mt-3">
+                    <div className="mt-3 text-center">
+                        <strong>Message:</strong>
+                        <p className="hand-writing fs-4">{selectedMessage.message}</p>
+                    </div>
+                    <div className="mt-3 text-center">
                         <strong>Date:</strong>
                         <p>{selectedMessage.formatted_date}</p>
                     </div>
+
+                    { showConfirm ? (
+                    <div className={`mt-3 text-center ${!fadeOut ? 'fade-in' : 'fade-out'}`}>
+                        <button className="btn btn-danger m-2 mt-3 mb-3" 
+                        onClick={() => handleDeleteMessage(selectedMessage.id)}
+                        >
+                        Confirm?
+                        </button>
+                        <button className="btn btn-secondary m-2 mt-3 mb-3"
+                        onClick={() => cancelDelete()}>
+                            Cancel
+                        </button>
+                        <p className="text-danger fw-bold">This will permanently delete this message!</p>
+                    </div>
+                    ) : (
+                    <div className={`mt-3 text-center ${!fadeOut ? 'fade-out' : 'fade-in'}`}>
+                        <button className="btn btn-danger m-2 mt-3 mb-3" 
+                        onClick={() => confirmDelete()}
+                        >
+                        Delete
+                        </button>
+                        <button className="btn btn-secondary m-2 mt-3 mb-3">
+                            Reply
+                        </button>
+                    </div>
+                    )}
+                    
+                    
     
                 </div>
                 ) : (null)}

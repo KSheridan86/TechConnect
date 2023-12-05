@@ -360,3 +360,22 @@ def inbox(request):
         # Handle exceptions and return an appropriate response
         return Response(
             {'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['DELETE'])
+@permission_classes([IsAuthenticated])
+def delete_message(request, message_id):
+    # pylint: disable=E1101
+    try:
+        user = request.user
+        message = PrivateMessage.objects.get(id=message_id, recipient=user)
+        message.delete()
+
+        return Response({'message': 'Message deleted successfully'},
+                        status=status.HTTP_204_NO_CONTENT)
+    except PrivateMessage.DoesNotExist:
+        return Response({'error': 'Message not found'},
+                        status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)

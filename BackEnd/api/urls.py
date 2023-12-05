@@ -31,4 +31,6 @@ urlpatterns = [
           views.view_skills, name="view-skills"),
      path('users/submit-review/', views.submit_review, name="submit_review"),
      path('users/inbox/', views.inbox, name="inbox"),
+     path('users/delete-message/<int:message_id>/',
+          views.delete_message, name="delete-message"),
 ]
