@@ -48,7 +48,19 @@ const Inbox = () => {
             };
             try {
                 const response = await api.get(`users/inbox/`, config);
-                setMessages(response.data);
+                // Separate messages into read and unread
+                const unreadMessages = response.data.filter(message => !message.is_read);
+                const readMessages = response.data.filter(message => message.is_read);
+
+                // Sort unread messages from newest to oldest
+                const sortedUnreadMessages = unreadMessages.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Sort read messages from newest to oldest
+                const sortedReadMessages = readMessages.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+                // Concatenate unread messages first, followed by read messages
+                const sortedMessages = [...sortedUnreadMessages, ...sortedReadMessages];
+                setMessages(sortedMessages);
             } catch (error) {
                 console.error('Error fetching messages:', error);
                 setErrors({ general: 
@@ -150,7 +162,7 @@ const Inbox = () => {
     // }
 
     return (
-    <div className='container fill-screen'>
+    <div className='container fill-screen mb-5'>
     {!successMessage ? (
         <div className="row justify-content-center logout mt-5">
             <div className={`col-10 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
@@ -161,7 +173,7 @@ const Inbox = () => {
                 </div>
                 </div>
                 )}
-                <div className={`${fadeOut ? 'fade-out' : 'fade-in'} ${showMessage ? 'd-none' : ''}`}> 
+                <div className={`p-2 ${fadeOut ? 'fade-out' : 'fade-in'} ${showMessage ? 'd-none' : ''}`}> 
                     <h1 className="fw-bold p-4 text-center">
                         <strong className="header-font">Inbox</strong>
                     </h1>
