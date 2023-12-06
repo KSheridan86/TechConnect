@@ -18,6 +18,7 @@ import AddSkills from './views/AddSkills';
 import AddProjects from './views/AddProjects';
 import ProjectDetail from './views/ProjectDetail';
 import Inbox from './views/Inbox';
+import SendMessage from './views/SendMessage';
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false);
@@ -53,6 +54,7 @@ function App() {
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
           <Route path="/inbox" element={<Inbox />} />
+          <Route path="/send-message" element={<SendMessage />} />
           {/* <Route path="/confirm-delete/:id" element={<ConfirmDelete />} /> */}
           <Route path="/update-profile" element={<CreateProfile />} />
           <Route path="/add-skills" element={<AddSkills />} />

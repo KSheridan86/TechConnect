@@ -133,20 +133,6 @@ const Inbox = () => {
         }
     };
 
-    // const handleViewMessage = (message) => {
-    //     // console.log(unreadMessagesCount)
-    //     // if (unreadMessagesCount > 0) {
-    //     //     let updatedMessageCount = unreadMessagesCount - 1;
-    //     //     localStorage.setItem('unreadMessagesCount', updatedMessageCount);
-    //     // }
-    //     setSelectedMessage(message);
-    //     setFadeOut(true);
-    //     setTimeout(() => {
-    //         setFadeIn(true);
-    //         setShowMessage(true);
-    //     }, 1000);
-    // };
-
     const handleViewMessage = async (message) => {
         try {
             if (!message.is_read) {
@@ -176,6 +162,7 @@ const Inbox = () => {
     
             // Set selected message and initiate fade-out animation
             setSelectedMessage(message);
+            console.log(message)
             setFadeOut(true);
     
             // Delay the fade-in to give time for the fade-out animation
@@ -198,14 +185,22 @@ const Inbox = () => {
         }, 1000);
     };
 
+    const handleReply = (recipient) => {
+        console.log(recipient)
+        setShouldSlideOut(true);
+        setTimeout(() => {
+            navigate(`/send-message`, { state: { recipient: recipient } });
+        }, 1000);
+    };
+
     // function capitalizeFirstLetter(string) {
     //     return string.charAt(0).toUpperCase() + string.slice(1);
     // }
 
     return (
-    <div className='container fill-screen mb-5'>
+    <div className='container mb-5'>
     {!successMessage ? (
-        <div className="row justify-content-center logout mt-5">
+        <div className="row justify-content-center logout mt-2">
             <div className={`col-10 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                 {errors.general && (
                 <div className='notification-overlay fs-3'>
@@ -293,7 +288,8 @@ const Inbox = () => {
                         >
                         Delete
                         </button>
-                        <button className="btn btn-secondary m-2 mt-3 mb-3">
+                        <button className="btn btn-secondary m-2 mt-3 mb-3"
+                            onClick={() => handleReply(selectedMessage.sender)}>
                             Reply
                         </button>
                     </div>

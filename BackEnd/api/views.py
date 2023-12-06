@@ -409,3 +409,33 @@ def update_message(request, message_id):
     except Exception as e:
         return Response({'error': str(e)},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['POST'])
+@permission_classes([IsAuthenticated])
+def send_message(request):
+    """
+    Send a private message.
+    """
+    # pylint: disable=E1101
+    try:
+        sender = request.user
+        recipient = User.objects.get(id=request.data['recipient'])
+        message = request.data['message']
+
+        # Create a new message
+        new_message = PrivateMessage.objects.create(
+            sender=sender, recipient=recipient, message=message)
+
+        # Serialize the message data
+        serializer = PrivateMessageSerializer(new_message)
+
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+    except User.DoesNotExist:
+        return Response({'error': 'Recipient not found.'},
+                        status=status.HTTP_404_NOT_FOUND)
+
+    except Exception as e:
+        return Response({'error': str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)

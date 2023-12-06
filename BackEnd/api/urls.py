@@ -35,4 +35,5 @@ urlpatterns = [
           views.delete_message, name="delete-message"),
      path('users/update-message/<int:message_id>/',
           views.update_message, name="update-message"),
+     path('users/send-message/', views.send_message, name="send-message"),
 ]
