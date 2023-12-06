@@ -99,9 +99,6 @@ const AddSkills = () => {
                         }
                     })
                 );
-                console.log('Current skills:', skillsDetails);
-                // setCurrentSkills1(response.data.skills_level_1);
-                // setCurrentSkills2(response.data.skills_level_2);
             } catch (error) {
                 console.error('Error fetching current skills:', error);
                 setErrors({ general: "Whoops, we couldn't find your current skills, you have skills don't you??" });

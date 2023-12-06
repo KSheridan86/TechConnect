@@ -82,7 +82,7 @@ const Footer = ({onLogout}) => {
             <div className="row">
                 <div className={`${ currentUser !== null ? 'col-md-6' : 'col-12'}`}>
                     <div className="small common-font">
-                        Designed & Built by ChimpTech Web Design    
+                        Designed & Built by Ken Sheridan    
                         <div>
                             © 2023 - All rights reserved
                         </div>

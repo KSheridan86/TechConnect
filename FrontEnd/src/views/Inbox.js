@@ -24,6 +24,7 @@ const Inbox = () => {
     const { shouldAnimate, setShouldAnimate } = useAnimation();
     const [messages, setMessages] = useState([]);
     const [selectedMessage, setSelectedMessage] = useState({});
+    const [errors, setErrors] = useState({});
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -50,6 +51,15 @@ const Inbox = () => {
                 setMessages(response.data);
             } catch (error) {
                 console.error('Error fetching messages:', error);
+                setErrors({ general: 
+                    "Whoops, looks like there's an issue fetching your messages. Please try again." });
+                setTimeout(() => {
+                    setErrors({});
+                    setShouldSlideOut(true);
+                    setTimeout(() => {
+                        navigate('/');
+                    }, 1000);
+                }, 3000);
             }
         };
     
@@ -86,9 +96,7 @@ const Inbox = () => {
             if (response.status === 204) {
                 // Remove the deleted message from the state
                 setMessages((prevMessages) => prevMessages.filter((msg) => msg.id !== messageId));
-    
-                // Optionally, you can display a success message or perform any other action
-                console.log('Message deleted successfully');
+
                 setFadeIn(false);
                 setTimeout(() => {
                     setShowMessage(false);
@@ -102,7 +110,16 @@ const Inbox = () => {
             }
         } catch (error) {
             console.error('Error deleting message:', error);
+            setErrors({ general: "Whoops, looks like there's an issue deleting this message. Please try again." });
             // Handle error if the API request fails
+            setTimeout(() => {
+                setErrors({});
+                // setShouldSlideOut(true);
+                setTimeout(() => {
+                    // navigate('/inbox');
+                    setShowMessage(false);
+                }, 1000);
+            }, 3000);
         }
     };
 
@@ -113,7 +130,6 @@ const Inbox = () => {
         //     localStorage.setItem('unreadMessagesCount', updatedMessageCount);
         // }
         setSelectedMessage(message);
-        console.log(message)
         setFadeOut(true);
         setTimeout(() => {
             setFadeIn(true);
@@ -138,7 +154,13 @@ const Inbox = () => {
     {!successMessage ? (
         <div className="row justify-content-center logout mt-5">
             <div className={`col-10 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
-                
+                {errors.general && (
+                <div className='notification-overlay fs-3'>
+                <div className='alert alert-danger' role='alert'>
+                    {errors.general}
+                </div>
+                </div>
+                )}
                 <div className={`${fadeOut ? 'fade-out' : 'fade-in'} ${showMessage ? 'd-none' : ''}`}> 
                     <h1 className="fw-bold p-4 text-center">
                         <strong className="header-font">Inbox</strong>
