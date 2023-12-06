@@ -365,6 +365,9 @@ def inbox(request):
 @api_view(['DELETE'])
 @permission_classes([IsAuthenticated])
 def delete_message(request, message_id):
+    """
+    Delete a message.
+    """
     # pylint: disable=E1101
     try:
         user = request.user
@@ -376,6 +379,33 @@ def delete_message(request, message_id):
     except PrivateMessage.DoesNotExist:
         return Response({'error': 'Message not found'},
                         status=status.HTTP_404_NOT_FOUND)
+    except Exception as e:
+        return Response({'error': str(e)},
+                        status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+
+@api_view(['PATCH'])
+@permission_classes([IsAuthenticated])
+def update_message(request, message_id):
+    """
+    Update the is_read field for a message.
+    """
+    # pylint: disable=E1101
+    try:
+        user = request.user
+        message = PrivateMessage.objects.get(id=message_id, recipient=user)
+
+        # Update the is_read field
+        message.is_read = True
+        message.save()
+
+        return Response({'detail': 'Message marked as read.'},
+                        status=status.HTTP_200_OK)
+
+    except PrivateMessage.DoesNotExist:
+        return Response({'error': 'Message not found.'},
+                        status=status.HTTP_404_NOT_FOUND)
+
     except Exception as e:
         return Response({'error': str(e)},
                         status=status.HTTP_500_INTERNAL_SERVER_ERROR)

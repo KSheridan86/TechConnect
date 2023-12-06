@@ -33,4 +33,6 @@ urlpatterns = [
      path('users/inbox/', views.inbox, name="inbox"),
      path('users/delete-message/<int:message_id>/',
           views.delete_message, name="delete-message"),
+     path('users/update-message/<int:message_id>/',
+          views.update_message, name="update-message"),
 ]

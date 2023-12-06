@@ -52,13 +52,11 @@ const Inbox = () => {
                 const unreadMessages = response.data.filter(message => !message.is_read);
                 const readMessages = response.data.filter(message => message.is_read);
 
-                // Sort unread messages from newest to oldest
+                // Sort read & unread messages from newest to oldest
                 const sortedUnreadMessages = unreadMessages.sort((a, b) => new Date(b.date) - new Date(a.date));
-
-                // Sort read messages from newest to oldest
                 const sortedReadMessages = readMessages.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-                // Concatenate unread messages first, followed by read messages
+                // Concatenate sortedMessages and set messages
                 const sortedMessages = [...sortedUnreadMessages, ...sortedReadMessages];
                 setMessages(sortedMessages);
             } catch (error) {
@@ -135,19 +133,62 @@ const Inbox = () => {
         }
     };
 
-    const handleViewMessage = (message) => {
-        // console.log(unreadMessagesCount)
-        // if (unreadMessagesCount > 0) {
-        //     let updatedMessageCount = unreadMessagesCount - 1;
-        //     localStorage.setItem('unreadMessagesCount', updatedMessageCount);
-        // }
-        setSelectedMessage(message);
-        setFadeOut(true);
-        setTimeout(() => {
-            setFadeIn(true);
-            setShowMessage(true);
-        }, 1000);
+    // const handleViewMessage = (message) => {
+    //     // console.log(unreadMessagesCount)
+    //     // if (unreadMessagesCount > 0) {
+    //     //     let updatedMessageCount = unreadMessagesCount - 1;
+    //     //     localStorage.setItem('unreadMessagesCount', updatedMessageCount);
+    //     // }
+    //     setSelectedMessage(message);
+    //     setFadeOut(true);
+    //     setTimeout(() => {
+    //         setFadeIn(true);
+    //         setShowMessage(true);
+    //     }, 1000);
+    // };
+
+    const handleViewMessage = async (message) => {
+        try {
+            if (!message.is_read) {
+                const config = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        Authorization: `Bearer ${currentUser.data.token}`,
+                    },
+                };
+    
+                // Make API request to update the message as read
+                await api.patch(`users/update-message/${message.id}/`, { is_read: true }, config);
+    
+                // Update the local state to mark the message as read
+                setMessages((prevMessages) =>
+                    prevMessages.map((msg) =>
+                        msg.id === message.id ? { ...msg, is_read: true } : msg
+                    )
+                );
+    
+                // Update the local storage count of unread messages
+                const updatedMessagesCount = unreadMessagesCount - 1;
+                localStorage.setItem('unreadMessagesCount', updatedMessagesCount);
+    
+                console.log('Message marked as read successfully');
+            }
+    
+            // Set selected message and initiate fade-out animation
+            setSelectedMessage(message);
+            setFadeOut(true);
+    
+            // Delay the fade-in to give time for the fade-out animation
+            setTimeout(() => {
+                // Clear selected message and initiate fade-in animation
+                setFadeIn(true);
+                setShowMessage(true);
+            }, 1000);
+        } catch (error) {
+            console.error('Error marking message as read:', error);
+        }
     };
+
     const handleBack = () => {
         setFadeIn(false);
         setTimeout(() => {
