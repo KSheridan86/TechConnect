@@ -12,7 +12,6 @@ import SignUp from './views/SignUp';
 import DeleteUser from './views/DeleteUser';
 import Login from './views/Login';
 import Logout from './views/Logout';
-// import ConfirmDelete from './views/ConfirmDelete';
 import CreateProfile from './views/CreateProfile';
 import AddSkills from './views/AddSkills';
 import AddProjects from './views/AddProjects';
@@ -55,7 +54,6 @@ function App() {
           <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
           <Route path="/inbox" element={<Inbox />} />
           <Route path="/send-message" element={<SendMessage />} />
-          {/* <Route path="/confirm-delete/:id" element={<ConfirmDelete />} /> */}
           <Route path="/update-profile" element={<CreateProfile />} />
           <Route path="/add-skills" element={<AddSkills />} />
           <Route path="/add-projects" element={<AddProjects />} />

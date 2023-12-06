@@ -162,7 +162,6 @@ const Inbox = () => {
     
             // Set selected message and initiate fade-out animation
             setSelectedMessage(message);
-            console.log(message)
             setFadeOut(true);
     
             // Delay the fade-in to give time for the fade-out animation
@@ -186,10 +185,10 @@ const Inbox = () => {
     };
 
     const handleReply = (recipient) => {
-        console.log(recipient)
         setShouldSlideOut(true);
+        localStorage.setItem('selectedMessage', JSON.stringify(selectedMessage));
         setTimeout(() => {
-            navigate(`/send-message`, { state: { recipient: recipient } });
+            navigate(`/send-message`);
         }, 1000);
     };
 

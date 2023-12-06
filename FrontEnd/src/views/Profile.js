@@ -70,6 +70,7 @@ const Profile = () => {
         if (profileId) {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
+          console.log(response.data)
           setProjects(response.data.projects);
           setReviews(response.data.reviews);
           if (currentUser) {
@@ -359,6 +360,14 @@ const Profile = () => {
     }
   };
 
+  const sendMessage = () => {
+    setShouldSlideOut(true);
+    localStorage.setItem('profile', JSON.stringify(foundUser));
+    setTimeout(() => {
+      navigate('/send-message');
+    }, 1000);
+  }
+
   return (
     <div className='container mt-4 fill-screen mb-2'>
       {!successMessage ? (
@@ -386,7 +395,7 @@ const Profile = () => {
               <div className="row">
                 <div className="col-md-12">
                   <div className="row">
-                    <div className="col-7">
+                    <div className="col-7 text-center">
                     {foundUser && foundUser.avatar ? (
                       <img
                         src={`${baseAvatarUrl}${foundUser.avatar}`}
@@ -400,6 +409,17 @@ const Profile = () => {
                         className='user-avatar mt-2 rounded'
                       />
                     )}
+                    <div>
+                      {currentUser ? (
+                      <button 
+                        className='btn btn-warning mt-2 mb-2 mx-2'
+                        onClick={sendMessage}>
+                          Send Message
+                      </button>
+                      ) : (null)}
+                      
+                    </div>
+                    
                     </div>
                     <div className="col-5 mt-3">
                     {foundUser && (
@@ -469,9 +489,12 @@ const Profile = () => {
                 <div className="col-md-12 mt-3">
                 {foundUser && (
                   <div>
+                    { currentUser ? (
                     <p className='header-font text-center text-uppercase'>
                       <a href={`mailto:${foundUser.email}`} className="email-link">{foundUser.email}</a>
                     </p>
+                    ) : (null)}
+                    
                     <p className='header-font text-center text-uppercase p-3'>
                       Introduction: <br />{` ${foundUser.intro_text || 'Not provided'}`}
                     </p>
@@ -682,7 +705,7 @@ const Profile = () => {
                     }`}>
                     <p>{review.review}</p>
                     <p>{renderStars(review.rating)}</p>
-                    {currentUser.data.email === foundUser.email ? (
+                    {currentUser?.data.email === foundUser?.email ? (
                       <p className='fs-4'>
                       <FontAwesomeIcon 
                         icon={faTimesCircle} 
@@ -703,12 +726,17 @@ const Profile = () => {
                     )}
                   </div>
                 )))}
-                <button
-                  className={`btn btn-warning btn-lg mt-4 mb-4 w-50 d-flex justify-content-center align-items-center m-auto ${showBack ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
-                  onClick={handleLeaveReviewClick}
-                >
-                  Leave Review
-                </button>
+                <div>
+                  {currentUser ? (
+                  <button
+                    className={`btn btn-warning btn-lg mt-4 mb-4 w-50 d-flex justify-content-center align-items-center m-auto ${showBack ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
+                    onClick={handleLeaveReviewClick}
+                  >
+                    Leave Review
+                  </button>
+                  ) : (null)}
+                </div>
+                
               </div>
 
 

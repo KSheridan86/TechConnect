@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -11,15 +11,27 @@ const api = axios.create({
 
 const SendMessage = () => {
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-  const navigate = useNavigate();
-  const location = useLocation();
-  const [message, setMessage] = useState('');
-  const { recipient } = location?.state;
-  console.log(recipient)
+const selectedMessage = JSON.parse(localStorage.getItem('selectedMessage'));
+const profile = JSON.parse(localStorage.getItem('profile'));
+const navigate = useNavigate();
+const [message, setMessage] = useState('');
+const [shouldSlideOut, setShouldSlideOut] = useState(false);
+const [successMessage, setSuccessMessage] = useState(false);
+const [transition, setTransition] = useState(false);
+const [errors, setErrors] = useState({});
 
-  const [shouldSlideOut, setShouldSlideOut] = useState(false);
-    const [successMessage, setSuccessMessage] = useState(false);
-    const [transition, setTransition] = useState(false);
+  const checkUser = () => {
+    if ((!selectedMessage && !profile) || !currentUser) {
+      navigate('/')
+    }
+    if (currentUser === null) {
+      navigate('/login')
+    }
+  };
+
+  useEffect(() => {
+    checkUser();
+  }, []);
 
 
   const handleSendMessage = async () => {
@@ -30,36 +42,41 @@ const currentUser = JSON.parse(localStorage.getItem('currentUser'));
           Authorization: `Bearer ${currentUser.data.token}`,
         },
       };
-
+      
       const data = {
-        recipient,
+        recipient: selectedMessage?.sender || profile?.user,
         message,
         sender: currentUser.data.id,
       };
-      console.log(data)
 
       const response = await api.post('users/send-message/', data, config);
 
-      if (response.status === 201) {
-        // Optionally, you can navigate to another page or show a success message
-        console.log('Message sent successfully');
+        console.log(response.data);
         setShouldSlideOut(true);
         setTimeout(() => {
             setSuccessMessage(true);
             setTimeout(() => {
                 setTransition(true);
                 setTimeout(() => {
+                  if (selectedMessage) {
                     navigate('/inbox');
+                  } else {
+                    navigate('/profile');
+                  }
                 }, 500);
             }, 2500);
         }, 1000);
-      } else {
-        console.error('Error sending message:', response.data);
-        // Handle error if the send operation was not successful
-      }
-    } catch (error) {
-      console.error('Error sending message:', error);
-      // Handle error if the API request fails
+        localStorage.removeItem('profile');
+        localStorage.removeItem('selectedMessage');
+      } catch (error) {
+      setErrors({ general: "Whoops, looks like there's a problem sending your message. Please try again later." });
+      setTimeout(() => {
+        setErrors({});
+        setTimeout(() => {
+          navigate('/inbox');
+        }, 500);
+        
+        }, 3000);
     }
   };
 
@@ -67,15 +84,30 @@ const currentUser = JSON.parse(localStorage.getItem('currentUser'));
     <div className='container fill-screen'>
     {!successMessage ? (
       <div className="row justify-content-center logout mt-5">
+        {errors.general && (
+        <div className='notification-overlay fs-3'>
+          <div className='alert alert-danger' role='alert'>
+            {errors.general}
+          </div>
+        </div>
+        )}
         <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
           <div className="glass-box fw-bold p-4 m-5 text-center">
-            <strong className="header-font">Enter your message below...</strong>
+            { selectedMessage ? (
+              <div>
+              <strong className="header-font">Reply to message from {selectedMessage?.sender_name}</strong>
+              <p>{selectedMessage.sender_name} sent: <br />"{selectedMessage.message}"</p>
+              </div>
+            ) : (
+              <strong className="header-font">Message to {profile?.username} from {currentUser?.data.username}</strong>
+            )}
             <form className="mt-2 mb-2 hand-writing">
                 <div className="mb-3">
                     <textarea
                     className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
+                        placeholder='Type your message here...'
                     />
                 </div>
                 <button type="button"
@@ -97,10 +129,6 @@ const currentUser = JSON.parse(localStorage.getItem('currentUser'));
       </div>
     )}
     </div>
-    // <div>
-    //   <h2>Send Message</h2>
-  
-    // </div>
   );
 };
 
