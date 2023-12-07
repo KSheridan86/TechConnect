@@ -635,7 +635,7 @@ const Profile = () => {
                 <h3 className="m-1 p-1 header-font text-center">Testimonials</h3>
               </div>
 
-              <div className={`col-11 col-md-8 col-lg-6 mt-2 fade-in glass-box ${showBack ? 'flip' : ''}`}>
+              <div className={`col-12 col-md-8 col-lg-6 mt-2 fade-in glass-box ${showBack ? 'flip' : ''}`}>
               {showBack ? (
                   // Back of the div with the form
                   <div className="review-form text-center flip-back form-in">
@@ -695,7 +695,7 @@ const Profile = () => {
                   <div key={review.id} className="mb-3 mt-3 text-center review-container fade-in">
                     <div className="text-center">
                     <button 
-                      className='form-label header-font btn btn-success btn-lg mt-2 w-75 d-flex justify-content-between align-items-center m-auto' 
+                      className='form-label header-font btn btn-success btn-lg mt-2 w-100 d-flex justify-content-between align-items-center m-auto' 
                       onClick={() => toggleDropdown(review.id)}>
                         {review.reviewer_name}
                         <FontAwesomeIcon icon={faChevronDown} style={{ marginLeft: '5px' }} />

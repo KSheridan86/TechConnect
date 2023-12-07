@@ -127,7 +127,7 @@ const ProjectDetails = () => {
 
 
   return  (
-    <div className="container mt-4 mb-2">
+    <div className="container check mt-4 mb-5">
       {!successMessage ? (
       <div className={`row justify-content-evenly ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
         <h2 className={`header-font text-center text-uppercase mt-3 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
@@ -196,7 +196,7 @@ const ProjectDetails = () => {
         </div>
         <div className='text-center mt-2 mb-1 hand-writing'>
           {!confirmation ? (
-            <div className={`${fadeButton ? 'fade-out' : 'fade-in'}`}>
+            <div className={`mb-5 ${fadeButton ? 'fade-out' : 'fade-in'}`}>
               <button
                 className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}
                 onClick={() => {

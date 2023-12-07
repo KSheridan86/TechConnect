@@ -210,7 +210,7 @@ const AddSkills = () => {
                 <form>
                     <div className='row justify-content-evenly text-center'>
                         <div className={`col-md-8 mb-0 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
-                            <div className='glass-box border-dark m-3 p-4'>
+                            <div className='glass-box border-dark m-3 p-1 p-md-4'>
                                 <h2 className='header-font text-center text-uppercase mt-2'>
                                     Add Skills to your Profile
                                 </h2>
@@ -219,29 +219,29 @@ const AddSkills = () => {
                                         Use this space to inform clients of your abilities, ie "React", "Python" etc...
                                     </h4>
                                     <br />
-                                    <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>
-                                        Lets start with your primary skills, the ones you're most proficient and comfortable with.
+                                    <label className='fw-bold mb-2'>
+                                        Lets start with your primary skills, the ones you're most comfortable with.
                                     </label>
-                                    <textarea style={{maxWidth: '75%'}}
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
+                                    <textarea
+                                        className='w-75 text-center border border-dark border-2 p-2 form-control mb-1 hand-writing m-auto'
                                         name='skills_1'
                                         placeholder='Add your PRIMARY skills here separated by commas'
                                         onChange={(e) => setPrimarySkills(e.target.value)}
-                                        rows={1}
+                                        rows={2}
                                     />
                                     {errors.primarySkills && (
                                         <div className="text-danger">{errors.primarySkills}</div>
                                     )}
                                     <br />
-                                    <label style={{maxWidth: '75%'}} className='fw-bold mb-2'>
+                                    <label className='fw-bold mb-2'>
                                         Now add your secondary skills, skills you're familiar with but not a pro in.
                                     </label>
-                                    <textarea style={{maxWidth: '75%'}}
-                                        className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
+                                    <textarea
+                                        className='w-75 text-center border border-dark border-2 p-2 form-control mb-2 hand-writing m-auto'
                                         name='skills_2'
                                         placeholder='Add your SECONDARY skills here separated by commas'
                                         onChange={(e) => setSecondarySkills(e.target.value)}
-                                        rows={1}
+                                        rows={2}
                                     />
                                     {errors.secondarySkills && (
                                         <div className="text-danger">{errors.secondarySkills}</div>

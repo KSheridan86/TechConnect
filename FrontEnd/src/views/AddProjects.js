@@ -19,7 +19,7 @@ const AddProjects = () => {
     const navigate = useNavigate();
     const location = useLocation();
     const returnUrl = location.state ? location.state.returnUrl : null;
-    const projectUrl = location.state ? location.state.project.id : null;
+    const projectUrl = location.state ? location?.state?.project?.id : null;
 
     useEffect(() => {
         if (location.state && location.state.project) {
@@ -199,7 +199,7 @@ const AddProjects = () => {
     };
 
     return (
-        <div className='container'>
+        <div className='container mb-3'>
             <div className={`row justify-content-center login ${isSubmitted ? 'fade-out' : 'fade-in'}`}>
             {errors.general && (
             <div className='notification-overlay fs-3'>
@@ -208,7 +208,7 @@ const AddProjects = () => {
                 </div>
             </div>
             )}
-                <div className={`col-10 col-lg-8 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
+                <div className={`col-12 col-lg-8 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
 
                     <form encType="multipart/form-data">
                         <div className='glass-box border-dark m-3 p-3'>

@@ -510,3 +510,7 @@ ul {
 .bottom-space {
   margin-bottom: 5rem;
 }
+
+.check {
+  min-height: 75vh;
+}

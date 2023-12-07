@@ -160,8 +160,8 @@ const CreateProfile = () => {
             if (!profile.intro_text) validationErrors.intro_text = 'Introduction is required';
             if (!profile.years_of_experience) validationErrors.years_of_experience = 'Years of Experience is required';
             if (!profile.location) validationErrors.location = 'Location is required';
+            if (!profile.portfolio_url) validationErrors.portfolio_url = 'Portfolio URL is required';
             if (profile.available && !profile.date_available) validationErrors.date_available = 'Date Available is required';
-
             if (Object.keys(validationErrors).length > 0) {
                 setErrors(validationErrors);
                 return;
@@ -191,7 +191,7 @@ const CreateProfile = () => {
                 Authorization: `Bearer ${currentUser.data.token}`,
                 },
             };
-
+            console.log('formData', formData)
             // Make a POST request to update the user profile
             const response = await api.post('users/update_profile/', formData, config);
 
@@ -333,7 +333,7 @@ const CreateProfile = () => {
                                 className='text-center border border-dark border-2 p-2 form-control mb-2 hand-writing'
                                 type='text'
                                 name='portfolio_url'
-                                placeholder={profile.portfolio_url ? profile.portfolio_url : 'Enter portfolio site URL'}
+                                placeholder={profile.portfolio_url ? profile.portfolio_url : 'https://www.Enter-portfolio-site-URL.com'}
                                 onChange={handleInputChange}
                             />
                             {errors.portfolio_url && (

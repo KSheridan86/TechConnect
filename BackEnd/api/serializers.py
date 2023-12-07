@@ -104,6 +104,7 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         fields = '__all__'
         extra_kwargs = {
             'avatar': {'required': False, 'allow_null': True},
+            'portfolio_url': {'required': False, 'allow_null': True},
         }
 
     def to_representation(self, instance):

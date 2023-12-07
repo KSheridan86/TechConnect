@@ -134,11 +134,11 @@ def user_profile(request, user_id=None):
     else:
         user = request.user
     profile = DeveloperProfile.objects.get(user=user)
-    projects = Project.objects.filter(developer=profile)
+    user_projects = Project.objects.filter(developer=profile)
     reviews = DeveloperReview.objects.filter(reviewee=profile)
 
     serializer = DeveloperProfileSerializer(
-        profile, context={'projects': projects, 'reviews': reviews})
+        profile, context={'projects': user_projects, 'reviews': reviews})
     return Response(serializer.data)
 
 
