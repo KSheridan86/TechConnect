@@ -220,7 +220,7 @@ div > a {
     margin-top: 0;
   }
   .max {
-    min-height: 110vh;
+    min-height: 135vh;
   
   }
 }
@@ -375,7 +375,7 @@ div > a {
 
 /* not sure?? */
 .max {
-  max-height: 80vh;
+  max-height: 95vh;
 }
 
 .project-image {
@@ -508,7 +508,7 @@ ul {
 
 
 .bottom-space {
-  margin-bottom: 5rem;
+  margin-bottom: 10rem;
 }
 
 .check {

@@ -25,6 +25,7 @@ const Developers = () => {
   const baseAvatarUrl = 'http://127.0.0.1:8000';
   const navigate = useNavigate();
   const [experienceFilter, setExperienceFilter] = useState('all');
+  const [isSearchPerformed, setIsSearchPerformed] = useState(false);
 
   useEffect(() => {
     if (shouldAnimate) {
@@ -97,6 +98,7 @@ const Developers = () => {
   }, []);
 
   const handleSearch = () => {
+    setIsSearchPerformed(true);
     const meetsExperienceCriteria = (user) => {
       const userExperience = user.years_of_experience;
 
@@ -168,9 +170,9 @@ const Developers = () => {
         navigate(`/profile`, { state: { userId } });
       }, 1000);
   };
-  // console.log(users)
+
   return (
-    <div className="container mt-4">
+    <div className="container mt-4 bottom-space">
       <div className="row justify-content-evenly">
       {errors.general && (
       <div className='notification-overlay fs-3'>
@@ -181,7 +183,7 @@ const Developers = () => {
       )}
         <div className={`col-10 col-md-5 glass-box p-2 mt-3 text-center max ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
           <h1 className="fw-bold p-2 text-center header-font text-uppercase">Discover Talented Developers!</h1>
-          <p className="p-2">
+          <p className="p-2 fs-5">
             Looking for the right developer for your project?
             <br />
             You're in the right place!
@@ -194,7 +196,7 @@ const Developers = () => {
             Simply input your particular criteria below and we'll do the rest!
           </p>
           <div className="row justify-content-center text-center">
-            <div className="col-8">
+            <div className="col-10 col-md-8">
               <input
                 className="fw-bold border border-dark border-2 p-2 form-control mb-3 hand-writing"
                 type="text"
@@ -203,7 +205,7 @@ const Developers = () => {
                 onChange={handleInputChange}
               />
             </div>
-            <div className="col-8 text-center hand-writing">
+            <div className="col-10 col-md-8 text-center hand-writing">
               <select
                 className="form-select mb-3"
                 onChange={(e) => setSearchType(e.target.value)}
@@ -213,7 +215,7 @@ const Developers = () => {
               </select>
             </div>
 
-            <div className="col-8 text-center hand-writing">
+            <div className="col-10 col-md-8 text-center hand-writing">
           <select
             className="form-select mb-3"
             onChange={(e) => setExperienceFilter(e.target.value)} // Updated state on change
@@ -238,53 +240,55 @@ const Developers = () => {
                   checked={showAvailableDevs}
                   onChange={() => setShowAvailableDevs(!showAvailableDevs)}
                 />
-               
               </div>
             </div>
             <div className="col-8 text-center hand-writing">
               <button
-                className="btn btn-warning border-dark border-2 mt-3 col-6"
+                className="btn btn-warning border-dark border-2 mt-3 mb-2 col-6"
                 onClick={handleSearch}
               >
                 Search
               </button>
+              <p>Not sure what you want? <br /> Just perform an empty search to view ALL Developers!</p>
+
             </div>
           </div>
         </div>
         <div className={`col-12 col-md-6 max mb-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
           <div className="glass-box m-3 text-center">
-            <div className="p-3">
+            <div className="p-4">
               <p className="fs-1 mb-4 header-font text-uppercase">Searching made easy!</p>
-              <div className="fs-5 mt-2 mb-1 header-font">Name</div>
-              <p className='p-2'>
+              <div className="fs-4 mt-2 mb-1 header-font">Name</div>
+              <p className='p-2 fs-5'>
                 Have a specific developer in mind?
                 Search their name to quickly find their profile and portfolio.
               </p>
               <hr />
-              <div className="fs-5 mt-3 mb-1 header-font">Tech Stack</div>
-              <p className='p-2'>
+              <div className="fs-4 mt-3 mb-1 header-font">Tech Stack</div>
+              <p className='p-2 fs-5'>
                 Use our technology stack filter to discover developers who specialize in
                 what you need.
               </p>
               <hr />
-              <div className="fs-5 mt-3 mb-1 header-font">Experience</div>
-              <p className='p-2'>
+              <div className="fs-4 mt-3 mb-1 header-font">Experience</div>
+              <p className='p-2 fs-5 '>
                 Find developers with the right level of experience for your project,
                 whether you're looking for seasoned veterans or fresh talent.
               </p>
               <hr />
-              <div className="fs-5 mt-3 mb-1 header-font">Location</div>
-              <p className='p-2'>
-                Prefer to work with developers in your area or time zone?
+              <div className="fs-4 mt-3 mb-1 header-font">Location</div>
+              <p className='p-2 fs-5'>
+                Prefer to work with developers in your area?
                 Our location filter helps you narrow down your search.
               </p>
             </div>
           </div>
         </div>
-      </div>
-      
-      {/* New container for the filtered user list */}
-      <div id="resultsContainer" className="row justify-content-center mt-3">
+        <div><br /></div>
+        {/* New container for the filtered user list */}
+
+        {isSearchPerformed && (
+      <div id="resultsContainer" className="bottom-space row justify-content-center mt-5 mb-5">
         <div className="col-10 text-center max animate-slide-left">
           <div className="row">
           {searchButtonClicked && searchTerm && filteredUsers.length === 0 ? (
@@ -326,8 +330,8 @@ const Developers = () => {
           )}
           </div>
         </div>
+      </div>)}
       </div>
-      {/* <div style={{ height: "100px" }}></div> */}
     </div>
   );
 };

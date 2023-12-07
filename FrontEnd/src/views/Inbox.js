@@ -172,6 +172,15 @@ const Inbox = () => {
             }, 1000);
         } catch (error) {
             console.error('Error marking message as read:', error);
+            setErrors({ general: "Whoops, looks like there's an issue retrieving this message. Please try again." });
+            // Handle error if the API request fails
+            setTimeout(() => {
+                setErrors({});
+                setTimeout(() => {
+                    navigate('/inbox');
+                    setShowMessage(false);
+                }, 1000);
+            }, 3000);
         }
     };
 

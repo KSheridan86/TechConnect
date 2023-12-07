@@ -83,7 +83,7 @@ const [errors, setErrors] = useState({});
   return (
     <div className='container'>
     {!successMessage ? (
-      <div className="row justify-content-center logout mt-5">
+      <div className="row justify-content-center logout">
         {errors.general && (
         <div className='notification-overlay fs-3'>
           <div className='alert alert-danger' role='alert'>
@@ -92,7 +92,7 @@ const [errors, setErrors] = useState({});
         </div>
         )}
         <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
-          <div className="glass-box fw-bold p-4 m-5 text-center">
+          <div className="glass-box fw-bold p-4 m-2 text-center">
             { selectedMessage ? (
               <div>
               <strong className="header-font">Reply to message from {selectedMessage?.sender_name}</strong>

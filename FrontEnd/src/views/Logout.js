@@ -50,7 +50,7 @@ const Logout = ({ onLogout }) => {
   };
 
   return (
-    <div className='container mb-3'>
+    <div className='container login mt-4'>
     {!successMessage ? (
       <div className="row justify-content-center logout">
         <div className={`col-12 col-lg-6 mt-3 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
@@ -66,8 +66,8 @@ const Logout = ({ onLogout }) => {
           </div>
         </div>
       </div>) : (
-      <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-10 col-md-5 mt-5 glass-box">
+      <div className={`row justify-content-center mt-5 mb-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
+        <div className="col-10 col-md-5 mt-5 glass-box mb-5">
           <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
             Logout Successful!
             <br />
