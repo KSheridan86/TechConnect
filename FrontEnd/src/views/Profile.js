@@ -705,6 +705,21 @@ const Profile = () => {
                     }`}>
                     <p>{review.review}</p>
                     <p>{renderStars(review.rating)}</p>
+                    <div>
+                    {currentUser?.data.email !== foundUser?.email ? (
+                    <p>{review.recommended === true ? (
+                      <div className="">
+                        <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+                        <p className="hand-writing">Recommended</p>
+                      </div>
+                        ) : (
+                          <div className="">
+                           <FontAwesomeIcon icon={faTimesCircle} style={{color: 'red',cursor: 'pointer'}} />
+                          <p className="hand-writing">Not Recommended</p>
+                        </div>
+                        )}</p>
+                    ) : (null)}
+                        </div>
                     {currentUser?.data.email === foundUser?.email ? (
                       <p className='fs-4'>
                       <FontAwesomeIcon 
@@ -715,6 +730,7 @@ const Profile = () => {
                         }} 
                       // onClick={() => handleDeleteReview(review.id)}
                         />
+                        <br />Delete
                     </p>
                       ) : (null)}
                       
@@ -738,11 +754,7 @@ const Profile = () => {
                 </div>
                 
               </div>
-
-
-  
-</div>
-
+            </div>
 
             {currentUser ? (
             <div className='text-center mt-2 mb-1 hand-writing'>
