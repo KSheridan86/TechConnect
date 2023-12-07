@@ -70,7 +70,6 @@ const Profile = () => {
         if (profileId) {
           const response = await api.get(`users/profile/${profileId}`, config);
           setFoundUser(response.data);
-          console.log(response.data)
           setProjects(response.data.projects);
           setReviews(response.data.reviews);
           if (currentUser) {
@@ -706,21 +705,22 @@ const Profile = () => {
                     <p>{review.review}</p>
                     <p>{renderStars(review.rating)}</p>
                     <div>
-                    {currentUser?.data.email !== foundUser?.email ? (
-                    <p>{review.recommended === true ? (
+             
+                    <div>{review.recommended === true ? (
                       <div className="">
                         <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
                         <p className="hand-writing">Recommended</p>
                       </div>
                         ) : (
                           <div className="">
-                           <FontAwesomeIcon icon={faTimesCircle} style={{color: 'red',cursor: 'pointer'}} />
+                           <FontAwesomeIcon icon={faTimesCircle} style={{ color: 'red' }} className='fs-2' />
                           <p className="hand-writing">Not Recommended</p>
                         </div>
-                        )}</p>
-                    ) : (null)}
+                        )}
+                    </div>
+            
                         </div>
-                    {currentUser?.data.email === foundUser?.email ? (
+                    {/* {currentUser?.data.email === foundUser?.email ? (
                       <p className='fs-4'>
                       <FontAwesomeIcon 
                         icon={faTimesCircle} 
@@ -732,7 +732,7 @@ const Profile = () => {
                         />
                         <br />Delete
                     </p>
-                      ) : (null)}
+                      ) : (null)} */}
                       
                   </div>
                     ) : (

@@ -116,7 +116,6 @@ const Developers = () => {
     // Filter users based on the search term and search type
     const filteredUsers = users.filter((user) => {
       if (searchType === 'regular') {
-        console.log(user.years_of_experience)
         // For regular search, use existing logic
         return (
           Object.values(user).some(
