@@ -394,7 +394,15 @@ const Profile = () => {
               <div className="row">
                 <div className="col-md-12">
                   <div className="row">
+                  <div className="col-12">
+                      {foundUser.firstname && (
+                      <p className='header-font text-center text-uppercase fs-4 mt-3'>
+                        {`${foundUser.firstname} ${foundUser.lastname}`}
+                      </p>
+                      )}
+                      </div>
                     <div className="col-7 text-center">
+                     
                     {foundUser && foundUser.avatar ? (
                       <img
                         src={`${baseAvatarUrl}${foundUser.avatar}`}
@@ -411,7 +419,7 @@ const Profile = () => {
                     <div>
                       {currentUser ? (
                       <button 
-                        className='btn btn-warning mt-2 mb-2 mx-2'
+                        className='btn btn-warning mt-3 mb-2 mx-2'
                         onClick={sendMessage}>
                           Send Message
                       </button>
@@ -422,13 +430,9 @@ const Profile = () => {
                     <div className="col-5 mt-3">
                     {foundUser && (
                     <div>
-                      {foundUser.firstname && (
-                      <p className='header-font text-center text-uppercase fs-4'>
-                        {`${foundUser.firstname} ${foundUser.lastname}`}
-                      </p>
-                      )}
+                      
                       {foundUser.location && (
-                      <p className="header-font text-center text-uppercase">
+                      <p className="header-font text-center text-uppercase mt-md-5">
                         <span className="header-font-profile">Location: </span>
                         {`${foundUser.location}`}
                       </p>
@@ -472,7 +476,20 @@ const Profile = () => {
                         </a>
                       </p>
                       )}
-                      {foundUser.available && foundUser.date_available && (
+                      {/* {foundUser.available && foundUser.date_available && (
+                      <p className="header-font text-center text-uppercase">
+                        <span className="header-font-profile">available from: </span>
+                        {`${foundUser.date_available}`}
+                      </p>
+                      )}
+                      {!foundUser.available && (
+                      <p className='header-font text-center text-uppercase'>Not Available</p>
+                      )} */}
+                    </div>
+                    )}
+                    </div>
+                    <div className="col-12 mt-2 text-center">
+                    {foundUser.available && foundUser.date_available && (
                       <p className="header-font text-center text-uppercase">
                         <span className="header-font-profile">available from: </span>
                         {`${foundUser.date_available}`}
@@ -481,8 +498,6 @@ const Profile = () => {
                       {!foundUser.available && (
                       <p className='header-font text-center text-uppercase'>Not Available</p>
                       )}
-                    </div>
-                    )}
                     </div>
                   </div>
                 </div>

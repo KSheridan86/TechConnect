@@ -200,7 +200,7 @@ const Inbox = () => {
     <div className='container mb-5'>
     {!successMessage ? (
         <div className="row justify-content-center logout mt-2">
-            <div className={`col-10 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
+            <div className={`col-11 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
                 {errors.general && (
                 <div className='notification-overlay fs-3'>
                 <div className='alert alert-danger' role='alert'>
@@ -220,7 +220,31 @@ const Inbox = () => {
                             Read
                         </span>
                     </div>
-                    <ul className="p-0">
+                    <ul className="custom-visibility-small">
+                        {messages.map((message) => (
+                            <li key={message.id}>
+                                <button 
+                                    className={`w-100 header-font btn mt-2 d-flex 
+                                        justify-content-between align-items-center m-auto 
+                                        ${!message.is_read ? 'btn-warning' : 'btn-success'}`} 
+                                        onClick={() => handleViewMessage(message)}>
+                                    <div>
+                                        From: <br />
+                                        <strong>
+                                            {message.sender_name}
+                                        </strong>
+                                    </div>
+                                    {message.message.length > 15 ? `
+                                        ${message.message.slice(0, 15)}...` : 
+                                        message.message
+                                    }
+                                    <br />
+                                    {message.formatted_date}
+                                </button>
+                            </li>
+                        ))}
+                    </ul>
+                    <ul className="p-0 custom-visibility-large">
                         {messages.map((message) => (
                             <li key={message.id}>
                                 <button 
