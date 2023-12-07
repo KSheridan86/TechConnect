@@ -368,7 +368,7 @@ const Profile = () => {
   }
 
   return (
-    <div className='container mt-4 fill-screen'>
+    <div className='container mt-4'>
       {!successMessage ? (
         <div className='row justify-content-evenly'>
           <div>

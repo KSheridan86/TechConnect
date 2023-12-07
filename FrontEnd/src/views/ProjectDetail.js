@@ -56,7 +56,7 @@ const ProjectDetails = () => {
 
   if (loading) {
     return (
-      <div className='container fill-screen'>
+      <div className='container'>
         <div className="row justify-content-center logout mt-5">
           <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
             <h1 className="glass-box fw-bold p-4 m-5 text-center">
@@ -127,7 +127,7 @@ const ProjectDetails = () => {
 
 
   return  (
-    <div className="container mt-4 fill-screen mb-2">
+    <div className="container mt-4 mb-2">
       {!successMessage ? (
       <div className={`row justify-content-evenly ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
         <h2 className={`header-font text-center text-uppercase mt-3 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>

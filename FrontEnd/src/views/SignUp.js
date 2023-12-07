@@ -211,7 +211,7 @@ const SignUp = ({ onLogin }) => {
 
   if (!notAllowed) {
   return (
-    <div className="container login fill-screen mt-4">
+    <div className="container login mt-4">
     {!successMessage ? (
       <div className="row mt-3 justify-content-center">
         <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
@@ -315,7 +315,7 @@ const SignUp = ({ onLogin }) => {
   ); 
   } else {
     return (
-      <div className="container login mt-4 fill-screen main-content">
+      <div className="container login mt-4 main-content">
         <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
         <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
           <div className="col-5 mt-5 glass-box">

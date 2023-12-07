@@ -142,7 +142,7 @@ const Login = ({ onLogin }) => {
 
   if (!notAllowed) {
   return (
-    <div className="container login mt-4 fill-screen main-content">
+    <div className="container login mt-4 main-content">
       <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
       {!successMessage ? (
       <div className='row'>
@@ -205,7 +205,7 @@ const Login = ({ onLogin }) => {
           </form>
         </div>
 
-        <div className={`col-md-6 hand-writing ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
+        <div className={`col-md-6 hand-writing bottom-space ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
           <div className="glass-box m-3 fw-bold p-3 text-center">
             <p className="fs-5">Don't have an account yet?</p>
             <p>Are you a Developer looking to showcase your talents or find work? <br /> Sign up here!</p>
@@ -225,7 +225,7 @@ const Login = ({ onLogin }) => {
       ) :
       <div 
         className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box">
+        <div className="col-10 col-md-5 mt-5 glass-box">
           <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
             Login Successful!
             <br />
@@ -238,7 +238,7 @@ const Login = ({ onLogin }) => {
   ); 
   } else {
       return (
-        <div className="container login mt-4 fill-screen main-content">
+        <div className="container login mt-4 main-content">
           <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
           <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
             <div className="col-5 mt-5 glass-box">

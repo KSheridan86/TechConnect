@@ -50,10 +50,10 @@ const Logout = ({ onLogout }) => {
   };
 
   return (
-    <div className='container fill-screen'>
+    <div className='container'>
     {!successMessage ? (
-      <div className="row justify-content-center logout mt-5">
-        <div className={`col-12 col-lg-6 mt-5 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
+      <div className="row justify-content-center logout">
+        <div className={`col-12 col-lg-6 mt-3 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
           <h1 className="glass-box fw-bold p-4 m-5 text-center">
             <strong className="header-font">Are you sure you want to Logout?</strong>
           </h1>
@@ -67,7 +67,7 @@ const Logout = ({ onLogout }) => {
         </div>
       </div>) : (
       <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box">
+        <div className="col-10 col-md-5 mt-5 glass-box">
           <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
             Logout Successful!
             <br />

@@ -193,7 +193,7 @@ const AddSkills = () => {
     if (!notAllowed) {
 
     return (
-        <div className='container mt-5 fill-screen'>
+        <div className='container mt-5'>
 
         {!successMessage ? (
             <div className='row justify-content-center login'>
@@ -289,7 +289,7 @@ const AddSkills = () => {
     );
     } else {
         return (
-            <div className="container login mt-4 fill-screen main-content">
+            <div className="container login mt-4 main-content">
                 <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
                 <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
                     <div className="col-5 mt-5 glass-box">

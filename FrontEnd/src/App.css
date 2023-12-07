@@ -1,11 +1,11 @@
 * {
   margin: 0;
   padding: 0;
-  box-sizing: border-box;
+  /* box-sizing: border-box; */
 }
-body {
+/* body {
   overflow-x: hidden;
-}
+} */
 
 /* custom font & text effects*/
 @font-face {
@@ -156,10 +156,6 @@ p {
 }
 .big-arrow {
   font-size: 2rem;
-}
-
-.fill-screen {
-  min-height: 90vh;
 }
 
 /* Back to top btn styles & animation */
@@ -512,5 +508,5 @@ ul {
 
 
 .bottom-space {
-  margin-bottom: 10rem;
+  margin-bottom: 5rem;
 }

@@ -69,7 +69,7 @@ const Footer = ({onLogout}) => {
     }
 
     return (
-    <footer className="footer text-white text-center py-3 fixed-bottom">
+    <footer className="footer text-white text-center py-3 sticky-bottom">
         {!transition ? (
         <div className={`container ${successMessage ? 'fade-out': 'fade-in'}`}>
         {errors.general && (

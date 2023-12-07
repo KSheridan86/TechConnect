@@ -25,7 +25,7 @@ const Home = () => {
     }
 
     return (
-        <div className="container mt-4 fill-screen">
+        <div className="container mt-4">
             <div className="row justify-content-evenly mt-5">
                 <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
                     <div className="glass-box border-dark m-3 header-font p-4 text-center">
@@ -52,7 +52,7 @@ const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
+                <div className={`col-md-6 bottom-space ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-right'}`}>
                     <div className="p-3 text-center glass-box m-3 border-dark">
                         <h1 className='header-font mb-3'>Developers!</h1>
                         <p>

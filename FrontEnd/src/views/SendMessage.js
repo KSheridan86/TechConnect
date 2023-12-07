@@ -81,7 +81,7 @@ const [errors, setErrors] = useState({});
   };
 
   return (
-    <div className='container fill-screen'>
+    <div className='container'>
     {!successMessage ? (
       <div className="row justify-content-center logout mt-5">
         {errors.general && (

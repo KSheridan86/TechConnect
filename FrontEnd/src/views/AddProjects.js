@@ -199,7 +199,7 @@ const AddProjects = () => {
     };
 
     return (
-        <div className='container fill-screen'>
+        <div className='container'>
             <div className={`row justify-content-center login ${isSubmitted ? 'fade-out' : 'fade-in'}`}>
             {errors.general && (
             <div className='notification-overlay fs-3'>
