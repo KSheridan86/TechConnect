@@ -368,18 +368,18 @@ const Profile = () => {
   }
 
   return (
-    <div className='container mt-4 fill-screen mb-2'>
+    <div className='container mt-4 fill-screen'>
       {!successMessage ? (
-            <div className='row justify-content-evenly'>
-            <div>
-            {errors.general && (
-                    <div className='notification-overlay fs-3'>
-                        <div className='alert alert-success' role='alert'>
-                        {errors.general}
-                        </div>
-                    </div>
-                )}
+        <div className='row justify-content-evenly'>
+          <div>
+          {errors.general && (
+            <div className='notification-overlay fs-3'>
+              <div className='alert alert-success' role='alert'>
+                {errors.general}
+              </div>
             </div>
+          )}
+          </div>
           
           {currentUser ? ( // Conditionally render content only if currentUser exists
             <h2 className={`header-font text-center text-uppercase mt-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
@@ -390,7 +390,7 @@ const Profile = () => {
               )}
             </h2>
           ) : null}
-            <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
+            <div className={`col-md-6 col-11 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
               <div className="row">
                 <div className="col-md-12">
                   <div className="row">
@@ -416,7 +416,6 @@ const Profile = () => {
                           Send Message
                       </button>
                       ) : (null)}
-                      
                     </div>
                     
                     </div>
@@ -424,18 +423,20 @@ const Profile = () => {
                     {foundUser && (
                     <div>
                       {foundUser.firstname && (
-                      <p className='header-font text-center text-uppercase'>
+                      <p className='header-font text-center text-uppercase fs-4'>
                         {`${foundUser.firstname} ${foundUser.lastname}`}
                       </p>
                       )}
                       {foundUser.location && (
                       <p className="header-font text-center text-uppercase">
-                        {`Location: ${foundUser.location}`}
+                        <span className="header-font-profile">Location: </span>
+                        {`${foundUser.location}`}
                       </p>
                       )}
                       {foundUser.years_of_experience && (
-                      <p className='header-font text-center text-uppercase'>
-                        {`Yrs Exp: ${foundUser.years_of_experience}`}
+                      <p className="header-font text-center text-uppercase">
+                        <span className="header-font-profile">Yrs Exp: </span>
+                        {`${foundUser.years_of_experience}`}
                       </p>
                       )}
                       {foundUser.github && (
@@ -472,8 +473,9 @@ const Profile = () => {
                       </p>
                       )}
                       {foundUser.available && foundUser.date_available && (
-                      <p className='header-font text-center text-uppercase'>
-                        {`Available from: ${foundUser.date_available}`}
+                      <p className="header-font text-center text-uppercase">
+                        <span className="header-font-profile">available from: </span>
+                        {`${foundUser.date_available}`}
                       </p>
                       )}
                       {!foundUser.available && (
@@ -495,17 +497,19 @@ const Profile = () => {
                     ) : (null)}
                     
                     <p className='header-font text-center text-uppercase p-3'>
-                      Introduction: <br />{` ${foundUser.intro_text || 'Not provided'}`}
+                      <h4 className="header-font-profile">Introduction</h4>
+                      {` ${foundUser.intro_text || 'Not provided'}`}
                     </p>
                     <p className='header-font text-center text-uppercase p-3'>
-                      Biography: <br />{` ${foundUser.biography_text || 'Not provided'}`}
+                    <h4 className="header-font-profile">Biography</h4>
+                      {` ${foundUser.biography_text || 'Not provided'}`}
                     </p>
                   </div>
                 )}
                 </div>
               </div>
     
-              <h2 className='header-font text-center text-uppercase mt-1'>Skills</h2>
+              <h2 className='header-font-profile text-center text-uppercase mt-1'>Skills</h2>
               {isSkillsDefinedAndNotEmpty ? (
               <div>
               {skillsLevel1 && (
@@ -579,13 +583,13 @@ const Profile = () => {
               )}</div>) : (null) } 
             </div>
     
-            <div className={`col-md-6 col-10 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
+            <div className={`col-md-6 col-11 col-lg-5 glass-box mb-5 ${shouldSlideOut ? 'animate-slide-out-bottom' : 'animate-slide-bottom'}`}>
               <div className="project-container mt-3">
                 <h3 className='header-font text-center text-uppercase mt-3'>Your Projects:</h3>
                 {projects && projects.length > 0 && (
                   <div>
                     {projects.map((project, index) => (
-                      <div className="project-box glass-box w-75 m-auto mb-3" key={index}>
+                      <div className="project-box glass-box m-auto mb-3" key={index}>
                         <Link to="#" 
                           key={index} 
                           className="project-link"
@@ -631,8 +635,7 @@ const Profile = () => {
                 <h3 className="m-1 p-1 header-font text-center">Testimonials</h3>
               </div>
 
-
-              <div className={`col-10 col-md-8 col-lg-6 mt-2 fade-in glass-box ${showBack ? 'flip' : ''}`}>
+              <div className={`col-11 col-md-8 col-lg-6 mt-2 fade-in glass-box ${showBack ? 'flip' : ''}`}>
               {showBack ? (
                   // Back of the div with the form
                   <div className="review-form text-center flip-back form-in">
@@ -705,35 +708,19 @@ const Profile = () => {
                     <p>{review.review}</p>
                     <p>{renderStars(review.rating)}</p>
                     <div>
-             
-                    <div>{review.recommended === true ? (
-                      <div className="">
-                        <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
-                        <p className="hand-writing">Recommended</p>
+                      <div>{review.recommended === true ? (
+                        <div className="">
+                          <FontAwesomeIcon icon={faCheck} style={{ color: 'green' }} className='fs-1' />
+                          <p className="hand-writing">Recommended</p>
+                        </div>
+                          ) : (
+                            <div className="">
+                            <FontAwesomeIcon icon={faTimesCircle} style={{ color: 'red' }} className='fs-2' />
+                            <p className="hand-writing">Not Recommended</p>
+                          </div>
+                          )}
                       </div>
-                        ) : (
-                          <div className="">
-                           <FontAwesomeIcon icon={faTimesCircle} style={{ color: 'red' }} className='fs-2' />
-                          <p className="hand-writing">Not Recommended</p>
-                        </div>
-                        )}
                     </div>
-            
-                        </div>
-                    {/* {currentUser?.data.email === foundUser?.email ? (
-                      <p className='fs-4'>
-                      <FontAwesomeIcon 
-                        icon={faTimesCircle} 
-                        style={{
-                          color: 'red',
-                          cursor: 'pointer',
-                        }} 
-                      // onClick={() => handleDeleteReview(review.id)}
-                        />
-                        <br />Delete
-                    </p>
-                      ) : (null)} */}
-                      
                   </div>
                     ) : (
                       <div>
@@ -752,7 +739,6 @@ const Profile = () => {
                   </button>
                   ) : (null)}
                 </div>
-                
               </div>
             </div>
 
@@ -779,7 +765,7 @@ const Profile = () => {
                   </p>
                 </div>
                 ) : (
-                <div className={`${fadeButton2 ? 'fade-out' : 'fade-in'}`}>
+                <div className={`bottom-space ${fadeButton2 ? 'fade-out' : 'fade-in'}`}>
                   <button
                     className={`btn btn-warning btn-lg mx-2 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}
                     onClick={updateProfile}
@@ -798,7 +784,7 @@ const Profile = () => {
               )}
             </div>
             ) : (null) }
-            <div style={{ height: '8rem' }}></div>
+            {/* <div style={{ height: '10rem' }}></div> */}
           </div>
       ) : (
         <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 

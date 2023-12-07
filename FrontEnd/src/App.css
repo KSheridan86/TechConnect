@@ -21,9 +21,9 @@ body {
   font-family: 'myHeaderFont', sans-serif;
   color: #f1916d;
 }
-.header-font {
+.header-font-profile {
   font-family: 'myHeaderFont', sans-serif;
-  color: #f1916d;
+  color: #f5d7db;
 }
 .hand-writing {
   font-family: 'Edu SA Beginner', cursive;
@@ -417,7 +417,7 @@ div > a {
 
 .project-box {
   height: 7rem;
-  width: 100%;
+  width: 75%;
 }
 
 .project-container {
@@ -508,4 +508,9 @@ ul {
   padding: 0px 6px;
   font-size: 10px;
   /* font-weight: bold; */
+}
+
+
+.bottom-space {
+  margin-bottom: 10rem;
 }

@@ -79,8 +79,8 @@ const Footer = ({onLogout}) => {
                 </div>
             </div>
         )}
-            <div className="row">
-                <div className={`${ currentUser !== null ? 'col-md-6' : 'col-12'}`}>
+            <div className="row ">
+                <div className={`col-8 col-md-6`}>
                     <div className="small common-font">
                         Designed & Built by Ken Sheridan    
                         <div>
@@ -89,7 +89,7 @@ const Footer = ({onLogout}) => {
                     </div>
                 </div>
                 {currentUser !== null ? (
-                <div className="col-md-6 col-12 mt-3 mt-md-0">
+                <div className="col-4 col-md-6 mt-md-0">
                 {confirmation ? (
                     <div className={`${fadeButton ? 'fade-in' : 'fade-out'}`}>
                         <button 

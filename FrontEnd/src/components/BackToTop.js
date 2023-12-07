@@ -23,7 +23,7 @@ const BackToTop = () => {
     return (
         <button
             id="no-shadow"
-            className={`back-to-top-button ${isVisible ? 'visible' : ''}`}
+            className={`back-to-top-button mb-3 ${isVisible ? 'visible' : ''}`}
             onClick={scrollToTop}>
                 <img id="arrow-image" src={process.env.PUBLIC_URL + '/images/back-to-top.png'} alt="Back to top" />
         </button>
