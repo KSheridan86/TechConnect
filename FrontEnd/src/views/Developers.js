@@ -172,7 +172,7 @@ const Developers = () => {
   };
 
   return (
-    <div className="container mt-4 bottom-space hide-scroll-bar">
+    <div className="container mt-4 bottom-space">
       <div className="row justify-content-evenly">
       {errors.general && (
       <div className='notification-overlay fs-3'>

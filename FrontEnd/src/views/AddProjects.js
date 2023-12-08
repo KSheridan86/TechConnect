@@ -216,7 +216,7 @@ const AddProjects = () => {
     };
 
     return (
-        <div className='container mb-3 hide-scroll-bar'>
+        <div className='container mb-3'>
             <div className={`row justify-content-center login ${isSubmitted ? 'fade-out' : 'fade-in'}`}>
             {errors.general && (
             <div className='notification-overlay fs-3'>

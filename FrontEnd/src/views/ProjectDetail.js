@@ -52,6 +52,7 @@ const ProjectDetails = () => {
     };
 
     fetchProjectDetails();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [projectId]);
 
   if (loading) {

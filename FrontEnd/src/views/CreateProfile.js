@@ -193,7 +193,6 @@ const CreateProfile = () => {
                 Authorization: `Bearer ${currentUser.data.token}`,
                 },
             };
-            console.log('formData', formData)
             // Make a POST request to update the user profile
             const response = await api.post('users/update_profile/', formData, config);
 

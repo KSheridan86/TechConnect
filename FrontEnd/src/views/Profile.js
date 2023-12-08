@@ -196,7 +196,7 @@ const Profile = () => {
   // Function to update the user profile
   const updateProfile = () => {
     localStorage.setItem('userProfile', JSON.stringify(foundUser));
-    const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
+    // const retrievedProfile = JSON.parse(localStorage.getItem('userProfile'));
     setShouldSlideOut(true);
       setTimeout(() => {
         navigate('/update-profile');
@@ -370,7 +370,7 @@ const Profile = () => {
   }
 
   return (
-    <div className='container mt-4 login hide-scroll-bar'>
+    <div className='container mt-4 login'>
       {!successMessage ? (
         <div className='row justify-content-evenly'>
           <div>
