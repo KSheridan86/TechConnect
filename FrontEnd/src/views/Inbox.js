@@ -206,7 +206,7 @@ const Inbox = () => {
     // }
 
     return (
-    <div className='container mb-5'>
+    <div className='container mb-5 hide-scroll-bar'>
     {!successMessage ? (
         <div className="row justify-content-center logout mt-2">
             <div className={`col-11 col-lg-6 mt-5 mb-5 glass-box ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>

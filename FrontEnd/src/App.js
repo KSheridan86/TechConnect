@@ -9,7 +9,6 @@ import Home from './views/Home';
 import Developers from './views/Developers';
 import Profile from './views/Profile';
 import SignUp from './views/SignUp';
-import DeleteUser from './views/DeleteUser';
 import Login from './views/Login';
 import Logout from './views/Logout';
 import CreateProfile from './views/CreateProfile';
@@ -49,7 +48,6 @@ function App() {
           <Route path="/developers" element={<Developers />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/signup" element={<SignUp onLogin={handleLogin} />} />
-          <Route path="/delete-user" element={<DeleteUser onLogout={handleLogout} />} />
           <Route path="/login" element={<Login onLogin={handleLogin} />} />
           <Route path="/logout" element={<Logout onLogout={handleLogout} />} />
           <Route path="/inbox" element={<Inbox />} />

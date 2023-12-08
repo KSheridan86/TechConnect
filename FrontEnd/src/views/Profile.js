@@ -231,10 +231,12 @@ const Profile = () => {
       };
   
       if (response) {
+        currentUser.profile = response.data;
         setShouldSlideOut(true);
         setTimeout(() => {
           setSuccessMessage(true);
           displayMessage();
+          localStorage.setItem('currentUser', JSON.stringify(currentUser));
         }, 1000);
       }
     } catch (error) {
@@ -368,7 +370,7 @@ const Profile = () => {
   }
 
   return (
-    <div className='container mt-4'>
+    <div className='container mt-4 login hide-scroll-bar'>
       {!successMessage ? (
         <div className='row justify-content-evenly'>
           <div>
@@ -803,7 +805,7 @@ const Profile = () => {
           </div>
       ) : (
         <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box">
+        <div className="col-10 col-md-5 mt-5 glass-box">
             <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
                 Profile Deleted!
                 <br />

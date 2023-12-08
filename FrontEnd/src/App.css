@@ -536,3 +536,8 @@ p > a {
       display: inline !important;
   }
 }
+
+.hide-scroll-bar {
+  overflow-x: hidden;
+  width: 100vw;
+}

@@ -92,7 +92,7 @@ const [errors, setErrors] = useState({});
   };
 
   return (
-    <div className='container login mt-4'>
+    <div className='container login mt-4 hide-scroll-bar'>
     {!successMessage ? (
       <div className="row justify-content-center logout">
         {errors.general && (
@@ -130,7 +130,7 @@ const [errors, setErrors] = useState({});
         </div>
       </div>) : (
       <div className={`bottom-space row justify-content-center mt-5 header-font mb-5 ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box mb-5">
+        <div className="col-10 col-md-5 mt-5 glass-box mb-5">
           <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
             Message sent!
             <br />

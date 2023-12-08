@@ -222,7 +222,7 @@ const CreateProfile = () => {
 
     if (!notAllowed) {
     return (
-        <div className='container'>
+        <div className='container hide-scroll-bar'>
             <div className='row justify-content-center login'>
             {errors.general && (
                 <div className='notification-overlay fs-3'>

@@ -50,7 +50,7 @@ const Logout = ({ onLogout }) => {
   };
 
   return (
-    <div className='container login mt-4'>
+    <div className='container login mt-4 hide-scroll-bar'>
     {!successMessage ? (
       <div className="row justify-content-center logout">
         <div className={`col-12 col-lg-6 mt-3 ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>

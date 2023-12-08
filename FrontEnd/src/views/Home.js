@@ -25,7 +25,7 @@ const Home = () => {
     }
 
     return (
-        <div className="container mt-4">
+        <div className="container mt-4 hide-scroll-bar">
             <div className="row justify-content-evenly mt-5">
                 <div className={`col-md-6 ${shouldSlideOut ? 'animate-slide-out-left' : 'animate-slide-left'}`}>
                     <div className="glass-box border-dark m-3 header-font p-4 text-center">

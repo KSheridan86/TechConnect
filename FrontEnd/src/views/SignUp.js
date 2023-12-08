@@ -302,7 +302,7 @@ const SignUp = ({ onLogin }) => {
       </div>
     ) :
       <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box">
+        <div className="col-10 col-md-5 mt-5 glass-box">
             <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
               Account Created!
               <br />
@@ -315,10 +315,10 @@ const SignUp = ({ onLogin }) => {
   ); 
   } else {
     return (
-      <div className="container login mt-4 main-content">
+      <div className="container login mt-4 main-content hide-scroll-bar">
         <div style={{ height: "70px" }} className="d-none d-lg-block"></div>
         <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-          <div className="col-5 mt-5 glass-box">
+          <div className="col-10 col-md-5 mt-5 glass-box">
             <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
               Already Registered and logged in!
               <br />

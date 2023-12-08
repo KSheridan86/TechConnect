@@ -127,7 +127,7 @@ const ProjectDetails = () => {
 
 
   return  (
-    <div className="container check mt-4 mb-5">
+    <div className="container check mt-4 mb-5 hide-scroll-bar">
       {!successMessage ? (
       <div className={`row justify-content-evenly ${shouldSlideOut ? 'animate-slide-out-right' : 'animate-slide-left'}`}>
         <h2 className={`header-font text-center text-uppercase mt-3 ${shouldSlideOut ? 'animate-slide-out-top' : 'animate-slide-top'}`}>
@@ -242,7 +242,7 @@ const ProjectDetails = () => {
               >
                 Confirm?
               </button>
-              <p className="glass-box text-danger fw-bold mt-2 fs-5 col-6 m-auto">
+              <p className="p-2 glass-box text-danger fw-bold mt-2 fs-5 col-10 col-md-6 m-auto">
                 This will permanently delete this project....
               </p>
             </div>
@@ -251,7 +251,7 @@ const ProjectDetails = () => {
       </div>
       ) : (
         <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box">
+        <div className="col-10 col-md-5 mt-5 glass-box">
             <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
                 Project Deleted!
                 <br />

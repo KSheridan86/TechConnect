@@ -21,6 +21,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
     setIsNavOpen(false);
   };
 
+  console.log(currentUser)
   const handleNavLinkClick = (link) => {
     setShouldAnimate(true);
     closeNav();
@@ -85,7 +86,7 @@ const Navbar = ({ isLoggedIn, onLogin, onLogout }) => {
                 Developers
               </span>
             </li>
-            {currentUser && currentUser.data.account_type === "Developer" && (
+            {currentUser && currentUser.data.account_type === "Developer" && currentUser.profile?.detail !== "Profile deleted successfully." && (
               <li className={`nav-item ${location.pathname === '/profile' ? 'active' : ''}`}>
                 {currentUser ? (
                   <span className="nav-link header-font m-2" onClick={() => userProfileClick()}>
