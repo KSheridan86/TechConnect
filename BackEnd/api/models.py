@@ -16,6 +16,14 @@ from django.utils import timezone
 
 
 class Skill(models.Model):
+    """_summary_
+
+    Args:
+        models (_type_): _description_
+
+    Returns:
+        _type_: _description_
+    """
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -93,25 +101,6 @@ class DeveloperReview(models.Model):
 
     def __str__(self):
         return f"{self.reviewee}"
-
-
-# Project Review Model
-class ProjectReview(models.Model):
-    """
-    This model represents a review given by a user to a project and includes
-    details like the review content, date, and rating.
-    """
-    reviewer = models.ForeignKey(User, on_delete=models.CASCADE)
-    reviewee = models.ForeignKey(DeveloperProfile, on_delete=models.CASCADE)
-    project = models.ForeignKey(
-        Project, on_delete=models.CASCADE, related_name='reviews')
-    review = models.TextField()
-    rating = models.DecimalField(max_digits=2, decimal_places=1,
-                                 null=True, blank=True)
-    date = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return f"{self.project}"
 
 
 class PrivateMessage(models.Model):

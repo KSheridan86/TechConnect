@@ -46,10 +46,27 @@ const AddProjects = () => {
         image: null,
     });
 
+    // Function to format URLs
+    const formatUrl = (url) => {
+        if (!url.startsWith('http://www') && !url.startsWith('https://www')) {
+            if (url.startsWith('www')) {
+                return `http://${url}`;
+            } else {
+                return `http://www.${url}`;
+            }
+        }
+        return url;
+    };
+
     // Function to handle changes to the inputs in the form
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        setProject((prevProject) => ({ ...prevProject, [name]: value }));
+        if (['site_url', 'repo_url'].includes(name)) {
+            const formattedValue = formatUrl(value);
+            setProject((prevProject) => ({ ...prevProject, [name]: formattedValue }));
+        } else {
+            setProject((prevProject) => ({ ...prevProject, [name]: value }));
+        }
     };
 
     // Function to handle image change

@@ -160,7 +160,9 @@ const CreateProfile = () => {
             if (!profile.intro_text) validationErrors.intro_text = 'Introduction is required';
             if (!profile.years_of_experience) validationErrors.years_of_experience = 'Years of Experience is required';
             if (!profile.location) validationErrors.location = 'Location is required';
-            if (!profile.portfolio_url) validationErrors.portfolio_url = 'Portfolio URL is required';
+            if (!profile.github) validationErrors.github = `GitHub URL is required (If you don't have one, please enter 'github.com')`;
+            if (!profile.linkedin) validationErrors.linkedin = 'LinkedIn URL is required (If you do not have one, please enter "linkedin.com")';
+            if (!profile.portfolio_url) validationErrors.portfolio_url = 'Portfolio URL is required (If you do not have one, please enter "portfolio.com")';
             if (profile.available && !profile.date_available) validationErrors.date_available = 'Date Available is required';
             if (Object.keys(validationErrors).length > 0) {
                 setErrors(validationErrors);

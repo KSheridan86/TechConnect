@@ -193,7 +193,7 @@ const AddSkills = () => {
     if (!notAllowed) {
 
     return (
-        <div className='container mt-5'>
+        <div className='container login mt-5'>
 
         {!successMessage ? (
             <div className='row justify-content-center login'>

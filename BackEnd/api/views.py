@@ -16,11 +16,9 @@ from rest_framework_simplejwt.views import TokenObtainPairView
 # pylint: disable=W0611
 from .models import (User, DeveloperProfile, Project, Skill,
                      DeveloperReview, PrivateMessage)
-# from .models import (ProjectReview)
 from .serializers import (UserSerializer, UserSerializerWithToken,
                           DeveloperProfileSerializer, ProjectSerializer,
                           DeveloperReviewSerializer, PrivateMessageSerializer)
-# from .serializers import (ProjectReviewSerializer)
 
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):

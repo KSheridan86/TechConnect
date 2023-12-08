@@ -7,7 +7,7 @@ from rest_framework.validators import UniqueValidator
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth.models import User
 from .models import (DeveloperProfile, Project,
-                     DeveloperReview, ProjectReview, PrivateMessage)
+                     DeveloperReview, PrivateMessage)
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -128,18 +128,6 @@ class DeveloperProfileSerializer(serializers.ModelSerializer):
         if isinstance(skills, str):
             return [s.strip() for s in skills.split(',') if s.strip()]
         return skills
-
-
-class ProjectReviewSerializer(serializers.ModelSerializer):
-    """
-    Serializes the ProjectReview model.
-    """
-    class Meta:
-        """
-        _summary_
-        """
-        model = ProjectReview
-        fields = '__all__'
 
 
 class PrivateMessageSerializer(serializers.ModelSerializer):

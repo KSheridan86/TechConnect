@@ -11,8 +11,8 @@ const api = axios.create({
 
 const SendMessage = () => {
 const currentUser = JSON.parse(localStorage.getItem('currentUser'));
-const selectedMessage = JSON.parse(localStorage.getItem('selectedMessage'));
-const profile = JSON.parse(localStorage.getItem('profile'));
+const [selectedMessage, setSelectedMessage] = useState({});
+const [profile, setProfile] = useState({});
 const navigate = useNavigate();
 const [message, setMessage] = useState('');
 const [shouldSlideOut, setShouldSlideOut] = useState(false);
@@ -33,7 +33,18 @@ const [errors, setErrors] = useState({});
     checkUser();
   }, []);
 
+  useEffect(() => {
+    setSelectedMessage(JSON.parse(localStorage.getItem('selectedMessage')));
+    setProfile(JSON.parse(localStorage.getItem('profile')));
+    setTimeout(() => {
+      localStorage.removeItem('profile');
+      localStorage.removeItem('selectedMessage');
+    }, 1000);
+  }, []);
 
+  console.log(selectedMessage);
+  console.log(profile);
+  console.log(currentUser.data.account_type);
   const handleSendMessage = async () => {
     try {
       const config = {
@@ -60,14 +71,14 @@ const [errors, setErrors] = useState({});
                 setTimeout(() => {
                   if (selectedMessage) {
                     navigate('/inbox');
+                  } else if (currentUser.data.account_type === 'Client') {
+                    navigate('/developers');
                   } else {
                     navigate('/profile');
                   }
                 }, 500);
             }, 2500);
         }, 1000);
-        localStorage.removeItem('profile');
-        localStorage.removeItem('selectedMessage');
       } catch (error) {
       setErrors({ general: "Whoops, looks like there's a problem sending your message. Please try again later." });
       setTimeout(() => {
@@ -81,7 +92,7 @@ const [errors, setErrors] = useState({});
   };
 
   return (
-    <div className='container'>
+    <div className='container login mt-4'>
     {!successMessage ? (
       <div className="row justify-content-center logout">
         {errors.general && (
@@ -118,8 +129,8 @@ const [errors, setErrors] = useState({});
           </div>
         </div>
       </div>) : (
-      <div className={`row justify-content-center mt-5 header-font ${ transition ? 'fade-out' : 'fade-in'}`}> 
-        <div className="col-5 mt-5 glass-box">
+      <div className={`bottom-space row justify-content-center mt-5 header-font mb-5 ${ transition ? 'fade-out' : 'fade-in'}`}> 
+        <div className="col-5 mt-5 glass-box mb-5">
           <h2 className={`header-font mt-2 text-center text-uppercase fade-in p-3 m-3 ${shouldSlideOut ? 'fade-out' : 'fade-in'}`}>
             Message sent!
             <br />
