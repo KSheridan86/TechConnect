@@ -1,0 +1,39 @@
+{
+  "files": {
+    "main.css": "/static/css/main.98603cfd.css",
+    "main.js": "/static/js/main.9232b883.js",
+    "static/js/787.93570e80.chunk.js": "/static/js/787.93570e80.chunk.js",
+    "static/media/fa-solid-900.ttf": "/static/media/fa-solid-900.4a2cd718d7031b732e76.ttf",
+    "static/media/binary-code.webp": "/static/media/binary-code.96aae4f783516d81c730.webp",
+    "static/media/fa-brands-400.ttf": "/static/media/fa-brands-400.150de8eaa454d669c405.ttf",
+    "static/media/fa-solid-900.woff2": "/static/media/fa-solid-900.bb975c966c37455a1bc3.woff2",
+    "static/media/fa-brands-400.woff2": "/static/media/fa-brands-400.e033a13ee751afc1860c.woff2",
+    "static/media/goat.png": "/static/media/goat.eb22c6f06853918a5c83.png",
+    "static/media/fa-regular-400.ttf": "/static/media/fa-regular-400.d87474231f4192884802.ttf",
+    "service-worker.js": "/service-worker.js",
+    "static/media/lion.png": "/static/media/lion.c51bbf12044536cb7b49.png",
+    "static/media/dog.png": "/static/media/dog.70b94fb8eabfba488f4a.png",
+    "static/media/giraffe.png": "/static/media/giraffe.fd8b7ff4a4f8ae2015d0.png",
+    "static/media/raccoon.png": "/static/media/raccoon.ca46d6edfdd4f8fc48a0.png",
+    "static/media/bear.png": "/static/media/bear.1402f1626a525bd87bd4.png",
+    "static/media/owl.png": "/static/media/owl.242172e24e0ffc0314cb.png",
+    "static/media/baveuse.woff": "/static/media/baveuse.754855852fd55accd523.woff",
+    "static/media/logo.png": "/static/media/logo.48fe2127d520e9fa2835.png",
+    "static/media/panda.png": "/static/media/panda.ae7d17565c24dd1ee695.png",
+    "static/media/penguin.png": "/static/media/penguin.d681ad559c614ce0b119.png",
+    "static/media/cat.png": "/static/media/cat.fe63ca4c389b5395e545.png",
+    "static/media/fa-regular-400.woff2": "/static/media/fa-regular-400.3223dc79c1adee56370b.woff2",
+    "static/media/win95.png": "/static/media/win95.77813f1a7b03955adb63.png",
+    "static/media/fa-v4compatibility.ttf": "/static/media/fa-v4compatibility.0e3a648be390bd8cb094.ttf",
+    "static/media/MafinestIta0.woff": "/static/media/MafinestIta0.81f940010a3ab93c7771.woff",
+    "static/media/fa-v4compatibility.woff2": "/static/media/fa-v4compatibility.68577e40f3e70067b5da.woff2",
+    "index.html": "/index.html",
+    "main.98603cfd.css.map": "/static/css/main.98603cfd.css.map",
+    "main.9232b883.js.map": "/static/js/main.9232b883.js.map",
+    "787.93570e80.chunk.js.map": "/static/js/787.93570e80.chunk.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.98603cfd.css",
+    "static/js/main.9232b883.js"
+  ]
+}
