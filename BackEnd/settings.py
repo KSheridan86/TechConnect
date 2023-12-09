@@ -33,7 +33,10 @@ SECRET_KEY = os.environ.get('SECRET_KEY')
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['techconnect.herokuapp.com', '127.0.0.1', 'localhost']
+ALLOWED_HOSTS = [
+    'techconnect.herokuapp.com', '127.0.0.1', 'localhost',
+    'https://techconnect-19b5c62f6900.herokuapp.com/',
+    'techconnect-19b5c62f6900.herokuapp.com/']
 
 
 # Application definition
