@@ -31,11 +31,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    'techconnect.herokuapp.com', '127.0.0.1', 'localhost',
-    'techconnect-19b5c62f6900.herokuapp.com',]
+    '127.0.0.1', 'localhost',
+    'techconnect-19b5c62f6900.herokuapp.com',
+    'https://techconnect-19b5c62f6900.herokuapp.com',]
 
 
 # Application definition
@@ -186,6 +187,7 @@ CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     'https://techconnect-19b5c62f6900.herokuapp.com',
+    'techconnect-19b5c62f6900.herokuapp.com',
     'https://www.techconnect.ie',  # Replace with the actual origin of your React app
 ]
 CORS_ALLOW_CREDENTIALS = True
