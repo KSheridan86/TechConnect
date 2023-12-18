@@ -38,7 +38,8 @@ ALLOWED_HOSTS = [
     'techconnect-19b5c62f6900.herokuapp.com',
     'https://techconnect-19b5c62f6900.herokuapp.com',
     'https://www.tech-connect.ie',
-    'http://www.tech-connect.ie',]
+    'http://www.tech-connect.ie',
+    'tech-connect.ie',]
 
 
 # Application definition
