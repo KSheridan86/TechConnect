@@ -182,9 +182,8 @@ STATIC_ROOT = BASE_DIR / "frontend/static"
 
 MEDIA_ROOT = 'static/images'
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ALLOW_ALL_ORIGINS = False
 CORS_ALLOWED_ORIGINS = [
-    '*',
     "http://localhost:3000",
     'https://techconnect-19b5c62f6900.herokuapp.com',
     'https://www.techconnect.ie',  # Replace with the actual origin of your React app
