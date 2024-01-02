@@ -5,7 +5,7 @@
 
 ![alt text](./docs/responsive.png)
 
-### Live site available [here](https://techconnect-19b5c62f6900.herokuapp.com). 
+### Live site available [here](https://www.tech-connect.ie). 
 ### Repo available [here](https://github.com/KSheridan86/TechConnect).
 
 
